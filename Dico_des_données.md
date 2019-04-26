@@ -33,7 +33,7 @@
 |id|INT|PRIMARY KEY, NOT NULL, UNSIGNED, AUTO_INCREMENT|L'identifiant du fruit ou légume|
 | name | VARCHAR(255)| NOT NULL | nom du vegetable|
 | water_irrigation_interval | INT | NOT NULL | temps entre arrossage |
-| growing_interval | INT | NOT NULL | nom du vegetable|
+| growing_interval | INT | NOT NULL | interval de pousse|
 
 
 ## Quels fruits sur quelles parcelles (`vegetables_plots`)
