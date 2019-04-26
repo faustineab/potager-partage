@@ -7,8 +7,9 @@
 | id | INT | PRIMARY KEY, NOT NULL, UNSIGNED, AUTO_INCREMENT | L'identifiant du potager |
 | name | VARCHAR(255)| NOT NULL | nom du potager |
 | adress | TEXT | NOT NULL | adresse du potager |
-| meters | INT | NOT NULL| m2 du potager |
-| numbers_plots | INT | NOT NULL | Nombre de parcelles sur le potager |
+| meters | INT | NULL| m2 du potager |
+| numbers_plots_row | INT | NOT NULL | Nombre de parcelles sur le potager |
+| numbers_plots_column | INT | NOT NULL | Nombre de parcelles sur le potager |
 | created_at | TIMESTAMP | NOT NULL, DEFAULT CURRENT_TIMESTAMP | La date de création du potager |
 | updated_at | TIMESTAMP | NULL | La date de la dernière mise à jour du potager |
 | user_id | INT|NOT NULL | id de l'admin |
@@ -31,6 +32,9 @@
 |-|-|-|-|
 |id|INT|PRIMARY KEY, NOT NULL, UNSIGNED, AUTO_INCREMENT|L'identifiant du fruit ou légume|
 | name | VARCHAR(255)| NOT NULL | nom du vegetable|
+| water_irrigation_interval | INT | NOT NULL | temps entre arrossage |
+| growing_interval | INT | NOT NULL | nom du vegetable|
+
 
 ## Quels fruits sur quelles parcelles (`vegetables_plots`)
 
@@ -40,6 +44,25 @@
 | plots_id | INT|NOT NULL|id de la parcelle|
 | seedling_date | TIME | NOT NULL | date de semis|
 | reaping_date | TIME | NULL | date de récolte|
+
+## Offre (`offer`)
+
+|Champ|Type|Spécificités|Description|
+|-|-|-|-|
+|id|INT|PRIMARY KEY, NOT NULL, UNSIGNED, AUTO_INCREMENT|L'identifiant de l'offre|
+| vegetable_id | INT|NOT NULL| id du vegetable ou fruit |
+| total | INT | NOT NULL | Total à donner |
+| Quantity | INT | NOT NULL | quantité à donner|
+| user_id | INT|NOT NULL|id du user qui offre|
+
+## Receveur (`command`)
+
+|Champ|Type|Spécificités|Description|
+|-|-|-|-|
+|id|INT|PRIMARY KEY, NOT NULL, UNSIGNED, AUTO_INCREMENT|L'identifiant de l'offre|
+| quantity | INT|NOT NULL| quantité prise |
+| offre_id | INT|NOT NULL| id de l'offre |
+| user_id | INT|NOT NULL|id du user qui reçoit|
 
 ## Question (`question`)
 
@@ -85,6 +108,8 @@ Champ|Type|Spécificités|Description|
 | Name | VARCHAR(32)| NOT NULL , UNIQUE| pseudo de l'utilisateur|
 | email | VARCHAR(64)| NOT NULL , UNIQUE| email de l'utilisateur|
 | password | VARCHAR(255)| NOT NULL| MDP de l'utilisateur|
+| phone | VARCHAR(64)| NOT NULL , UNIQUE| téléphone de l'utilisateur|
+| adress | VARCHAR(255)| NOT NULL | adresse de l'utilisateur|
 | created_at | TIMESTAMP |NOT NULL, DEFAULT CURRENT_TIMESTAMP |La date de création du user|
 | updated_at | TIMESTAMP |NULL |La date de la dernière mise à jour du user|
 | role_id |INT |NOT NULL | L'identifiant du role de l'utilisateur|
