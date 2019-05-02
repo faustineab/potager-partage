@@ -1,0 +1,34 @@
+.subscription{
+    background-image: url(../../img/loginbackground.jpg);
+    background-size: cover;
+    background-position: center;
+    height: 100vh;
+      h1{
+        text-align: center;
+        font-size: 1.8em;
+        margin: 1em;
+        color:  #5e5250;
+      }
+    .subscriptionForm{
+      margin: 0 auto;
+      width: 500px;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      font-family: 'Fresca', sans-serif;
+      font-size: 1.5em;
+      .field label{
+        color: #5e5250;
+      }
+      .button{
+        background-color: #7ba566;
+        color: white;
+        margin-bottom: 1em;
+        padding: 0.8em;
+        font-family: 'Fresca', sans-serif;
+        font-size: 1em;
+      }
+    }
+  }
+  
