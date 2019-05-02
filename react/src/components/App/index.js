@@ -7,17 +7,16 @@ import React from 'react';
  * Local import
  */
 // Composants
+import Login from '../../containers/Login';
 
 // Styles et assets
-import './app.sass';
 
 /**
  * Code
  */
 const App = () => (
   <div id="app">
-    <h1 id="app-title">Modèle React</h1>
-    <p id="app-content">Hello tout le monde :)</p>
+    <Login />
   </div>
 );
 
