@@ -5,7 +5,6 @@ const initialState = {
   loginMessage: 'Message personnalisé',
   loggedIn: false,
   user: {},
-  repos: [],
 };
 
 const LOGIN_INPUT_CHANGE = 'LOGIN_INPUT_CHANGE';
@@ -26,7 +25,7 @@ const reducer = (state = initialState, action = {}) => {
         user: { ...action.user },
         repos: [...action.repos],
       };
-      case USER_LOGOUT:
+    case USER_LOGOUT:
       return {
         ...state,
         loggedIn: false,
@@ -36,7 +35,7 @@ const reducer = (state = initialState, action = {}) => {
         ...state,
         username: action.username,
       };
-      case PASSWORD_INPUT_CHANGE:
+    case PASSWORD_INPUT_CHANGE:
       return {
         ...state,
         password: action.password,
