@@ -15,7 +15,7 @@ const JoinGarden = () => (
         <label>Nom</label>
         <input placeholder='Nom' />
       </Form.Field>
-      <Button type='submit'>Submit</Button>
+      <Button type='submit'>Rejoindre</Button>
     </Form>
   </main>
 );
