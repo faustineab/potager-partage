@@ -80,9 +80,7 @@ class RegistrationController extends AbstractController
         $form->handleRequest($request);
         
         if($form->isSubmitted() && $form->isValid()){
-            
-            dump($user);
-            exit;
+        
 
             $hashedPassword = $encoder->encodePassword($user, $user->getPassword());
             $user->setPassword($hashedPassword);
