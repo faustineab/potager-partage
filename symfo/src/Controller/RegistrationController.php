@@ -5,7 +5,6 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Entity\Garden;
 use App\Form\AdminType;
-use App\Form\RegistrationFormType;
 use App\Form\RegistrationUserType;
 use App\Security\LoginFormAuthenticator;
 use Symfony\Component\HttpFoundation\Request;
@@ -21,7 +20,7 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 class RegistrationController extends AbstractController
 {
     /**
-     * @Route("/register", name="app_register")
+     * @Route("/register/admin", name="app_register")
      */
     public function registerAdmin(Request $request, UserPasswordEncoderInterface $passwordEncoder, GuardAuthenticatorHandler $guardHandler, LoginFormAuthenticator $authenticator): Response
     {
@@ -30,6 +29,8 @@ class RegistrationController extends AbstractController
             'garden' => new Garden()
         ];
         
+
+
         $form = $this->createForm(AdminType::class, $userGarden);
         $form->handleRequest($request);
 
@@ -38,6 +39,8 @@ class RegistrationController extends AbstractController
             
             $hashedPassword = $passwordEncoder->encodePassword($userGarden['user'], $userGarden['user']->getPassword());
             $userGarden['user']->setPassword($hashedPassword);
+         //   $userGarden['user']->addRole('ROLE_ADMIN'); set rôle admin à faire 
+
 
             $userGarden['user']->setStatut('ok');
 
@@ -62,31 +65,36 @@ class RegistrationController extends AbstractController
     }
 
     /**
-     * @Route("/registration/user", name="registration")
+     * @Route("/register/user", name="registration")
      */
     public function registerUser(Request $request, ObjectManager $manager, UserPasswordEncoderInterface $encoder, User $user = null) : Response
     {
+        // if($user == null){  
+        //     $user = new User(); 
+        // }
 
-            $user = new User(); 
- 
-         $form= $this->createForm(RegistrationUserType::class, $user);
+        $user = new User();
 
-         $form->handleRequest($request);
+        $form= $this->createForm(RegistrationUserType::class, $user);
+
+        $form->handleRequest($request);
         
-         if($form->isSubmitted() && $form->isValid()){
+        if($form->isSubmitted() && $form->isValid()){
             
-             $hashedPassword = $encoder->encodePassword($user, $user->getPassword());
-             $user->setPassword($hashedPassword);
-             $user->setCreatedAt(new \DateTime());
-             $user->setUpdatedAt(new \DateTime());
-             $user->setStatut('à valider');
+            dump($user);
+            exit;
 
-             $manager->persist($user);
-             $manager->flush();
+            $hashedPassword = $encoder->encodePassword($user, $user->getPassword());
+            $user->setPassword($hashedPassword);
+
+            $user->setStatut('en attente');
+
+            $manager->persist($user);
+            $manager->flush();
  
-             $this->addFlash(
-                 'success',
-                 'Votre compte à bien été créé, vous pouvez vous connecter'
+            $this->addFlash(
+                'success',
+                'Votre compte à bien été créé, vous pouvez vous connecter'
              );
  dump($user);
             exit;  

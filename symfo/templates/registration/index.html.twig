@@ -22,8 +22,7 @@
         {{ form_label(form.email)}}
         {{ form_widget(form.email)}}
 
-       {{ form_row(form.password.first) }}
-       {{ form_row(form.password.second) }}
+       {{ form_row(form.plainPassword) }}
 
         {{ form_label(form.phone)}}
         {{ form_widget(form.phone)}}
@@ -34,7 +33,7 @@
         {{ form_label(form.gardens)}}
         {{ form_widget(form.gardens)}}
 
-           <button type='submit' class="btn btn-primary mt-5"> Valider mon inscription </button>
+    <button type='submit' class="btn btn-primary mt-5"> Valider mon inscription </button>
 
 
     {{ form_end(form)}}
