@@ -16,6 +16,7 @@ class GardenType extends AbstractType
             ->add('address')
             ->add('zipcode')
             ->add('city')
+            ->add('address_specificities')
             ->add('meters')
             ->add('number_plots_row')
             ->add('number_plots_column')
