@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { Form } from 'semantic-ui-react';
 import { withRouter } from 'react-router-dom';
 
@@ -7,9 +8,12 @@ import './index.scss';
 class Subscribe extends Component {
   redirect='';
 
+
   handleSubmit = (evt) => {
     evt.preventDefault();
-    this.props.history.push(this.redirect);
+    const { history, onFormSubmit } = this.props;
+    history.push(this.redirect);
+    onFormSubmit();
   }
 
   handleClick =(evt) => {
@@ -17,45 +21,58 @@ class Subscribe extends Component {
   }
 
   handleChange =(evt) => {
-    console.log(evt.target.name);
+    const { inputChange } = this.props;
+    const name = evt.target.name;
+    const value = evt.target.value;
+    inputChange(name, value);
   }
 
   render() {
+    const {
+      firstName,
+      lastName,
+      email,
+      phoneNumber,
+      address1,
+      address2,
+      zipcode,
+      password,
+    } = this.props;
     return (
       <main className="subscription">
         <Form className="subscriptionForm" onSubmit={this.handleSubmit}>
           <h1>Inscription</h1>
           <Form.Field>
             <label>Prénom</label>
-            <input placeholder="Prénom" name="firstName" onChange={this.handleChange} />
+            <input placeholder="Prénom" value={firstName} name="firstName" onChange={this.handleChange} />
           </Form.Field>
           <Form.Field>
             <label>Nom</label>
-            <input placeholder="Nom" name="lastName" onChange={this.handleChange} />
+            <input placeholder="Nom" value={lastName} name="lastName" onChange={this.handleChange} />
           </Form.Field>
           <Form.Field>
             <label>e-mail</label>
-            <input type="text" placeholder="e-mail" name="email" onChange={this.handleChange} />
+            <input type="text" placeholder="e-mail" value={email} name="email" onChange={this.handleChange} />
           </Form.Field>
           <Form.Field>
             <label>téléphone</label>
-            <input type="text" placeholder="téléphone" name="phoneNumber" onChange={this.handleChange} />
+            <input type="text" placeholder="téléphone" value={phoneNumber} name="phoneNumber" onChange={this.handleChange} />
           </Form.Field>
           <Form.Field>
             <label>adresse 1</label>
-            <input type="text" placeholder="ex : 12 rue des jardiniers ..." name="address1" onChange={this.handleChange} />
+            <input type="text" placeholder="ex : 12 rue des jardiniers ..." value={address1} name="address1" onChange={this.handleChange} />
           </Form.Field>
           <Form.Field>
             <label>adresse 2</label>
-            <input type="text" placeholder="" onChange={this.handleChange} />
+            <input type="text" placeholder="" value={address2} onChange={this.handleChange} />
           </Form.Field>
           <Form.Field>
             <label>code postal</label>
-            <input type="text" placeholder="code postal" name="zipcode" onChange={this.handleChange} />
+            <input type="text" placeholder="code postal" value={zipcode} name="zipcode" onChange={this.handleChange} />
           </Form.Field>
           <Form.Field>
             <label>mot de passe</label>
-            <input type="password" placeholder="mot de passe" name="password" onChange={this.handleChange} />
+            <input type="password" placeholder="mot de passe" value={password} name="password" onChange={this.handleChange} />
           </Form.Field>
           <Form.Group id="buttons">
             <button type="submit" name="create-garden" className="subscriptionButton" onClick={this.handleClick}>Créer un potager</button>
@@ -65,6 +82,30 @@ class Subscribe extends Component {
       </main>
     );
   }
+}
+
+Subscribe.propTypes = {
+  firstName: PropTypes.string,
+  lastName: PropTypes.string,
+  email: PropTypes.string,
+  password: PropTypes.string,
+  phoneNumber: PropTypes.string,
+  address1: PropTypes.string,
+  address2: PropTypes.string,
+  zipcode: PropTypes.string,
+  inputChange: PropTypes.func.isRequired,
+  onFormSubmit: PropTypes.func.isRequired,
+};
+
+Subscribe.defaulProps = {
+  firstName: '',
+  lastName: '',
+  email: PropTypes.string,
+  password: PropTypes.string,
+  phoneNumber: PropTypes.string,
+  address1: PropTypes.string,
+  address2: PropTypes.string,
+  zipcode: PropTypes.string,
 }
 
 export default withRouter(Subscribe);

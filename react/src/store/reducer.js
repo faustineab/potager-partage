@@ -20,8 +20,8 @@ export const LOG_USER = 'LOG_USER';
 const CHANGE_LOGIN_MESSAGE = 'CHANGE_LOGIN_MESSAGE';
 const USER_LOGGED = 'USER_LOGGED';
 const USER_LOGOUT = 'USER_LOGOUT';
-const SUBSCRIPTION_INPUT_CHANGE = 'SUBSCRIPTION_INPUT_CHANGE';
-const REGISTER_USER = 'REGISTER_USER';
+export const SUBSCRIPTION_INPUT_CHANGE = 'SUBSCRIPTION_INPUT_CHANGE';
+export const REGISTER_USER = 'REGISTER_USER';
 
 const reducer = (state = initialState, action = {}) => {
   switch (action.type) {
@@ -59,6 +59,16 @@ const reducer = (state = initialState, action = {}) => {
       return {
         ...state,
         loginMessage: action.text,
+      };
+    case SUBSCRIPTION_INPUT_CHANGE:
+      return {
+        ...state,
+        [action.name]: action.state,
+      };
+    case REGISTER_USER:
+      return {
+        ...state,
+        loading: true,
       };
     default:
       return state;
