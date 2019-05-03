@@ -1,6 +1,13 @@
 const initialState = {
   username: '',
   password: '',
+  firstName: '',
+  lastName: '',
+  email: '',
+  phoneNumber: '',
+  address1: '',
+  address2: '',
+  zipcode: '',
   loading: false,
   loginMessage: 'Message personnalisé',
   loggedIn: false,
@@ -13,6 +20,8 @@ export const LOG_USER = 'LOG_USER';
 const CHANGE_LOGIN_MESSAGE = 'CHANGE_LOGIN_MESSAGE';
 const USER_LOGGED = 'USER_LOGGED';
 const USER_LOGOUT = 'USER_LOGOUT';
+const SUBSCRIPTION_INPUT_CHANGE = 'SUBSCRIPTION_INPUT_CHANGE';
+const REGISTER_USER = 'REGISTER_USER';
 
 const reducer = (state = initialState, action = {}) => {
   switch (action.type) {
@@ -83,6 +92,16 @@ export const userLogged = (user, repos) => ({
 
 export const userLogout = () => ({
   type: USER_LOGOUT,
+});
+
+export const subscriptionInputChange = (name, value) => ({
+  type: SUBSCRIPTION_INPUT_CHANGE,
+  name,
+  value,
+});
+
+export const registerUser = () => ({
+  type: REGISTER_USER,
 });
 
 export default reducer;
