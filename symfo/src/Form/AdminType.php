@@ -2,31 +2,26 @@
 
 namespace App\Form;
 
-use App\Entity\Garden;
+use App\Form\GardenType;
+use App\Form\RegistrationUserType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class GardenType extends AbstractType
+class AdminType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('name')
-            ->add('address')
-            ->add('zipcode')
-            ->add('city')
-            ->add('meters')
-            ->add('number_plots_row')
-            ->add('number_plots_column')
-
+            ->add('user', RegistrationUserType::class)
+            ->add('garden', GardenType::class)
         ;
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => Garden::class,
+            // Configure your form options here
         ]);
     }
 }

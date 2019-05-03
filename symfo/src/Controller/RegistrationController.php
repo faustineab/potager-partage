@@ -3,18 +3,19 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Entity\Garden;
+use App\Form\AdminType;
 use App\Form\RegistrationFormType;
+use App\Form\RegistrationUserType;
 use App\Security\LoginFormAuthenticator;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
-use Symfony\Component\Security\Guard\GuardAuthenticatorHandler;
-use App\Entity\Garden;
-use App\Form\RegistrationUserType;
-use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Guard\GuardAuthenticatorHandler;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 
 class RegistrationController extends AbstractController
@@ -24,27 +25,31 @@ class RegistrationController extends AbstractController
      */
     public function registerAdmin(Request $request, UserPasswordEncoderInterface $passwordEncoder, GuardAuthenticatorHandler $guardHandler, LoginFormAuthenticator $authenticator): Response
     {
-        $user = new User();
-        $form = $this->createForm(RegistrationFormType::class, $user);
+        $userGarden = [
+            'user' => new User(),
+            'garden' => new Garden()
+        ];
+        
+        $form = $this->createForm(AdminType::class, $userGarden);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             // encode the plain password
-            $user->setPassword(
-                $passwordEncoder->encodePassword(
-                    $user,
-                    $form->get('plainPassword')->getData()
-                )
-            );
+            
+            $hashedPassword = $passwordEncoder->encodePassword($userGarden['user'], $userGarden['user']->getPassword());
+            $userGarden['user']->setPassword($hashedPassword);
+
+            $userGarden['user']->setStatut('ok');
 
             $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($user);
+            $entityManager->persist($userGarden['user']);
+            $entityManager->persist($userGarden['garden']);
             $entityManager->flush();
 
             // do anything else you need here, like send an email
 
             return $guardHandler->authenticateUserAndHandleSuccess(
-                $user,
+                $userGarden['user'],
                 $request,
                 $authenticator,
                 'main' // firewall name in security.yaml

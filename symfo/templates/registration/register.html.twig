@@ -6,11 +6,19 @@
     <h1>Register</h1>
 
     {{ form_start(registrationForm) }}
-        {{ form_row(registrationForm.name) }}
-        {{ form_row(registrationForm.email) }}
-        {{ form_row(registrationForm.plainPassword) }}
-        {{ form_row(registrationForm.phone) }}
-        {{ form_row(registrationForm.address) }}
+        {{ form_row(registrationForm.user.name) }}
+        {{ form_row(registrationForm.user.email) }}
+        {{ form_row(registrationForm.user.password) }}
+        {{ form_row(registrationForm.user.phone) }}
+        {{ form_row(registrationForm.user.address) }}
+
+        {{ form_row(registrationForm.garden.name) }}
+        {{ form_row(registrationForm.garden.address) }}
+        {{ form_row(registrationForm.garden.zipcode) }}
+        {{ form_row(registrationForm.garden.city) }}
+        {{ form_row(registrationForm.garden.meters) }}
+        {{ form_row(registrationForm.garden.number_plots_row) }}
+        {{ form_row(registrationForm.garden.number_plots_column) }}
         
         <button class="btn">Register</button>
     {{ form_end(registrationForm) }}
