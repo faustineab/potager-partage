@@ -13,6 +13,7 @@ const Login = ({ username, password, usernameChange, passwordChange, loginMessag
 
   const handleChangePassword = (evt) => {
     const { value } = evt.target;
+    console.log(value);
     passwordChange(value);
   }
 

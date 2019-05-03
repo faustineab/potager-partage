@@ -63,7 +63,7 @@ const reducer = (state = initialState, action = {}) => {
     case SUBSCRIPTION_INPUT_CHANGE:
       return {
         ...state,
-        [action.name]: action.state,
+        [action.name]: action.value,
       };
     case REGISTER_USER:
       return {

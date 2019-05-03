@@ -6,8 +6,7 @@ import { withRouter } from 'react-router-dom';
 import './index.scss';
 
 class Subscribe extends Component {
-  redirect='';
-
+  redirect = '';
 
   handleSubmit = (evt) => {
     evt.preventDefault();
@@ -22,8 +21,9 @@ class Subscribe extends Component {
 
   handleChange =(evt) => {
     const { inputChange } = this.props;
-    const name = evt.target.name;
-    const value = evt.target.value;
+    let name = evt.target.name;
+    let value = evt.target.value;
+    console.log(name, value);
     inputChange(name, value);
   }
 
