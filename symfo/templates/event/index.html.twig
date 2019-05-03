@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Event{% endblock %}
+
+{% block body %}
+<div class="container">
+    <h1>Inscrivez-vous</h1>
+
+    {{ form_start(form)}}
+        
+        {{ form_label(form.title)}}
+        {{ form_widget(form.title)}}
+
+        {{ form_label(form.description)}}
+        {{ form_widget(form.description)}}
+
+        {{ form_label(form.startDate)}}
+        {{ form_widget(form.startDate) }}
+
+        {{ form_label(form.endDate)}}
+        {{ form_widget(form.endDate)}}
+
+           <button type='submit' class="btn btn-primary mt-5"> Valider event </button>
+
+
+    {{ form_end(form)}}
+
+ 
+</div>
+{% endblock %}
