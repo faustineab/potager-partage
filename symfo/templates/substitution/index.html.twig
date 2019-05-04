@@ -3,18 +3,26 @@
 {% block title %}Hello SubstitutionController!{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+<div class="container">
+  
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ '/Users/juliemuru/Sites/Spe/Potager/potager-partage/symfo/src/Controller/SubstitutionController.php'|file_link(0) }}">src/Controller/SubstitutionController.php</a></code></li>
-        <li>Your template at <code><a href="{{ '/Users/juliemuru/Sites/Spe/Potager/potager-partage/symfo/templates/substitution/index.html.twig'|file_link(0) }}">templates/substitution/index.html.twig</a></code></li>
-    </ul>
+    {{ form_start(form)}}
+
+        {{ form_label(form.startDate)}}
+        {{ form_widget(form.startDate)}}
+
+        {{ form_label(form.endDate)}}
+        {{ form_widget(form.endDate)}}
+
+
+    <button type='submit' class="btn btn-primary mt-5"> Valider mon inscription </button>
+
+
+    {{ form_end(form)}}
+
+ 
 </div>
+
+
 {% endblock %}

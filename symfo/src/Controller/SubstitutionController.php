@@ -2,18 +2,43 @@
 
 namespace App\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Form\SubstitutionType;
+use App\Entity\VacancySubstitute;
+use Symfony\Component\HttpFoundation\Request;
+use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Entity\Vacancy;
 
 class SubstitutionController extends AbstractController
 {
     /**
-     * @Route("/substitution", name="substitution")
+     * @Route("/absence/2/remplacement", name="create_substitution")
      */
-    public function index()
+    public function substitution(Request $request, ObjectManager $manager)
     {
+        
+        $substitution = new VacancySubstitute();
+
+        $form = $this->createForm(SubstitutionType::class, $substitution);
+
+        $form->handleRequest($request);
+
+        // if($form->isSubmitted() && $form->isValid()){
+
+        //     $substitution->setVacancy($vacancy);
+        //     $substitution->setUser($this->getUser());
+
+            
+        //     $manager->persist($substitution);
+        //     $manager->flush();
+
+
+        //     return $this->redirectToRoute('registration');
+        // }
+        
         return $this->render('substitution/index.html.twig', [
-            'controller_name' => 'SubstitutionController',
+            'form' => $form->createView(),
         ]);
     }
 }
