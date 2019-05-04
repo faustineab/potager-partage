@@ -54,6 +54,51 @@ class VacancySubstitute
         $this->updatedAt = new \DateTime();
     }
 
+    public function isBookableDate(){
+
+      //  1/ dates qui ne sont pas disponibles
+
+        $notAvailableDays = $this->vacancy->getNotAvailableDays();
+
+        // 2/ Comparer les dates choisies avec les dates impossibles 
+
+        $substituteDays = $this->getDays();
+
+        $formatDay = function($day){
+            return $day->format('Y-m-d');
+        };
+
+        // tableau contenant les chaines de caractère des journées 
+        $days = array_map($formatDay, $substituteDays);
+
+        $notAvailable = array_map($formatDay, $notAvailableDays);
+
+        foreach($days as $day) {
+            if(array_search($day, $notAvailable) !== false)
+            return false;
+        }
+        return true;
+    }
+
+/** 
+ * Permet de récupérer un tableau des journées qui correspondent à ma remplacement 
+ * @return array Représente un tableau d'object DateTime des jours de remplacement 
+ */
+
+    public function getDays(){
+        $resultat = range(
+            $this->startDate->getTimestamp(),
+            $this->endDate->getTimestamp(),
+            24*60*60); // nbr de secondes entre les dates de début et de fin de remplacement
+
+        $days = array_map(function($dayTimestamp){
+            return new \DateTime(date('Y-m-d', $dayTimestamp));
+        }, $resultat);
+
+    
+    return  $days;
+    }
+
     public function getId(): ?int
     {
         return $this->id;
