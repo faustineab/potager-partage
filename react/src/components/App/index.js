@@ -12,7 +12,7 @@ import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-d
 import Subscribe from 'src/containers/Subscribe';
 import CreateGarden from 'src/containers/CreateGarden';
 import JoinGarden from 'src/containers/JoinGarden';
-import Login from '../../containers/Login';
+import Login from 'src/containers/Login';
 
 // Styles et assets
 
