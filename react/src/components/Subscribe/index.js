@@ -21,8 +21,8 @@ class Subscribe extends Component {
 
   handleChange =(evt) => {
     const { inputChange } = this.props;
-    let name = evt.target.name;
-    let value = evt.target.value;
+    const { name } = evt.target;
+    const { value } = evt.target;
     console.log(name, value);
     inputChange(name, value);
   }
@@ -97,7 +97,7 @@ Subscribe.propTypes = {
   onFormSubmit: PropTypes.func.isRequired,
 };
 
-Subscribe.defaulProps = {
+Subscribe.defaultProps = {
   firstName: '',
   lastName: '',
   email: PropTypes.string,

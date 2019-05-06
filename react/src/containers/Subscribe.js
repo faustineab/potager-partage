@@ -2,7 +2,7 @@ import { connect } from 'react-redux';
 
 import Subscribe from 'src/components/Subscribe';
 
-import { subscriptionInputChange, registerUser } from '../store/reducer';
+import { inputChange, registerUser } from '../store/reducer';
 
 const mapStateToProps = state => ({
   firstName: state.firstName,
@@ -17,7 +17,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   inputChange: (name, value) => {
-    dispatch(subscriptionInputChange(name, value));
+    dispatch(inputChange(name, value));
   },
   onFormSubmit: () => {
     dispatch(registerUser());
