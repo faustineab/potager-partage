@@ -12,6 +12,10 @@ const initialState = {
   loginMessage: 'Message personnalisé',
   loggedIn: false,
   user: {},
+  gardenList: [
+    { key: 'm', text: 'garden1', value: 'garden1' },
+    { key: 'n', text: 'garden2', value: 'garden2' },
+  ],
 };
 
 

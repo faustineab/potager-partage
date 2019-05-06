@@ -1,8 +1,10 @@
 import { connect } from 'react-redux';
 
-import JoinGarden from 'src/components/Subscribe/createGarden';
+import JoinGarden from 'src/components/Subscribe/joinGarden';
 
-const mapStateToProps = '';
+const mapStateToProps = state => ({
+  gardenList: state.gardenList,
+});
 
 const mapDispatchToProps = {};
 
