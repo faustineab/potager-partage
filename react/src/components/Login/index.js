@@ -7,34 +7,31 @@ import Subscribe from '../Subscribe';
 
 import './index.scss';
 
-const Login = ({ username, password, usernameChange, passwordChange, loginMessage, onFormSubmit, loading }) => {
+const Login = ({ username, password, inputChange, loginMessage, onFormSubmit, loading }) => {
 
-  const handleChangeUsername = (evt) => {
+  const handleInputChange = (evt) => {
+    const { name } = evt.target;
     const { value } = evt.target;
-    usernameChange(value);
-  }
-
-  const handleChangePassword = (evt) => {
-    const { value } = evt.target;
-    passwordChange(value);
-  }
+    console.log(name, value);
+    inputChange(name, value);
+  };
 
   const handleSubmit = (evt) => {
     evt.preventDefault();
     onFormSubmit();
-  }
-  
+  };
+
   return (
-    <main className="subscription">
-      
-      <Form className="subscriptionForm" onSubmit={handleSubmit}> 
+    <main className="subscription"> 
+      <Form className="subscriptionForm" onSubmit={handleSubmit}>
         <Form.Field>
         <label>Adresse e-mail</label>
           <Form.Input
             loading={loading}
             disabled={loading}
             value={username}
-            onChange={handleChangeUsername}
+            name="username"
+            onChange={handleInputChange}
             placeholder="Adresse e-mail"
           />
         </Form.Field>
@@ -45,7 +42,8 @@ const Login = ({ username, password, usernameChange, passwordChange, loginMessag
             loading={loading}
             disabled={loading}
             value={password}
-            onChange={handleChangePassword}
+            name="password"
+            onChange={handleInputChange}
             placeholder="Mot de passe"
           />
         </Form.Field>
@@ -58,30 +56,20 @@ const Login = ({ username, password, usernameChange, passwordChange, loginMessag
       </Form>
     </main>
   );
-
 };
 
 Login.propTypes = {
-  username: PropTypes.string.isRequired,
-  password: PropTypes.string.isRequired,
-  usernameChange: PropTypes.func.isRequired,
-  passwordChange: PropTypes.func.isRequired,
+  username: PropTypes.string,
+  password: PropTypes.string,
+  inputChange: PropTypes.func.isRequired,
   loginMessage: PropTypes.string.isRequired,
   onFormSubmit: PropTypes.func.isRequired,
   loading: PropTypes.bool.isRequired,
 };
 
+Login.defaultProps = {
+  username: '',
+  password: '',
+};
+
 export default Login;
-
-/*
-
-
-          <Form.Input
-            loading={loading}
-            disabled={loading}
-            value={username}
-            onChange={handleChangeUsername}
-            placeholder="Adresse e-mail"
-          />
-
-          */

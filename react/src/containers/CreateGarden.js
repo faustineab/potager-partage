@@ -1,4 +1,4 @@
-import { connect } from 'redux';
+import { connect } from 'react-redux';
 
 import CreateGarden from 'src/components/Subscribe/createGarden';
 
