@@ -107,6 +107,8 @@ export const inputChange = (name, value) => ({
 
 export const ModifyUserInfos = () => ({
   type: MODIFY_USER_INFOS,
+});
+
 export const registerUser = () => ({
   type: REGISTER_USER,
 });

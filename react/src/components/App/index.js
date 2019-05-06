@@ -33,8 +33,8 @@ const App = () => (
       <Route path="/subscribe" component={Subscribe} />
       <Route path="/create-garden" component={CreateGarden} />
       <Route path="/join-garden" component={JoinGarden} />
-      <Route path="/profile" component={Profil} />
-      <Route path="/profilemodify" component={ProfilModify} />
+      <Route path="/profil" component={Profil} />
+      <Route path="/profilmodify" component={ProfilModify} />
       <Route path="/profilmenu" component={ProfilMenu} />
     </Switch>
   </Router>

@@ -1,17 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Form, Button } from 'semantic-ui-react';
-import { Switch, Route, Link } from 'react-router-dom';
-
-<<<<<<< HEAD
-const Login = ({ username, password, usernameChange, passwordChange, loginMessage, onFormSubmit, loading }) => {
-=======
-import Subscribe from '../Subscribe';
+import { Link } from 'react-router-dom';
 
 import './index.scss';
 
 const Login = ({ username, password, inputChange, loginMessage, onFormSubmit, loading }) => {
->>>>>>> a48613e51730ee5046e05b0b95399ac438e244b8
 
   const handleInputChange = (evt) => {
     const { name } = evt.target;
