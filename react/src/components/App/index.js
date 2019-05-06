@@ -11,9 +11,9 @@ import {
  */
 // Composants
 
-import Subscribe from 'src/components/Subscribe';
-import CreateGarden from 'src/components/Subscribe/createGarden';
-import JoinGarden from 'src/components/Subscribe/joinGarden';
+import Subscribe from 'src/containers/Subscribe';
+import CreateGarden from 'src/containers/CreateGarden';
+import JoinGarden from 'src/containers/JoinGarden';
 import Login from '../../containers/Login';
 import Profil from '../../containers/Profil';
 import ProfilModify from '../../containers/ProfilModify';
