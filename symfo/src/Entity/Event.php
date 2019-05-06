@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\EventRepository")
@@ -13,26 +14,31 @@ class Event
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     * @Groups({"event"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="datetime")
+     * @Groups({"event"})
      */
     private $startDate;
 
     /**
      * @ORM\Column(type="datetime")
+     * @Groups({"event"})
      */
     private $endDate;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"event"})
      */
     private $title;
 
     /**
      * @ORM\Column(type="text", nullable=true)
+     * @Groups({"event"})
      */
     private $description;
 
@@ -49,6 +55,7 @@ class Event
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="events")
      * @ORM\JoinColumn(nullable=false)
+     * @Groups({"event"})
      */
     private $user;
 

@@ -13,9 +13,9 @@ use App\Entity\Vacancy;
 class SubstitutionController extends AbstractController
 {
     /**
-     * @Route("/absence/2/remplacement", name="create_substitution")
+     * @Route("/absence/{id}/remplacement", name="create_substitution")
      */
-    public function substitution(Request $request, ObjectManager $manager)
+    public function substitution(Request $request, ObjectManager $manager, Vacancy $vacancy)
     {
         
         $substitution = new VacancySubstitute();
@@ -24,18 +24,18 @@ class SubstitutionController extends AbstractController
 
         $form->handleRequest($request);
 
-        // if($form->isSubmitted() && $form->isValid()){
+        if($form->isSubmitted() && $form->isValid()){
 
-        //     $substitution->setVacancy($vacancy);
-        //     $substitution->setUser($this->getUser());
+            $substitution->setVacancy($vacancy);
+            $substitution->setUser($this->getUser());
 
             
-        //     $manager->persist($substitution);
-        //     $manager->flush();
+            $manager->persist($substitution);
+            $manager->flush();
 
 
-        //     return $this->redirectToRoute('registration');
-        // }
+            return $this->redirectToRoute('registration');
+        }
         
         return $this->render('substitution/index.html.twig', [
             'form' => $form->createView(),

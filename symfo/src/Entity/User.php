@@ -13,6 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
 use App\Entity\VacancySubstitute;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -37,6 +38,7 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"event"})
      */
     private $name;
 
@@ -104,7 +106,7 @@ class User implements UserInterface
      */
     private $events;
 
-     /**
+    /**
      * @ORM\ManyToMany(targetEntity="App\Entity\Role", mappedBy="users", cascade={"persist"})
      */
     private $roles;
@@ -113,7 +115,7 @@ class User implements UserInterface
 
     public function __construct()
     {
-        
+
         $this->gardens = new ArrayCollection();
         $this->plots = new ArrayCollection();
         $this->forumAnswers = new ArrayCollection();
@@ -125,7 +127,7 @@ class User implements UserInterface
     }
 
 
-    
+
     public function getId(): ?int
     {
         return $this->id;
@@ -150,7 +152,7 @@ class User implements UserInterface
      */
     public function getUsername(): string
     {
-        return (string) $this->email;
+        return (string)$this->email;
     }
 
     /**
@@ -244,7 +246,7 @@ class User implements UserInterface
 
         return $this;
     }
-    
+
     /**
      * @return Collection|Garden[]
      */
@@ -345,14 +347,12 @@ class User implements UserInterface
             }
         }
         return $this;
-		
     }
 
 
     public function __toString()
     {
         return $this->gardens;
-
     }
 
     public function getStatut(): ?string
@@ -432,9 +432,10 @@ class User implements UserInterface
         return $this;
     }
 
-    public function getRoles(){
-        
-        $roles = $this->roles->map(function($role){
+    public function getRoles()
+    {
+
+        $roles = $this->roles->map(function ($role) {
             return $role->getTitle();
         })->toArray();
         $roles[] = 'ROLE_USER';
