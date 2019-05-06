@@ -22,8 +22,7 @@ import './app.scss';
  * Code
  */
 const App = () => (
-  <div id="app">
-    <Router>
+<Router>
       <Switch>
         <Route exact path="/" component={Login} />
         <Route path="/subscribe" component={Subscribe} />
@@ -31,10 +30,22 @@ const App = () => (
         <Route path="/join-garden" component={JoinGarden} />
       </Switch>
     </Router>
-  </div>
 );
 
 /**
  * Export
  */
 export default App;
+
+/*
+
+<Router>
+      <Switch>
+        <Route exact path="/" component={Login} />
+        <Route path="/subscribe" component={Subscribe} />
+        <Route path="/create-garden" component={CreateGarden} />
+        <Route path="/join-garden" component={JoinGarden} />
+      </Switch>
+    </Router>
+
+    */

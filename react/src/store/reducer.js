@@ -1,6 +1,13 @@
 const initialState = {
   username: '',
   password: '',
+  firstName: 'Jean',
+  lastName: 'Dupont',
+  email: 'DupontJean@gmail.com',
+  phoneNumber: '0632482322',
+  address1: '1 rue du jardin',
+  address2: '',
+  zipcode: '',
   loading: false,
   loginMessage: 'Message personnalisé',
   loggedIn: false,
@@ -13,6 +20,8 @@ export const LOG_USER = 'LOG_USER';
 const CHANGE_LOGIN_MESSAGE = 'CHANGE_LOGIN_MESSAGE';
 const USER_LOGGED = 'USER_LOGGED';
 const USER_LOGOUT = 'USER_LOGOUT';
+export const INPUT_CHANGE = 'INPUT_CHANGE';
+export const MODIFY_USER_INFOS = 'MODIFY_USER_INFOS';
 
 const reducer = (state = initialState, action = {}) => {
   switch (action.type) {
@@ -51,6 +60,16 @@ const reducer = (state = initialState, action = {}) => {
         ...state,
         loginMessage: action.text,
       };
+    case INPUT_CHANGE:
+      return {
+        ...state,
+        [action.name]: action.value,
+      };
+    case MODIFY_USER_INFOS:
+      return {
+        ...state,
+        loading: true,
+      };
     default:
       return state;
   }
@@ -83,6 +102,16 @@ export const userLogged = (user, repos) => ({
 
 export const userLogout = () => ({
   type: USER_LOGOUT,
+});
+
+export const inputChange = (name, value) => ({
+  type: INPUT_CHANGE,
+  name,
+  value,
+});
+
+export const ModifyUserInfos = () => ({
+  type: MODIFY_USER_INFOS,
 });
 
 export default reducer;

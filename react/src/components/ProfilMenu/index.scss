@@ -1,0 +1,28 @@
+.background {
+    height: 100vh;
+}
+
+.user-block {
+    text-align: center;
+    max-width: 33%;
+    margin: 0 auto;
+    padding-top: 50px;
+    font-family: 'Fresca', sans-serif;
+    h1{
+        font-size: 2.5em;
+        margin-top: 30px;
+        margin-bottom: 20px;
+        color:  #5e5250;
+      }
+      h2{
+        font-size: 1.5em;
+        margin-bottom: 20px;
+        color:  #5e5250;
+      }
+      .modify_button{
+          width: 170px;
+          height: 55px;
+          font-family: 'Fresca', sans-serif;
+          font-size: 1.4em;
+      }
+}
