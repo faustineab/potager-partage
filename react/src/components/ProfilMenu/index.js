@@ -10,8 +10,8 @@ import './index.scss';
 const ProfilMenu = () => (
   <div className="background">
     <div className="user-block">
-      <Link to="profile"><Button className="modify_button" inverted color="olive">Profile</Button></Link>
-      <Link to="profilemodify"><Button className="modify_button" inverted color="olive">Modifier</Button></Link>
+      <Button as={Link} to="/profile" className="modify_button">Profile</Button>
+      <Button as={Link} to="/profilemodify" className="modify_button">Modifier</Button>
     </div>
     <Switch>
       <Route path="/profile" component={Profil} />

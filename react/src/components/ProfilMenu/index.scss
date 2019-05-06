@@ -24,5 +24,12 @@
           height: 55px;
           font-family: 'Fresca', sans-serif;
           font-size: 1.4em;
+          background-color: white;
+          border: solid 1px #7ba566;
+          color: #7ba566;
+          &:hover{
+              background-color: #7ba566;
+              color: white;
+          }
       }
-}
+    }

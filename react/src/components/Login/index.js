@@ -3,10 +3,6 @@ import PropTypes from 'prop-types';
 import { Form, Button } from 'semantic-ui-react';
 import { Switch, Route, Link } from 'react-router-dom';
 
-import Subscribe from '../Subscribe';
-
-import './index.scss';
-
 const Login = ({ username, password, usernameChange, passwordChange, loginMessage, onFormSubmit, loading }) => {
 
   const handleChangeUsername = (evt) => {
@@ -51,9 +47,6 @@ const Login = ({ username, password, usernameChange, passwordChange, loginMessag
         </Form.Field>
         <Button loading={loading} disabled={loading} type="submit">Connexion</Button>
         <Link to="/subscribe">Vous n'êtes pas encore inscrit ?</Link>
-        <Switch>
-          <Route path="/subscribe" component={Subscribe} />
-        </Switch>
         <label>{loginMessage}</label>
       </Form>
     </main>
