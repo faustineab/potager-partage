@@ -112,7 +112,6 @@ class User implements UserInterface
     private $roles;
 
 
-
     public function __construct()
     {
 
@@ -350,10 +349,10 @@ class User implements UserInterface
     }
 
 
-    public function __toString()
-    {
-        return $this->gardens;
-    }
+    //   public function __toString()
+    //    {
+    //        return $this->gardens;
+    //    }
 
     public function getStatut(): ?string
     {

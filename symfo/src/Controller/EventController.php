@@ -21,10 +21,11 @@ class EventController extends AbstractController
 
     public function create(Request $request, ObjectManager $manager, ValidatorInterface $validator)
     {
-
+        dump($request);
         $content = $request->getContent();
 
         $event = $this->get('serializer')->deserialize($content, Event::class, 'json');
+
         $errors = $validator->validate($event);
 
         if (count($errors) > 0) {

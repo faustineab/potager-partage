@@ -7,14 +7,18 @@ use App\Entity\Garden;
 use App\Form\AdminType;
 use App\Form\RegistrationUserType;
 use App\Security\LoginFormAuthenticator;
+use Symfony\Component\Validator\Validation;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Guard\GuardAuthenticatorHandler;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\Validator\Constraints as Assert;
+
 
 
 class RegistrationController extends AbstractController
@@ -28,7 +32,7 @@ class RegistrationController extends AbstractController
             'user' => new User(),
             'garden' => new Garden()
         ];
-        
+
 
 
         $form = $this->createForm(AdminType::class, $userGarden);
@@ -36,10 +40,10 @@ class RegistrationController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             // encode the plain password
-            
+
             $hashedPassword = $passwordEncoder->encodePassword($userGarden['user'], $userGarden['user']->getPassword());
             $userGarden['user']->setPassword($hashedPassword);
-         //   $userGarden['user']->addRole('ROLE_ADMIN'); set rôle admin à faire 
+            //   $userGarden['user']->addRole('ROLE_ADMIN'); set rôle admin à faire 
 
 
             $userGarden['user']->setStatut('ok');
@@ -65,44 +69,40 @@ class RegistrationController extends AbstractController
     }
 
     /**
-     * @Route("/register/user", name="registration")
+     * @Route("/register/user", name="registration", methods={"GET","POST"})
      */
-    public function registerUser(Request $request, ObjectManager $manager, UserPasswordEncoderInterface $encoder, User $user = null) : Response
+    public function registerUser(Request $request, ObjectManager $manager, UserPasswordEncoderInterface $encoder, User $user = null): Response
     {
         // if($user == null){  
         //     $user = new User(); 
         // }
 
+        $data = json_decode($request->getContent(), true);
+        dump($data);
+
+        $validator = Validation::createValidator();
+
+        $constraint = new Assert\Collection(array(
+            // the keys correspond to the keys in the input array
+            'name' => new Assert\Length(array('min' => 1)),
+            'password' => new Assert\Length(array('min' => 1)),
+            'email' => new Assert\Email(),
+        ));
+        $violations = $validator->validate($data, $constraint);
+        if ($violations->count() > 0) {
+            return new JsonResponse(["error" => (string)$violations], 500);
+        }
+        $username = $data['name'];
+        $password = $data['password'];
+        $email = $data['email'];
+
         $user = new User();
+        $user
+            ->setname($username)
+            ->setPassword($password)
+            ->setEmail($email);
 
-        $form= $this->createForm(RegistrationUserType::class, $user);
 
-        $form->handleRequest($request);
-        
-        if($form->isSubmitted() && $form->isValid()){
-        
-
-            $hashedPassword = $encoder->encodePassword($user, $user->getPassword());
-            $user->setPassword($hashedPassword);
-
-            $user->setStatut('en attente');
-
-            $manager->persist($user);
-            $manager->flush();
- 
-            $this->addFlash(
-                'success',
-                'Votre compte à bien été créé, vous pouvez vous connecter'
-             );
- dump($user);
-            exit;  
-             return $this->render('base.html.twig');
-         }
- 
-         return $this->render('registration/index.html.twig', [
-             'form' => $form->createView(),
-             
-         ]);
+        return new JsonResponse(["success" => $user->getUsername() . " has been registered!"], 200);
     }
-
 }
