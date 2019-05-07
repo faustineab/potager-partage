@@ -27,6 +27,15 @@ security:
                 failure_handler:          lexik_jwt_authentication.handler.authentication_failure
                 provider: in_database
 
+        api:
+            pattern: ^/api
+            stateless: true
+            anonymous: false
+            provider: in-database
+            guard:
+                authenticators:
+                    - lexik_jwt_authentication.jwt_token_authenticator
+
 
         main:
             anonymous: true
@@ -56,4 +65,7 @@ security:
     # Note: Only the *first* access control that matches will be used
     access_control:
         - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/,       roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/register, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/api,       roles: IS_AUTHENTICATED_FULLY }
+       
+        
