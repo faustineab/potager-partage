@@ -97,8 +97,8 @@ const reducer = (state = initialState, action = {}) => {
       return {
         ...state,
         askingQuestion: false,
-        questionToAsk: action.question,
-        questionTag: action.tag,
+        questionToAsk: '',
+        questionTag: '',
       };
     default:
       return state;

@@ -8,6 +8,7 @@ class AskQuestion extends Component {
   handleSubmit = (evt) => {
     evt.preventDefault();
     const { onQuestionSubmit } = this.props;
+    console.log(evt.currentTarget);
 
     onQuestionSubmit();
   }
@@ -22,16 +23,18 @@ class AskQuestion extends Component {
     const { inputChange } = this.props;
     const { name } = evt.target;
     const { value } = evt.target;
-    console.log(name, value);
     inputChange(name, value);
+  }
+
+  handleListChange =(evt) => {
+    const { inputChange } = this.props;
+    const { outerText } = evt.target;
+    console.log('questionTag', outerText);
+    inputChange('questionTag', outerText);
   }
 
   render() {
     const { tags, question, askingQuestion } = this.props;
-
-    console.log('askingQuestion', askingQuestion);
-    console.log('question', question);
-    console.log('tags', tags);
 
     return (
       <div id="newQuestion">
@@ -52,7 +55,7 @@ class AskQuestion extends Component {
             <Form.Select
               id="selectTags"
               name="questionTag"
-              onChange={this.handleChange}
+              onChange={this.handleListChange}
               options={tags}
               placeholder="tag"
             />
