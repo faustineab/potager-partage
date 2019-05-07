@@ -1,22 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Card, Image, Button, Icon, Popup, Form } from 'semantic-ui-react';
+import { Card, Image, Button, Icon } from 'semantic-ui-react';
 
+import AskQuestion from 'src/containers/AskQuestion';
 import './index.scss';
 
 const Forum = () => (
   <div id="forum">
     <h2>Le coin des jardiniers</h2>
-    <div id="newQuestion">
-      <Popup content="Ajouter une question" style={{ FontFamily: 'Fresca, sans-serif', color: '#5e5250' }} trigger={<Button id="addQuestion" icon="add" />} />
-      <Form id="questionForm">
-        <Form.TextArea />
-        <Form.Group>
-          <Form.Select id="selectTags" options={[{ key: 'm', text: 'Fruits & Légumes', value: 'Fruits & Légumes' }, { key: 'm', text: 'Autour du jardin', value: 'Autour du jardin' }, { key: 'm', text: 'Trucs & Astuces', value: 'Trucs & Astuces' }]} placeholder="tag" />
-          <Form.Button content="Poser" floated="right" />
-        </Form.Group>
-      </Form>
-    </div>
+    <AskQuestion />
     <Card fluid className="forumCard">
       <Card.Header className="cardHeader">A quelle fréquence arroser mes tomates ?</Card.Header>
       <Card.Content>

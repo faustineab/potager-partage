@@ -24,7 +24,7 @@ const initialState = {
   gardenNbPlotsRow: 1,
   gardenPlotsColumn: 1,
   gardenSize: '',
-  askingQuestion: 'false',
+  askingQuestion: false,
   questionToAsk: '',
   questionTag: '',
   tags: [
@@ -42,6 +42,8 @@ const USER_LOGOUT = 'USER_LOGOUT';
 export const INPUT_CHANGE = 'INPUT_CHANGE';
 export const MODIFY_USER_INFOS = 'MODIFY_USER_INFOS';
 export const REGISTER_USER = 'REGISTER_USER';
+export const USER_ASKING_QUESTION = 'USER_ASKING_QUESTION';
+export const QUESTION_ASKED = 'QUESTION_ASKED';
 
 
 const reducer = (state = initialState, action = {}) => {
@@ -81,15 +83,22 @@ const reducer = (state = initialState, action = {}) => {
         ...state,
         loading: true,
       };
-    case INPUT_CHANGE:
-      return {
-        ...state,
-        [action.name]: action.value,
-      };
     case MODIFY_USER_INFOS:
       return {
         ...state,
         loading: true,
+      };
+    case USER_ASKING_QUESTION:
+      return {
+        ...state,
+        askingQuestion: !state.askingQuestion,
+      };
+    case QUESTION_ASKED:
+      return {
+        ...state,
+        askingQuestion: false,
+        questionToAsk: action.question,
+        questionTag: action.tag,
       };
     default:
       return state;
@@ -128,6 +137,16 @@ export const ModifyUserInfos = () => ({
 
 export const registerUser = () => ({
   type: REGISTER_USER,
+});
+
+export const userAskingQuestion = () => ({
+  type: USER_ASKING_QUESTION,
+});
+
+export const questionAsked = (question, tag) => ({
+  type: QUESTION_ASKED,
+  question,
+  tag,
 });
 
 export default reducer;

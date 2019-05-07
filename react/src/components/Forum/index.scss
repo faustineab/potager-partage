@@ -20,11 +20,14 @@
   }
 
   #newQuestion{
-    #questionForm{
+    #showQuestionForm{
       display: block;
       #selectTags{
         width: 50%;
       }
+    }
+    #hideQuestionForm{
+      display:none;
     }
     #addQuestion{
       margin: 1em 0;
