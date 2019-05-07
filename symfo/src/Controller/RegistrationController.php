@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Entity\Garden;
+use App\Repository\GardenRepository;
 use App\Form\AdminType;
 use App\Form\RegistrationUserType;
 use App\Security\LoginFormAuthenticator;
@@ -71,14 +72,12 @@ class RegistrationController extends AbstractController
     /**
      * @Route("/register/user", name="registration", methods={"GET","POST"})
      */
-    public function registerUser(Request $request, ObjectManager $manager, UserPasswordEncoderInterface $encoder, User $user = null): Response
+    public function registerUser(GardenRepository $gardenRepository, Request $request, ObjectManager $manager, UserPasswordEncoderInterface $encoder, User $user = null): Response
     {
-        // if($user == null){  
-        //     $user = new User(); 
-        // }
+        $content = $request->getContent();
+        dump($content);
 
         $data = json_decode($request->getContent(), true);
-        dump($data);
 
         $validator = Validation::createValidator();
 
@@ -89,27 +88,32 @@ class RegistrationController extends AbstractController
             'email' => new Assert\Email(),
             'phone' => new Assert\Length(array('min' => 1)),
             'address' => new Assert\Length(array('min' => 1)),
-            'statut' => new Assert\Length(array('min' => 1)),
-
         ));
+
         $violations = $validator->validate($data, $constraint);
+
         if ($violations->count() > 0) {
             return new JsonResponse(["error" => (string)$violations], 500);
         }
+
         $username = $data['name'];
         $password = $data['password'];
         $email = $data['email'];
         $phone = $data['phone'];
         $address = $data['address'];
-        $statut = $data['statut'];
+
 
         $user = new User();
-        $user->setName($username)
+        $user->setStatut('à valider')
+            ->setName($username)
             ->setPassword($password)
             ->setEmail($email)
             ->setPhone($phone)
-            ->setAddress($address)
-            ->setStatut($statut);
+            ->setAddress($address);
+
+
+        $manager->persist($user);
+        $manager->flush();
 
 
         return new JsonResponse(["success" => $user->getUsername() . " has been registered!"], 200);
