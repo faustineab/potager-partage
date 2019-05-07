@@ -14,7 +14,7 @@ import {
 import Subscribe from 'src/containers/Subscribe';
 import CreateGarden from 'src/containers/CreateGarden';
 import JoinGarden from 'src/containers/JoinGarden';
-import Login from '../../containers/Login';
+import Login from 'src/containers/Login';
 import Profil from '../../containers/Profil';
 import ProfilModify from '../../containers/ProfilModify';
 import ProfilMenu from '../ProfilMenu';

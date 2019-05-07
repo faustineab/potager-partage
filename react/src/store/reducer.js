@@ -16,6 +16,14 @@ const initialState = {
     { key: 'm', text: 'garden1', value: 'garden1' },
     { key: 'n', text: 'garden2', value: 'garden2' },
   ],
+  gardenName: '',
+  gardenAddress: '',
+  gardenZipcode: '',
+  gardenAddressSpecificities: '',
+  gardenCity: '',
+  gardenNbPlotsRow: 1,
+  gardenPlotsColumn: 1,
+  gardenSize: '',
 };
 
 

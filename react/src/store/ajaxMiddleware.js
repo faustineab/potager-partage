@@ -10,7 +10,7 @@ const ajaxMiddleware = store => next => (action) => {
       next(action);
 
       const firstName = store.getState().firstName;
-      const lastName = store.getState().lartName;
+      const lastName = store.getState().lastName;
       const password = store.getState().password;
       const email = store.getState().email;
       const phone = store.getState().phoneNumber;

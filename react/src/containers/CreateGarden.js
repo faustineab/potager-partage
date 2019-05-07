@@ -2,9 +2,25 @@ import { connect } from 'react-redux';
 
 import CreateGarden from 'src/components/Subscribe/createGarden';
 
-const mapStateToProps = '';
+import { inputChange } from '../store/reducer';
 
-const mapDispatchToProps = {};
+
+const mapStateToProps = state => ({
+  gardenName: state.gardenName,
+  gardenAddress: state.gardenAddress,
+  gardenAddressSpecificities: state.gardenAddressSpecificities,
+  gardenZipcode: state.gardenZipcode,
+  gardenCity: state.gardenCity,
+  gardenNbPlotsRow: state.gardenNbPlotsRow,
+  gardenNbPlotsColumn: state.gardenNbPlotsColumn,
+  gardenSize: state.gardenSize,
+});
+
+const mapDispatchToProps = dispatch => ({
+  inputChange: (name, value) => {
+    dispatch(inputChange(name, value));
+  },
+});
 
 
 export default connect(
