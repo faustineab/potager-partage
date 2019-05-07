@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Form, Button } from 'semantic-ui-react';
+import { Link } from 'react-router-dom';
 
 import './index.scss';
 
@@ -45,6 +46,7 @@ const Login = ({ username, password, inputChange, loginMessage, onFormSubmit, lo
           />
         </Form.Field>
         <Button loading={loading} disabled={loading} type="submit">Connexion</Button>
+        <Link to="/subscribe">Vous n'êtes pas encore inscrit ?</Link>
         <label>{loginMessage}</label>
       </Form>
     </main>

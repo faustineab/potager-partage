@@ -32,6 +32,7 @@ const CHANGE_LOGIN_MESSAGE = 'CHANGE_LOGIN_MESSAGE';
 const USER_LOGGED = 'USER_LOGGED';
 const USER_LOGOUT = 'USER_LOGOUT';
 export const INPUT_CHANGE = 'INPUT_CHANGE';
+export const MODIFY_USER_INFOS = 'MODIFY_USER_INFOS';
 export const REGISTER_USER = 'REGISTER_USER';
 
 const reducer = (state = initialState, action = {}) => {
@@ -71,6 +72,16 @@ const reducer = (state = initialState, action = {}) => {
         ...state,
         loading: true,
       };
+    case INPUT_CHANGE:
+      return {
+        ...state,
+        [action.name]: action.value,
+      };
+    case MODIFY_USER_INFOS:
+      return {
+        ...state,
+        loading: true,
+      };
     default:
       return state;
   }
@@ -100,6 +111,10 @@ export const inputChange = (name, value) => ({
   type: INPUT_CHANGE,
   name,
   value,
+});
+
+export const ModifyUserInfos = () => ({
+  type: MODIFY_USER_INFOS,
 });
 
 export const registerUser = () => ({
