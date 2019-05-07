@@ -24,6 +24,14 @@ const initialState = {
   gardenNbPlotsRow: 1,
   gardenPlotsColumn: 1,
   gardenSize: '',
+  askingQuestion: 'false',
+  questionToAsk: '',
+  questionTag: '',
+  tags: [
+    { key: 'm', text: 'Fruits & Légumes', value: 'Fruits & Légumes' },
+    { key: 'n', text: 'Autour du jardin', value: 'Autour du jardin' },
+    { key: 'o', text: 'Trucs & Astuces', value: 'Trucs & Astuces' },
+  ],
 };
 
 
@@ -34,6 +42,7 @@ const USER_LOGOUT = 'USER_LOGOUT';
 export const INPUT_CHANGE = 'INPUT_CHANGE';
 export const MODIFY_USER_INFOS = 'MODIFY_USER_INFOS';
 export const REGISTER_USER = 'REGISTER_USER';
+
 
 const reducer = (state = initialState, action = {}) => {
   switch (action.type) {
