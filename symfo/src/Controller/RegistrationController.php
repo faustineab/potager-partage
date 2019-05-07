@@ -87,6 +87,10 @@ class RegistrationController extends AbstractController
             'name' => new Assert\Length(array('min' => 1)),
             'password' => new Assert\Length(array('min' => 1)),
             'email' => new Assert\Email(),
+            'phone' => new Assert\Length(array('min' => 1)),
+            'address' => new Assert\Length(array('min' => 1)),
+            'statut' => new Assert\Length(array('min' => 1)),
+
         ));
         $violations = $validator->validate($data, $constraint);
         if ($violations->count() > 0) {
@@ -95,12 +99,17 @@ class RegistrationController extends AbstractController
         $username = $data['name'];
         $password = $data['password'];
         $email = $data['email'];
+        $phone = $data['phone'];
+        $address = $data['address'];
+        $statut = $data['statut'];
 
         $user = new User();
-        $user
-            ->setname($username)
+        $user->setName($username)
             ->setPassword($password)
-            ->setEmail($email);
+            ->setEmail($email)
+            ->setPhone($phone)
+            ->setAddress($address)
+            ->setStatut($statut);
 
 
         return new JsonResponse(["success" => $user->getUsername() . " has been registered!"], 200);

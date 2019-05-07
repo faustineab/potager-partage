@@ -25,7 +25,7 @@ security:
                 check_path: /login
                 success_handler:          lexik_jwt_authentication.handler.authentication_success
                 failure_handler:          lexik_jwt_authentication.handler.authentication_failure
-            provider: in_database
+                provider: in_database
 
 
         main:
@@ -34,6 +34,7 @@ security:
             provider: in_database
 
             form_login: 
+                csrf_token_generator: security.csrf.token_manager
                 login_path: app_login
                 check_path: app_login
 
@@ -54,5 +55,5 @@ security:
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
-        # - { path: ^/admin, roles: ROLE_ADMIN }
-        # - { path: ^/profile, roles: ROLE_USER }
+        - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/,       roles: IS_AUTHENTICATED_FULLY }
