@@ -28,6 +28,7 @@ class User implements UserInterface
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     * @Groups("garden_get")
      */
     private $id;
 
@@ -71,6 +72,7 @@ class User implements UserInterface
 
     /**
      * @ORM\ManyToMany(targetEntity="App\Entity\Garden", mappedBy="user")
+     * @Groups("garden_get")
      */
     private $gardens;
     /**
@@ -435,7 +437,7 @@ class User implements UserInterface
     {
 
         $roles = $this->roles->map(function ($role) {
-            return $role->getTitle();
+            return $role->getName();
         })->toArray();
         $roles[] = 'ROLE_USER';
         return $roles;

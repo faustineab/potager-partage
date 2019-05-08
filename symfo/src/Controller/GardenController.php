@@ -9,12 +9,13 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 /**
- * @Route("/garden")
+ * @Route("/api/garden")
  */
 class GardenController extends AbstractController
 {
@@ -23,9 +24,9 @@ class GardenController extends AbstractController
      */
     public function index(GardenRepository $gardenRepository): Response
     {
-        return $this->render('garden/index.html.twig', [
-            'gardens' => $gardenRepository->findAll(),
-        ]);
+        $garden = $gardenRepository->findAll();
+
+        return $this->json($garden);
     }
 
     /**
@@ -60,46 +61,31 @@ class GardenController extends AbstractController
     /**
      * @Route("/{id}", name="garden_show", methods={"GET"})
      */
-    public function show(Garden $garden): Response
+    public function show($id,GardenRepository $gardenRepository,SerializerInterface $serializer): Response
     {
-        return $this->render('garden/show.html.twig', [
-            'garden' => $garden,
-        ]);
+        $garden = $gardenRepository->find($id);
+        $jsonGarden = $serializer->serialize(
+            $garden,
+            'json',
+            ['groups' => 'garden_get']
+        );
+        return JsonResponse::fromJsonString($jsonGarden);
     }
-
-    /**
-     * @Route("/{id}/edit", name="garden_edit", methods={"GET","POST"})
-     */
-    public function edit(Request $request, Garden $garden): Response
-    {
-        $form = $this->createForm(GardenType::class, $garden);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
-
-            return $this->redirectToRoute('garden_index', [
-                'id' => $garden->getId(),
-            ]);
-        }
-
-        return $this->render('garden/edit.html.twig', [
-            'garden' => $garden,
-            'form' => $form->createView(),
-        ]);
-    }
-
-    /**
+/**
      * @Route("/{id}", name="garden_delete", methods={"DELETE"})
      */
-    public function delete(Request $request, Garden $garden): Response
+    public function delete($id,Request $request, Garden $garden, SerializerInterface $serializer, EntityManagerInterface $manager, ValidatorInterface $validator): Response
     {
-        if ($this->isCsrfTokenValid('delete' . $garden->getId(), $request->request->get('_token'))) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->remove($garden);
-            $entityManager->flush();
+        if ($this->isCsrfTokenValid('delete'.$garden->getId(), $request->request->get('_token'))) {
+   
         }
 
-        return $this->redirectToRoute('garden_index');
+        $manager->remove($garden);
+        $manager->flush();
+
+        return $this->redirectToRoute('garden_index', [
+            'id' => $garden->getId(),
+        ], Response::HTTP_OK);
     }
+
 }
