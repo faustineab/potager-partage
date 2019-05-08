@@ -39,7 +39,7 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"event"})
+     * @Groups({"event","garden_get"})
      */
     private $name;
 
@@ -89,6 +89,7 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups("garden_get")
      */
     private $statut;
 
