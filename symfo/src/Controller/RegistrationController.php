@@ -20,6 +20,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 use App\Repository\UserRepository;
+use Symfony\Component\Security\Core\Encoder\PasswordEncoderInterface;
 
 class RegistrationController extends AbstractController
 {
@@ -28,40 +29,30 @@ class RegistrationController extends AbstractController
      */
     public function registerAdmin(Request $request, UserPasswordEncoderInterface $passwordEncoder, GuardAuthenticatorHandler $guardHandler, LoginFormAuthenticator $authenticator): Response
     {
-        $userGarden = [
-            'user' => new User(),
-            'garden' => new Garden()
-        ];
+
+        // encode the plain password
+
+        $hashedPassword = $passwordEncoder->encodePassword($userGarden['user'], $userGarden['user']->getPassword());
+        $userGarden['user']->setPassword($hashedPassword);
+        //   $userGarden['user']->addRole('ROLE_ADMIN'); set rôle admin à faire 
 
 
+        $userGarden['user']->setStatut('ok');
 
-        $form = $this->createForm(AdminType::class, $userGarden);
-        $form->handleRequest($request);
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->persist($userGarden['user']);
+        $entityManager->persist($userGarden['garden']);
+        $entityManager->flush();
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            // encode the plain password
+        // do anything else you need here, like send an email
 
-            $hashedPassword = $passwordEncoder->encodePassword($userGarden['user'], $userGarden['user']->getPassword());
-            $userGarden['user']->setPassword($hashedPassword);
-            //   $userGarden['user']->addRole('ROLE_ADMIN'); set rôle admin à faire 
+        return $guardHandler->authenticateUserAndHandleSuccess(
+            $userGarden['user'],
+            $request,
+            $authenticator,
+            'main' // firewall name in security.yaml
+        );
 
-
-            $userGarden['user']->setStatut('ok');
-
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($userGarden['user']);
-            $entityManager->persist($userGarden['garden']);
-            $entityManager->flush();
-
-            // do anything else you need here, like send an email
-
-            return $guardHandler->authenticateUserAndHandleSuccess(
-                $userGarden['user'],
-                $request,
-                $authenticator,
-                'main' // firewall name in security.yaml
-            );
-        }
 
         return $this->render('registration/register.html.twig', [
             'registrationForm' => $form->createView(),
@@ -107,9 +98,11 @@ class RegistrationController extends AbstractController
 
 
         $user = new User();
+        $hashedPassword = $encoder->encodePassword($user, $password);
+
         $user->setStatut('à valider')
             ->setName($username)
-            ->setPassword($password)
+            ->setPassword($hashedPassword)
             ->setEmail($email)
             ->setPhone($phone)
             ->setAddress($address);
