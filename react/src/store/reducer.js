@@ -1,3 +1,7 @@
+/**
+ * Initial State
+ */
+
 const initialState = {
   username: '',
   password: '',
@@ -35,6 +39,10 @@ const initialState = {
 };
 
 
+/**
+ * Types
+ */
+
 export const LOG_USER = 'LOG_USER';
 const CHANGE_LOGIN_MESSAGE = 'CHANGE_LOGIN_MESSAGE';
 const USER_LOGGED = 'USER_LOGGED';
@@ -44,8 +52,13 @@ export const MODIFY_USER_INFOS = 'MODIFY_USER_INFOS';
 export const REGISTER_USER = 'REGISTER_USER';
 export const USER_ASKING_QUESTION = 'USER_ASKING_QUESTION';
 export const ADD_TAG_TO_QUESTION = 'ADD_TAG_TO_QUESTION';
+export const REMOVE_QUESTION_TAG = 'REMOVE_QUESTION_TAG';
 export const QUESTION_ASKED = 'QUESTION_ASKED';
 
+
+/**
+ * Reducer
+ */
 
 const reducer = (state = initialState, action = {}) => {
   switch (action.type) {
@@ -99,6 +112,11 @@ const reducer = (state = initialState, action = {}) => {
         ...state,
         questionTags: [...state.questionTags, action.tag],
       };
+    case REMOVE_QUESTION_TAG:
+      return {
+        ...state,
+        questionTags: [...action.tagList],
+      };
     case QUESTION_ASKED:
       return {
         ...state,
@@ -111,6 +129,10 @@ const reducer = (state = initialState, action = {}) => {
   }
 };
 
+
+/**
+ * Action Creators
+ */
 
 export const logUser = () => ({
   type: LOG_USER,
@@ -154,10 +176,21 @@ export const addTagToQuestion = tag => ({
   tag,
 });
 
+export const removeQuestionTag = tagList => ({
+  type: REMOVE_QUESTION_TAG,
+  tagList,
+});
+
 export const questionAsked = (question, tag) => ({
   type: QUESTION_ASKED,
   question,
   tag,
 });
+
+
+/**
+ * Selectors
+ */
+
 
 export default reducer;

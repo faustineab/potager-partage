@@ -1,8 +1,9 @@
 import { connect } from 'react-redux';
 
+
 import AskQuestion from 'src/components/Forum/AskQuestion';
 
-import { inputChange, userAskingQuestion, questionAsked, addTagToQuestion } from '../store/reducer';
+import { inputChange, userAskingQuestion, questionAsked, addTagToQuestion, removeQuestionTag } from '../store/reducer';
 
 
 const mapStateToProps = state => ({
@@ -18,6 +19,9 @@ const mapDispatchToProps = dispatch => ({
   },
   addTag: (tag) => {
     dispatch(addTagToQuestion(tag));
+  },
+  removeQuestionTag: (tagList) => {
+    dispatch(removeQuestionTag(tagList));
   },
   userAskingQuestion: () => {
     dispatch(userAskingQuestion());

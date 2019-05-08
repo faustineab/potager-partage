@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Form, Popup, Button } from 'semantic-ui-react';
+import { Form, Popup, Button, Icon } from 'semantic-ui-react';
 
 import './index.scss';
 
@@ -27,11 +27,25 @@ class AskQuestion extends Component {
   }
 
   handleListChange =(evt) => {
-    const { addTag } = this.props;
+    const { addTag, questionTags } = this.props;
     const { outerText } = evt.target;
     console.log('questionTag', outerText);
-    addTag(outerText);
+    console.log(questionTags.includes(outerText));
+    if (!questionTags.includes(outerText)) {
+      addTag(outerText);
+    }
   }
+
+  handleTags =(evt) => {
+    const deletedTag = evt.currentTarget.id;
+    console.log('deletedTag', deletedTag);
+    const { questionTags, removeQuestionTag } = this.props;
+    console.log(questionTags);
+    const updatedQuestionTags = questionTags.filter(tag => tag !== deletedTag);
+    console.log(updatedQuestionTags);
+    removeQuestionTag(updatedQuestionTags);
+  }
+
 
   render() {
     const { tags, question, askingQuestion, questionTags } = this.props;
@@ -60,8 +74,8 @@ class AskQuestion extends Component {
               options={tags}
               placeholder="tag"
             />
-            <div>
-              {(questionTags.length > 0) && questionTags.map(tag => <div>{tag}</div>)}
+            <div id="questionTags">
+              {(questionTags.length > 0) && questionTags.map((tag, index) => <div key={index} className="tag">{tag} <Icon id={tag} onClick={this.handleTags} name="delete" /></div>)}
             </div>
           </Form.Group>
           <Form.Button content="Poser" floated="right" />
@@ -78,6 +92,7 @@ AskQuestion.propTypes = {
   askingQuestion: PropTypes.bool.isRequired,
   inputChange: PropTypes.func.isRequired,
   addTag: PropTypes.func.isRequired,
+  removeQuestionTag: PropTypes.func.isRequired,
   userAskingQuestion: PropTypes.func.isRequired,
   onQuestionSubmit: PropTypes.func.isRequired,
 };
