@@ -6,8 +6,10 @@ use App\Entity\Plot;
 use App\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Collection;
+use Symfony\Component\Serializer\Serializer;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Serializer\Annotation\Groups;
+
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\GardenRepository")
@@ -84,6 +86,7 @@ class Garden
     /**
      * @ORM\ManyToMany(targetEntity="App\Entity\User", inversedBy="gardens")
      * @Groups("garden_get")
+     * 
      */
     private $user;
 
