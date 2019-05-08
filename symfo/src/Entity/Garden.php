@@ -78,7 +78,7 @@ class Garden
      */
     private $plots;
 
-    
+
 
     public function __construct()
     {
@@ -220,6 +220,8 @@ class Garden
     {
         return $this->user;
     }
+
+
 
     public function addUser(User $user): self
     {

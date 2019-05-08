@@ -261,6 +261,9 @@ class User implements UserInterface
         }
         return $this;
     }
+
+
+
     public function removeGarden(Garden $garden): self
     {
         if ($this->gardens->contains($garden)) {

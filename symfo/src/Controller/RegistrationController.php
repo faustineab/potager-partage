@@ -19,8 +19,7 @@ use Symfony\Component\Security\Guard\GuardAuthenticatorHandler;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Validator\Constraints as Assert;
-
-
+use App\Repository\UserRepository;
 
 class RegistrationController extends AbstractController
 {
@@ -71,8 +70,10 @@ class RegistrationController extends AbstractController
 
     /**
      * @Route("/register/user", name="registration", methods={"GET","POST"})
+     *  @return JsonResponse|\Symfony\Component\HttpFoundation\RedirectResponse
+
      */
-    public function registerUser(GardenRepository $gardenRepository, Request $request, ObjectManager $manager, UserPasswordEncoderInterface $encoder, User $user = null): Response
+    public function registerUser(GardenRepository $gardenRepository, Request $request, ObjectManager $manager, UserPasswordEncoderInterface $encoder, User $user = null, UserRepository $userRepository): Response
     {
         $content = $request->getContent();
         dump($content);
@@ -88,6 +89,7 @@ class RegistrationController extends AbstractController
             'email' => new Assert\Email(),
             'phone' => new Assert\Length(array('min' => 1)),
             'address' => new Assert\Length(array('min' => 1)),
+            'gardenId' => new Assert\Length(array('min' => 1))
         ));
 
         $violations = $validator->validate($data, $constraint);
@@ -101,6 +103,7 @@ class RegistrationController extends AbstractController
         $email = $data['email'];
         $phone = $data['phone'];
         $address = $data['address'];
+        $gardenId = $data['gardenId'];
 
 
         $user = new User();
@@ -111,11 +114,28 @@ class RegistrationController extends AbstractController
             ->setPhone($phone)
             ->setAddress($address);
 
-
         $manager->persist($user);
+
+        $garden = $gardenRepository->find($gardenId);
+
+        $garden->addUser($user);
+
+        $manager->persist($garden);
         $manager->flush();
 
+        dump($garden);
+        exit;
 
-        return new JsonResponse(["success" => $user->getUsername() . " has been registered!"], 200);
+
+        $json = [
+            'username' => $data['email'],
+            'password' => $data['password']
+        ];
+        dump($json);
+        exit;
+
+
+
+        return $this->redirectToRoute('app_login', $json, 307);
     }
 }
