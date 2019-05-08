@@ -75,38 +75,46 @@ class EventController extends AbstractController
     public function edit_post(Event $event, Request $request, ObjectManager $manager, ValidatorInterface $validator, EventRepository $eventRepository)
     {
 
+        $user = $this->get('security.token_storage')->getToken()->getUser();
 
-        $content = $request->getContent();
+        if ($user == $event->getUser()) {
 
-        $currentEvent = $this->get('serializer')->deserialize($content, Event::class, 'json');
-        dump($currentEvent);
 
-        $errors = $validator->validate($event);
 
-        if (count($errors) > 0) {
-            dd($errors);
+            $content = $request->getContent();
+
+            $currentEvent = $this->get('serializer')->deserialize($content, Event::class, 'json');
+            dump($currentEvent);
+
+            $errors = $validator->validate($event);
+
+            if (count($errors) > 0) {
+                dd($errors);
+            }
+
+            $description = $currentEvent->getDescription();
+            $title = $currentEvent->getTitle();
+            $startDate = $currentEvent->getStartDate();
+            $endDate = $currentEvent->getEndDate();
+
+
+            $event->setDescription($description)
+                ->setTitle($title)
+                ->setStartDate($startDate)
+                ->setEndDate($endDate);
+
+
+            // $event->setUser($user);
+
+            $manager->persist($event);
+
+            $manager->flush();
+
+            return $this->redirectToRoute('show_event', [
+                'id' => $event->getId(),
+            ], Response::HTTP_CREATED);
+        } else {
+            echo 'non autorisé';
         }
-
-        $description = $currentEvent->getDescription();
-        $title = $currentEvent->getTitle();
-        $startDate = $currentEvent->getStartDate();
-        $endDate = $currentEvent->getEndDate();
-
-
-        $event->setDescription($description)
-            ->setTitle($title)
-            ->setStartDate($startDate)
-            ->setEndDate($endDate);
-
-        // $user = $this->get('security.token_storage')->getToken()->getUser();
-        // $event->setUser($user);
-
-        $manager->persist($event);
-
-        $manager->flush();
-
-        return $this->redirectToRoute('show_event', [
-            'id' => $event->getId(),
-        ], Response::HTTP_CREATED);
     }
 }
