@@ -57,15 +57,6 @@ class GardenController extends AbstractController
         ], Response::HTTP_CREATED); // Response::HTTP_CREATED = 201
     }
 
-    /**
-     * @Route("/{id}", name="garden_show", methods={"GET"})
-     */
-    public function show(Garden $garden): Response
-    {
-        return $this->render('garden/show.html.twig', [
-            'garden' => $garden,
-        ]);
-    }
 
     /**
      * @Route("/{id}/edit", name="garden_edit", methods={"GET","POST"})

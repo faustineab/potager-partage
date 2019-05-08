@@ -28,7 +28,7 @@ class RegistrationController extends AbstractController
     /**
      * @Route("/register/admin", name="app_register")
      */
-    public function registerAdmin(Request $request, GardenRepository $gardenRepository, UserPasswordEncoderInterface $encoder, ObjectManager $manager, GuardAuthenticatorHandler $guardHandler, LoginFormAuthenticator $authenticator, RoleRepository $roleRepository): Response
+    public function registerAdmin(Request $request, GardenRepository $gardenRepository, UserPasswordEncoderInterface $encoder, ObjectManager $manager, RoleRepository $roleRepository): Response
     {
 
         $content = $request->getContent();
@@ -126,27 +126,16 @@ class RegistrationController extends AbstractController
         $manager->persist($role);
         $manager->flush();
         dump($role);
-        exit;
-        // $garden->addUser($user);
-        // $manager->persist($garden);
 
-        // $manager->flush();
-
-        // dump($garden);
-        // exit;
-
-
-        $json = [
+        $credentials = [
             'username' => $data['email'],
             'password' => $data['password']
         ];
-        dump($json);
-        exit;
+        dump($credentials);
 
-
-
-        return $this->redirectToRoute('app_login', $json, 307);
+        return  new JsonResponse($credentials);
     }
+
 
 
     /**
@@ -215,10 +204,9 @@ class RegistrationController extends AbstractController
             'password' => $data['password']
         ];
         dump($json);
-        exit;
 
 
 
-        return $this->redirectToRoute('app_login', $json, 307);
+        return $this->redirectToRoute('app_login', [], 307);
     }
 }
