@@ -27,14 +27,15 @@ class AskQuestion extends Component {
   }
 
   handleListChange =(evt) => {
-    const { inputChange } = this.props;
+    const { addTag } = this.props;
     const { outerText } = evt.target;
     console.log('questionTag', outerText);
-    inputChange('questionTag', outerText);
+    addTag(outerText);
   }
 
   render() {
-    const { tags, question, askingQuestion } = this.props;
+    const { tags, question, askingQuestion, questionTags } = this.props;
+    console.log(questionTags.length);
 
     return (
       <div id="newQuestion">
@@ -54,13 +55,16 @@ class AskQuestion extends Component {
           <Form.Group>
             <Form.Select
               id="selectTags"
-              name="questionTag"
+              name="questionTags"
               onChange={this.handleListChange}
               options={tags}
               placeholder="tag"
             />
-            <Form.Button content="Poser" floated="right" />
+            <div>
+              {(questionTags.length > 0) && questionTags.map(tag => <div>{tag}</div>)}
+            </div>
           </Form.Group>
+          <Form.Button content="Poser" floated="right" />
         </Form>
       </div>
     );
@@ -69,9 +73,11 @@ class AskQuestion extends Component {
 
 AskQuestion.propTypes = {
   question: PropTypes.string,
+  questionTags: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
   tags: PropTypes.arrayOf(PropTypes.object.isRequired).isRequired,
   askingQuestion: PropTypes.bool.isRequired,
   inputChange: PropTypes.func.isRequired,
+  addTag: PropTypes.func.isRequired,
   userAskingQuestion: PropTypes.func.isRequired,
   onQuestionSubmit: PropTypes.func.isRequired,
 };

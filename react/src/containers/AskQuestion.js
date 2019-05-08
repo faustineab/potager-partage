@@ -2,18 +2,22 @@ import { connect } from 'react-redux';
 
 import AskQuestion from 'src/components/Forum/AskQuestion';
 
-import { inputChange, userAskingQuestion, questionAsked } from '../store/reducer';
+import { inputChange, userAskingQuestion, questionAsked, addTagToQuestion } from '../store/reducer';
 
 
 const mapStateToProps = state => ({
   question: state.questionToAsk,
   tags: state.tags,
   askingQuestion: state.askingQuestion,
+  questionTags: state.questionTags,
 });
 
 const mapDispatchToProps = dispatch => ({
   inputChange: (name, value) => {
     dispatch(inputChange(name, value));
+  },
+  addTag: (tag) => {
+    dispatch(addTagToQuestion(tag));
   },
   userAskingQuestion: () => {
     dispatch(userAskingQuestion());

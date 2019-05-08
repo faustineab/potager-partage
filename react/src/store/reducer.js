@@ -26,7 +26,7 @@ const initialState = {
   gardenSize: '',
   askingQuestion: false,
   questionToAsk: '',
-  questionTag: '',
+  questionTags: [],
   tags: [
     { key: 'm', text: 'Fruits & Légumes', value: 'Fruits & Légumes' },
     { key: 'n', text: 'Autour du jardin', value: 'Autour du jardin' },
@@ -43,6 +43,7 @@ export const INPUT_CHANGE = 'INPUT_CHANGE';
 export const MODIFY_USER_INFOS = 'MODIFY_USER_INFOS';
 export const REGISTER_USER = 'REGISTER_USER';
 export const USER_ASKING_QUESTION = 'USER_ASKING_QUESTION';
+export const ADD_TAG_TO_QUESTION = 'ADD_TAG_TO_QUESTION';
 export const QUESTION_ASKED = 'QUESTION_ASKED';
 
 
@@ -93,12 +94,17 @@ const reducer = (state = initialState, action = {}) => {
         ...state,
         askingQuestion: !state.askingQuestion,
       };
+    case ADD_TAG_TO_QUESTION:
+      return {
+        ...state,
+        questionTags: [...state.questionTags, action.tag],
+      };
     case QUESTION_ASKED:
       return {
         ...state,
         askingQuestion: false,
         questionToAsk: '',
-        questionTag: '',
+        questionTags: [],
       };
     default:
       return state;
@@ -141,6 +147,11 @@ export const registerUser = () => ({
 
 export const userAskingQuestion = () => ({
   type: USER_ASKING_QUESTION,
+});
+
+export const addTagToQuestion = tag => ({
+  type: ADD_TAG_TO_QUESTION,
+  tag,
 });
 
 export const questionAsked = (question, tag) => ({
