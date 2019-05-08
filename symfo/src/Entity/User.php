@@ -72,7 +72,6 @@ class User implements UserInterface
 
     /**
      * @ORM\ManyToMany(targetEntity="App\Entity\Garden", mappedBy="user")
-     * @Groups("garden_get")
      */
     private $gardens;
     /**

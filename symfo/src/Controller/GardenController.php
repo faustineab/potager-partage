@@ -22,12 +22,15 @@ class GardenController extends AbstractController
     /**
      * @Route("/", name="garden_index", methods={"GET"})
      */
-    public function index(GardenRepository $gardenRepository): Response
-    {
-        $garden = $gardenRepository->findAll();
+    public function index(GardenRepository $gardenRepository, SerializerInterface $serializer): Response
+   {
+       $gardens = $gardenRepository->findAll();
+       $jsonGardens = $serializer->serialize($gardens, 'json',
+           ['groups' => 'garden_get']
+       );
 
-        return $this->json($garden);
-    }
+       return JsonResponse::fromJsonString($jsonGardens);
+   }
 
     /**
      * @Route("/new", name="garden_new", methods={"GET","POST"})
