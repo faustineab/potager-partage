@@ -15,13 +15,12 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class EventController extends AbstractController
 {
     /**
-     * @Route("/event", name="create_event", methods={"GET","POST"})
+     * @Route("/api/event", name="create_event", methods={"GET","POST"})
      */
 
 
     public function create(Request $request, ObjectManager $manager, ValidatorInterface $validator)
     {
-        dump($request);
         $content = $request->getContent();
 
         $event = $this->get('serializer')->deserialize($content, Event::class, 'json');
@@ -32,7 +31,11 @@ class EventController extends AbstractController
             dd($errors);
         }
 
+        $user = $this->get('security.token_storage')->getToken()->getUser();
+        $event->setUser($user);
+
         $manager->persist($event);
+
         $manager->flush();
 
         return $this->redirectToRoute('show_event', [

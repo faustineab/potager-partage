@@ -196,7 +196,7 @@ class RegistrationController extends AbstractController
         $manager->flush();
 
         dump($garden);
-        exit;
+
 
 
         $credentials = [
