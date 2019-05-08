@@ -199,14 +199,14 @@ class RegistrationController extends AbstractController
         exit;
 
 
-        $json = [
+        $credentials = [
             'username' => $data['email'],
             'password' => $data['password']
         ];
-        dump($json);
+        dump($credentials);
 
 
 
-        return $this->redirectToRoute('app_login', [], 307);
+        return  new JsonResponse($credentials);
     }
 }
