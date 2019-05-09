@@ -31,9 +31,7 @@ class ForumQuestionController extends AbstractController
     public function index(SerializerInterface $serializer, ForumQuestionRepository $forumQuestionRepository): Response
     {
         $questions = $forumQuestionRepository->findAll();
-        $jsonQuestions = $serializer->serialize($questions, 'json',
-            ['groups' => 'forum_questions']
-        );
+        $jsonQuestions = $serializer->serialize($questions, 'json',['groups' => 'forum_questions']);
  
         return JsonResponse::fromJsonString($jsonQuestions);
     }

@@ -46,7 +46,6 @@ class ForumAnswer
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="forumAnswers")
      * @ORM\JoinColumn(nullable=false)
-     * @Groups({"forum_questions"})
      */
     private $user;
 

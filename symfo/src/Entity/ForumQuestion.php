@@ -46,13 +46,11 @@ class ForumQuestion
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\ForumAnswer", mappedBy="question", orphanRemoval=true)
-     * @Groups({"forum_questions"})
      */
     private $answers;
 
     /**
      * @ORM\ManyToMany(targetEntity="App\Entity\ForumTag", mappedBy="questions")
-     * @Groups({"forum_questions"})
      */
     private $tags;
 
