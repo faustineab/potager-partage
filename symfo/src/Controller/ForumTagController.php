@@ -30,129 +30,119 @@ class ForumTagController extends AbstractController
         return JsonResponse::fromJsonString($jsonTags);
     }
 
-    // /**
-    //  * @Route("/new", name="forum_question_new", methods={"POST"})
-    //  */
-    // public function new(Request $request, SerializerInterface $serializer, EntityManagerInterface $entityManager, ValidatorInterface $validator)
-    // {
-    //     $content = $request->getContent();
+    /**
+     * @Route("/new", name="forum_tag_new", methods={"POST"})
+     */
+    public function new(Request $request, SerializerInterface $serializer, EntityManagerInterface $entityManager, ValidatorInterface $validator)
+    {
+        $content = $request->getContent();
         
-    //     $question = $serializer->deserialize($content, ForumQuestion::class, 'json');
+        $tag = $serializer->deserialize($content, ForumTag::class, 'json');
         
-    //     $errors = $validator->validate($question);
-    //     if (count($errors) > 0)
-    //         {
-    //             foreach ($errors as $error) 
-    //             {
-    //                 return new JsonResponse(
-    //                     'message: Votre question comporte des erreurs : '.$error.'.', 
-    //                     406);
-    //             }
-    //         }
-        
-    //     $user = $this->get('security.token_storage')->getToken()->getUser();
-    //     $question->setUser($user);
-        
-    //     $entityManager->persist($question);
-    //     $entityManager->flush();
-        
-    //     return new JsonResponse('message: Votre question a été posée', 200);
-    // }
+        $user = $this->get('security.token_storage')->getToken()->getUser();
 
-    // /**
-    //  * @Route("/{id}", name="forum_question_show", methods={"GET"})
-    //  */
-    // public function show(ForumQuestion $question, Request $request, SerializerInterface $serializer): Response
-    // {
-    //     $jsonQuestion = $serializer->serialize($question, 'json',
-    //         ['groups' => 'forum_questions']
-    //     );
+        if ($user->getRoles() == 'ROLE_ADMIN') {            
+            $errors = $validator->validate($tag);
+            
+            if (count($errors) > 0)
+            {
+                foreach ($errors as $error) 
+                {
+                    return new JsonResponse(
+                        'message: Votre entrée comporte des erreurs : '.$error.'.', 
+                        406);
+                    }
+                }
+                
+                $tag->setUser($user);
+                
+                $entityManager->persist($tag);
+                $entityManager->flush();
+
+                return new JsonResponse('message: Votre tag a été créé', 200);
+        } 
+        
+        return new JsonResponse('message: Vous n\'avez pas les droits nécessaires pour ajouter une catégorie', 403);
+    }
+
+    /**
+     * @Route("/{id}", name="forum_tag_show", methods={"GET"})
+     */
+    public function show(ForumTag $tag, Request $request, SerializerInterface $serializer): Response
+    {
+        $jsonTag = $serializer->serialize($tag, 'json',
+            ['groups' => 'forum_tags']
+        );
  
-    //     return JsonResponse::fromJsonString($jsonQuestion);
-    // }
+        return JsonResponse::fromJsonString($jsonTag);
+    }
 
-    // /**
-    //  * @Route("/{id}/edit", name="forum_question_edit", methods={"PUT"})
-    //  */
-    // public function edit(Request $request, ForumQuestion $forumQuestion, EntityManagerInterface $entityManager, ValidatorInterface $validator, SerializerInterface $serializer): Response
-    // {
-    //     $user = $this->get('security.token_storage')->getToken()->getUser();
+    /**
+     * @Route("/{id}/edit", name="forum_tag_edit", methods={"PUT"})
+     */
+    public function edit(Request $request, ForumTag $forumTag, EntityManagerInterface $entityManager, ValidatorInterface $validator, SerializerInterface $serializer): Response
+    {
+        $user = $this->get('security.token_storage')->getToken()->getUser();
         
-    //     if ($user->getRoles() == 'ROLE_ADMIN') {
-    //         $admin = $user;
-    //     }       
+        if ($user->getRoles() == 'ROLE_ADMIN') {
+            $admin = $user;
+        }       
 
-    //     if ($user == $forumQuestion->getUser() || $admin)
-    //     {
-    //         $content = $request->getContent();
+        if ($user == $forumTag->getUser() || $admin)
+        {
+            $content = $request->getContent();
 
-    //         $editedQuestion = $serializer->deserialize($content, ForumQuestion::class, 'json');
-    //         // dd($editedQuestion);
+            $editedTag = $serializer->deserialize($content, ForumTag::class, 'json');
+            // dd($editedTag);
 
-    //         $errors = $validator->validate($editedQuestion);
+            $errors = $validator->validate($editedTag);
 
-    //         if (count($errors) > 0)
-    //         {
-    //             foreach ($errors as $error) 
-    //             {
-    //                 return new JsonResponse(
-    //                     'message: Votre modification comporte des erreurs : '.$error.'.', 
-    //                     304);
-    //             }
-    //         }
+            if (count($errors) > 0)
+            {
+                foreach ($errors as $error) 
+                {
+                    return new JsonResponse(
+                        'message: Votre modification comporte des erreurs : '.$error.'.', 
+                        304);
+                }
+            }
 
-    //         $title = $editedQuestion->getTitle();
-    //         if ($title != null)
-    //         {
-    //             $forumQuestion->setTitle($title);
-    //         }
+            $name = $editedTag->getName();
+            if ($name != null)
+            {
+                $forumTag->setName($name);
+            }
+
+            $forumTag->setUpdatedAt(new \Datetime());
             
-    //         $text = $editedQuestion->getText();
-    //         if ($text != null)
-    //         {
-    //             $forumQuestion->setText($text);
-    //         }
+            $entityManager->merge($forumTag);
+            $entityManager->persist($forumTag);
+            $entityManager->flush();
 
-    //         $forumQuestion->setUpdatedAt(new \Datetime());
+            return new JsonResponse('message: Votre catégorie a été modifiée', 200);
+        }
 
-    //         foreach ($editedQuestion->getTags() as $editedTag) 
-    //         {
-    //             if ($editedTag = $forumQuestion->getTags()) {
-    //                 $editedQuestion->addTag($editedTag);
-    //             }
-    //             if ($editedTag != $forumQuestion->getTags()) {
-    //                 $editedQuestion->removeTag($editedTag);
-    //             }
-    //         }
+        return new JsonResponse('message: Vous n\'êtes pas autorisé à modifier cette catégorie', 403);
+    }
+
+    /**
+     * @Route("/{id}", name="forum_tag_delete", methods={"DELETE"})
+     */
+    public function delete(ObjectManager $objectManager, ForumTag $forumTag): Response
+    {
+        $user = $this->get('security.token_storage')->getToken()->getUser();
+
+        if ($user->getRoles() == 'ROLE_ADMIN') {
+            $admin = $user;
+        }
+
+        if ($user = $forumTag->getUser() || $admin) {
+            $objectManager->remove($forumTag);
+            $objectManager->flush();
             
-    //         $entityManager->merge($forumQuestion);
-    //         $entityManager->persist($forumQuestion);
-    //         $entityManager->flush();
+            return new JsonResponse('message: Votre catégorie a été supprimée', 200);
+        }
 
-    //         return new JsonResponse('message: Votre question a été modifiée', 200);
-    //     }
-
-    //     return new JsonResponse('message: Vous n\'êtes pas autorisé à modifier cette question', 403);
-    // }
-
-    // /**
-    //  * @Route("/{id}", name="forum_question_delete", methods={"DELETE"})
-    //  */
-    // public function delete(ObjectManager $objectManager, ForumQuestion $forumQuestion): Response
-    // {
-    //     $user = $this->get('security.token_storage')->getToken()->getUser();
-
-    //     if ($user->getRoles() == 'ROLE_ADMIN') {
-    //         $admin = $user;
-    //     }
-
-    //     if ($user = $forumQuestion->getUser() || $admin) {
-    //         $objectManager->remove($forumQuestion);
-    //         $objectManager->flush();
-            
-    //         return new JsonResponse('message: Votre question a été supprimée', 200);
-    //     }
-
-    //     return new JsonResponse('message: Vous n\'êtes pas autorisé à supprimer cette question', 406);
-    // }
+        return new JsonResponse('message: Vous n\'êtes pas autorisé à supprimer cette catégorie', 406);
+    }
 }
