@@ -16,7 +16,7 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 /**
- * @Route("/api/forum/question/{id}/answer")
+ * @Route("/api/forum/question/{questionid}/answer")
  */
 class ForumAnswerController extends AbstractController
 {
@@ -50,78 +50,64 @@ class ForumAnswerController extends AbstractController
         return new JsonResponse('message: Vous avez répondu à la question "'.$question->getTitle().'"', 200);
     }
 
-    // /**
-    //  * @Route("/{id}/edit", name="forum_question_edit", methods={"PUT"})
-    //  */
-    // public function edit(Request $request, ForumQuestion $forumQuestion, EntityManagerInterface $entityManager, ValidatorInterface $validator, SerializerInterface $serializer): Response
-    // {
-    //     $user = $this->get('security.token_storage')->getToken()->getUser();
+    /**
+     * @Route("/{id}/edit", name="forum_answer_edit", methods={"PUT"})
+     */
+    public function edit(Request $request, ForumAnswer $forumAnswer, EntityManagerInterface $entityManager, ValidatorInterface $validator, SerializerInterface $serializer): Response
+    {
+        $user = $this->get('security.token_storage')->getToken()->getUser();
 
-    //     if ($user == $forumQuestion->getUser())
-    //     {
-    //         $content = $request->getContent();
+        if ($user == $forumAnswer->getUser())
+        {
+            $content = $request->getContent();
 
-    //         $editedQuestion = $serializer->deserialize($content, ForumQuestion::class, 'json');
-    //         // dd($editedQuestion);
+            $editedAnswer = $serializer->deserialize($content, ForumAnswer::class, 'json');
+            // dd($editedAnswer);
 
-    //         $errors = $validator->validate($editedQuestion);
+            $errors = $validator->validate($editedAnswer);
 
-    //         if (count($errors) > 0)
-    //         {
-    //             foreach ($errors as $error) 
-    //             {
-    //                 return new JsonResponse(
-    //                     'message: Votre modification comporte des erreurs : '.$error.'.', 
-    //                     304);
-    //             }
-    //         }
+            if (count($errors) > 0)
+            {
+                foreach ($errors as $error) 
+                {
+                    return new JsonResponse(
+                        'message: Votre modification comporte des erreurs : '.$error.'.', 
+                        304);
+                }
+            }
 
-    //         $title = $editedQuestion->getTitle();
-    //         if ($title != null)
-    //         {
-    //             $forumQuestion->setTitle($title);
-    //         }
+            $text = $editedAnswer->getText();
+            if ($text != null)
+            {
+                $forumAnswer->setText($text);
+            }
+
+            $forumAnswer->setUpdatedAt(new \Datetime());
             
-    //         $text = $editedQuestion->getText();
-    //         if ($text != null)
-    //         {
-    //             $forumQuestion->setText($text);
-    //         }
+            $entityManager->merge($forumAnswer);
+            $entityManager->persist($forumAnswer);
+            $entityManager->flush();
 
-    //         $forumQuestion->setUpdatedAt(new \Datetime());
+            return new JsonResponse('message: Votre réponse a été modifiée', 200);
+        }
 
-    //         foreach ($editedQuestion->getTags() as $editedTag) 
-    //         {
-    //             if ($editedTag = $forumQuestion->getTags()) {
-    //                 $editedQuestion->addTag($editedTag);
-    //             }
-    //             if ($editedTag != $forumQuestion->getTags()) {
-    //                 $editedQuestion->removeTag($editedTag);
-    //             }
-    //         }
+        return new JsonResponse('message: Vous n\'êtes pas autorisé à modifier cette réponse', 403);
+    }
+
+    /**
+     * @Route("/{id}", name="forum_answer_delete", methods={"DELETE"})
+     */
+    public function delete(ObjectManager $objectManager, ForumAnswer $forumAnswer): Response
+    {
+        $user = $this->get('security.token_storage')->getToken()->getUser();
+
+        if ($user = $forumAnswer->getUser()) {
+            $objectManager->remove($forumAnswer);
+            $objectManager->flush();
             
-    //         $entityManager->merge($forumQuestion);
-    //         $entityManager->persist($forumQuestion);
-    //         $entityManager->flush();
+            return new JsonResponse('message: Votre réponse a été supprimée', 200);
+        }
 
-    //         return new JsonResponse('message: Votre question a été modifiée', 200);
-    //     }
-
-    //     return new JsonResponse('message: Vous n\'êtes pas autorisé à modifier cette question', 403);
-    // }
-
-    // /**
-    //  * @Route("/{id}", name="forum_question_delete", methods={"DELETE"})
-    //  */
-    // public function delete(ObjectManager $objectManager, ForumQuestion $forumQuestion): Response
-    // {
-    //     $user = $this->get('security.token_storage')->getToken()->getUser();
-
-    //     if ($user = $forumQuestion->getUser()) {
-    //         $objectManager->remove($forumQuestion);
-    //         $objectManager->flush();
-    //     }
-
-    //     return new JsonResponse('message: Votre question a été supprimée', 200);
-    // }
+        return new JsonResponse('message: Vous n\'êtes pas autorisé à supprimer cette réponse', 406);
+    }
 }

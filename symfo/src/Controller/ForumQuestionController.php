@@ -141,8 +141,10 @@ class ForumQuestionController extends AbstractController
         if ($user = $forumQuestion->getUser()) {
             $objectManager->remove($forumQuestion);
             $objectManager->flush();
+            
+            return new JsonResponse('message: Votre question a été supprimée', 200);
         }
 
-        return new JsonResponse('message: Votre question a été supprimée', 200);
+        return new JsonResponse('message: Vous n\'êtes pas autorisé à supprimer cette question', 406);
     }
 }
