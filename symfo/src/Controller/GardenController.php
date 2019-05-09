@@ -27,6 +27,7 @@ class GardenController extends AbstractController
      * @Route("/", name="garden_index", methods={"GET"})
      */
     public function index(GardenRepository $gardenRepository, SerializerInterface $serializer): Response
+
     {
         $gardens = $gardenRepository->findAll();
         $jsonGardens = $serializer->serialize($gardens, 'json',
