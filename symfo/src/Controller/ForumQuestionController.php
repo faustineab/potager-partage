@@ -12,6 +12,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Console\Question\Question;
 
 /**
  * @Route("/api/forum/question")
@@ -52,18 +53,19 @@ class ForumQuestionController extends AbstractController
         $entityManager->flush();
         
         return new JsonResponse('message: Votre question a été posée');
-
     }
 
-    // /**
-    //  * @Route("/{id}", name="garden_show", methods={"GET"})
-    //  */
-    // public function show(Garden $garden): Response
-    // {
-    //     return $this->render('garden/show.html.twig', [
-    //         'garden' => $garden,
-    //     ]);
-    // }
+    /**
+     * @Route("/{id}", name="forum_question_show", methods={"GET"})
+     */
+    public function show(ForumQuestion $question, Request $request, SerializerInterface $serializer): Response
+    {
+        $jsonQuestion = $serializer->serialize($question, 'json',
+            ['groups' => 'forum_questions']
+        );
+ 
+        return JsonResponse::fromJsonString($jsonQuestion);
+    }
 
     // /**
     //  * @Route("/{id}/edit", name="garden_edit", methods={"GET","POST"})
