@@ -18,6 +18,7 @@ use Doctrine\ORM\EntityManager;
 use Symfony\Component\Serializer\Encoder\JsonEncode;
 use Doctrine\Common\Collections\ArrayCollection;
 use App\Entity\ForumTag;
+use App\Repository\ForumTagRepository;
 
 /**
  * @Route("/api/forum/question")
@@ -38,13 +39,13 @@ class ForumQuestionController extends AbstractController
     }
 
     /**
-     * @Route("/new", name="forum_question_new", methods={"PUT"})
+     * @Route("/new", name="forum_question_new", methods={"POST"})
      */
     public function new(Request $request, SerializerInterface $serializer, EntityManagerInterface $entityManager, ValidatorInterface $validator)
     {
         $content = $request->getContent();
         
-        $question = $this->get('serializer')->deserialize($content, ForumQuestion::class, 'json');
+        $question = $serializer->deserialize($content, ForumQuestion::class, 'json');
         
         $errors = $validator->validate($question);
         if (count($errors) > 0)
@@ -79,9 +80,9 @@ class ForumQuestionController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/edit", name="forum_question_edit", methods={"PATCH"})
+     * @Route("/{id}/edit", name="forum_question_edit", methods={"PUT"})
      */
-    public function edit(ForumTag $forumtag, Request $request, ForumQuestion $forumQuestion, EntityManagerInterface $entityManager, ValidatorInterface $validator, SerializerInterface $serializer): Response
+    public function edit(Request $request, ForumQuestion $forumQuestion, EntityManagerInterface $entityManager, ValidatorInterface $validator, SerializerInterface $serializer): Response
     {
         $user = $this->get('security.token_storage')->getToken()->getUser();
 
@@ -90,7 +91,7 @@ class ForumQuestionController extends AbstractController
             $content = $request->getContent();
 
             $editedQuestion = $serializer->deserialize($content, ForumQuestion::class, 'json');
-            dd($editedQuestion);
+            // dd($editedQuestion);
 
             $errors = $validator->validate($editedQuestion);
 
@@ -118,31 +119,24 @@ class ForumQuestionController extends AbstractController
 
             $forumQuestion->setUpdatedAt(new \Datetime());
 
-            $entityManager->persist($forumQuestion);
-            $entityManager->flush();
-
-            $tags = $editedQuestion->getTags();
-            
-            foreach ($forumTag as $tag) {
-                if ($tag = $tags) 
-                {
-                    
+            foreach ($editedQuestion->getTags() as $editedTag) 
+            {
+                if ($editedTag = $forumQuestion->getTags()) {
+                    $editedQuestion->addTag($editedTag);
+                }
+                if ($editedTag != $forumQuestion->getTags()) {
+                    $editedQuestion->removeTag($editedTag);
                 }
             }
-            // if ($tags != null)
-            // {
-                
-            //     $tag = new Tag($tags);
-            //     $forumQuestion->setText($text);
-            // }
             
-            
-            // $forumTag->addQuestion()
+            $entityManager->merge($forumQuestion);
+            $entityManager->persist($forumQuestion);
+            $entityManager->flush();
 
             return new JsonResponse('message: Votre question a été modifiée', 200);
         }
 
-        return new JsonResponse('message: Vous n\'êtes pas autorisé à modifier cette question', 405);
+        return new JsonResponse('message: Vous n\'êtes pas autorisé à modifier cette question', 403);
     }
 
     // /**
