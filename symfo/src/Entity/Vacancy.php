@@ -2,9 +2,10 @@
 
 namespace App\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\VacancyRepository")
@@ -20,11 +21,13 @@ class Vacancy
 
     /**
      * @ORM\Column(type="datetime")
+     * @Groups({"vacancy"})
      */
     private $startDate;
 
     /**
      * @ORM\Column(type="datetime")
+     * @Groups({"vacancy"})
      */
     private $endDate;
 
@@ -39,8 +42,8 @@ class Vacancy
     private $updatedAt;
 
     /**
-     * @ORM\OneToOne(targetEntity="App\Entity\User", inversedBy="vacancy", cascade={"persist", "remove"})
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="vacancies")
+     * @ORM\JoinColumn(nullable=false, unique = false)
      */
     private $user;
 
@@ -54,31 +57,32 @@ class Vacancy
         $this->vacancySubstitutes = new ArrayCollection();
         $this->createdAt = new \DateTime();
         $this->updatedAt = new \DateTime();
-
     }
 
     /**
      * @return array 
      */
-    
-    public function getNotAvailableDays(){
+
+    public function getNotAvailableDays()
+    {
         $notAvailableDays = [];
 
-        foreach ($this->vacancySubstitutes as $vacancySubstitute){
+        foreach ($this->vacancySubstitutes as $vacancySubstitute) {
             // je calcul les jours qui se trouvent entre la date d'arrivée et de départ
-            
+
             $resultat = range(
                 $vacancySubstitute->getStartDate()->getTimestamp(),
                 $vacancySubstitute->getEndDate()->getTimestamp(),
-                24*60*60); // nbr de secondes entre les dates d'arrivée et de départ
+                24 * 60 * 60
+            ); // nbr de secondes entre les dates d'arrivée et de départ
 
-            $days = array_map(function($dayTimestamp){
+            $days = array_map(function ($dayTimestamp) {
                 return new \DateTime(date('Y-m-d', $dayTimestamp));
             }, $resultat); // transformation du tableau résultat(seconde) en tableau (jours)
 
             $notAvailableDays = array_merge($notAvailableDays, $days);
         };
-        
+
         return  $notAvailableDays;
     }
 

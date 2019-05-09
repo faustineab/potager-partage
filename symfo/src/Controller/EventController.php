@@ -87,14 +87,12 @@ class EventController extends AbstractController
 
         if ($user == $event->getUser()) {
 
-
-
             $content = $request->getContent();
 
             $currentEvent = $this->get('serializer')->deserialize($content, Event::class, 'json');
-            dump($currentEvent);
+            // dump($currentEvent);
 
-            $errors = $validator->validate($event);
+            $errors = $validator->validate($currentEvent);
 
             if (count($errors) > 0) {
                 dd($errors);
