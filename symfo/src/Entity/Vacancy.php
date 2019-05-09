@@ -77,13 +77,38 @@ class Vacancy
             ); // nbr de secondes entre les dates d'arrivée et de départ
 
             $days = array_map(function ($dayTimestamp) {
-                return new \DateTime(date('Y-m-d', $dayTimestamp));
+                $day = new \DateTime(date('Y-m-d', $dayTimestamp));
+                return $day->format('Y-m-d H:i:s');
             }, $resultat); // transformation du tableau résultat(seconde) en tableau (jours)
 
             $notAvailableDays = array_merge($notAvailableDays, $days);
         };
 
         return  $notAvailableDays;
+    }
+
+    public function getAvailableDays()
+    {
+        $availableDays = [];
+
+
+        // je calcul les jours qui se trouvent entre la date de début d'absence et de retour
+
+        $resultat = range(
+            $this->getStartDate()->getTimestamp(),
+            $this->getEndDate()->getTimestamp(),
+            24 * 60 * 60
+        ); // nbr de secondes entre les dates d'arrivée et de départ
+
+        $days = array_map(function ($dayTimestamp) {
+
+            $day = new \DateTime(date('Y-m-d', $dayTimestamp));
+            return $day->format('Y-m-d H:i:s');
+        }, $resultat); // transformation du tableau résultat(seconde) en tableau (jours)
+
+        $availableDays = array_merge($availableDays, $days);
+
+        return  $availableDays;
     }
 
     public function getId(): ?int

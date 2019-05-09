@@ -79,11 +79,11 @@ class RegistrationController extends AbstractController
 
 
         $user = new User();
-        // $hashedPassword = $encoder->encodePassword($user, $password);
+        $hashedPassword = $encoder->encodePassword($user, $password);
 
         $user->setStatut('ok')
             ->setName($username)
-            ->setPassword($password)
+            ->setPassword($hashedPassword)
             ->setEmail($email)
             ->setPhone($phone)
             ->setAddress($address);
