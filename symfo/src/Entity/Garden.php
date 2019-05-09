@@ -2,10 +2,14 @@
 
 namespace App\Entity;
 
+use App\Entity\Plot;
+use App\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Collection;
+use Symfony\Component\Serializer\Serializer;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Serializer\Annotation\Groups;
+
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\GardenRepository")
@@ -16,23 +20,27 @@ class Garden
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     * @Groups("garden_get")
      * @Groups({"garden_register"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=60)
+     * @Groups("garden_get")
      * @Groups({"garden_register"})
      */
     private $name;
 
     /**
      * @ORM\Column(type="text")
+     * @Groups("garden_get")
      */
     private $address;
 
     /**
      * @ORM\Column(type="string", length=5)
+     * @Groups("garden_get")
      */
     private $zipcode;
 
@@ -43,41 +51,50 @@ class Garden
 
     /**
      * @ORM\Column(type="text", nullable=true)
+     * @Groups("garden_get")
      */
     private $address_specificities;
 
     /**
      * @ORM\Column(type="integer")
+     * @Groups("garden_get")
      */
     private $meters;
 
     /**
      * @ORM\Column(type="integer")
+     * @Groups("garden_get")
      */
     private $number_plots_row;
 
     /**
      * @ORM\Column(type="integer")
+     * @Groups("garden_get")
      */
     private $number_plots_column;
 
     /**
      * @ORM\Column(type="datetime")
+     * @Groups("garden_get")
      */
     private $created_at;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
+     * @Groups("garden_get")
      */
     private $updated_at;
 
     /**
      * @ORM\ManyToMany(targetEntity="App\Entity\User", inversedBy="gardens")
+     * @Groups("garden_get")
+     * 
      */
     private $user;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Plot", mappedBy="garden")
+     * @Groups("garden_get")
      */
     private $plots;
 

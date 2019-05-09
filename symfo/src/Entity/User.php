@@ -28,6 +28,7 @@ class User implements UserInterface
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     * @Groups("garden_get")
      */
     private $id;
 
@@ -38,7 +39,7 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"event"})
+     * @Groups({"event","garden_get"})
      */
     private $name;
 
@@ -88,6 +89,7 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups("garden_get")
      */
     private $statut;
 
@@ -438,7 +440,7 @@ class User implements UserInterface
     {
 
         $roles = $this->roles->map(function ($role) {
-            return $role->getTitle();
+            return $role->getName();
         })->toArray();
         $roles[] = 'ROLE_USER';
         return $roles;

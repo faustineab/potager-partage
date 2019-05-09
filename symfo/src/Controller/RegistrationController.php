@@ -1,7 +1,5 @@
 <?php
-
 namespace App\Controller;
-
 use App\Entity\User;
 use App\Entity\Garden;
 use App\Form\AdminType;
@@ -92,6 +90,7 @@ class RegistrationController extends AbstractController
         $manager->persist($user);
         dump($user);
 
+
         $garden = new Garden();
         $garden->setName($gardenName)
             ->setAddress($gardenAddress)
@@ -108,10 +107,12 @@ class RegistrationController extends AbstractController
         dump($garden);
 
 
+
         $garden = $gardenRepository->findOneBy([
             'name' => $gardenName
         ]);
         dump($garden);
+
 
         $garden->addUser($user);
         dump($garden);
@@ -119,6 +120,7 @@ class RegistrationController extends AbstractController
 
         $manager->persist($garden);
         dump($garden);
+
 
         $role = $roleRepository->findOneBy([
             'label' => 'Administrateur'
@@ -157,17 +159,13 @@ class RegistrationController extends AbstractController
     /**
      * @Route("/register/user", name="registration", methods={"POST"})
      *  @return JsonResponse|\Symfony\Component\HttpFoundation\RedirectResponse
-
      */
     public function registerUser(GardenRepository $gardenRepository, Request $request, ObjectManager $manager, UserPasswordEncoderInterface $encoder, User $user = null, UserRepository $userRepository): Response
     {
         $content = $request->getContent();
         dump($content);
-
         $data = json_decode($request->getContent(), true);
-
         $validator = Validation::createValidator();
-
         $constraint = new Assert\Collection(array(
             // the keys correspond to the keys in the input array
             'name' => new Assert\Length(array('min' => 1)),
@@ -177,13 +175,10 @@ class RegistrationController extends AbstractController
             'address' => new Assert\Length(array('min' => 1)),
             'gardenId' => new Assert\Length(array('min' => 1))
         ));
-
         $violations = $validator->validate($data, $constraint);
-
         if ($violations->count() > 0) {
             return new JsonResponse(["error" => (string)$violations], 500);
         }
-
         $username = $data['name'];
         $password = $data['password'];
         $email = $data['email'];
@@ -202,6 +197,7 @@ class RegistrationController extends AbstractController
             ->setPhone($phone)
             ->setAddress($address);
 
+
         $manager->persist($user);
 
         $garden = $gardenRepository->find($gardenId);
@@ -213,15 +209,11 @@ class RegistrationController extends AbstractController
 
         dump($garden);
 
-
-
         $credentials = [
             'username' => $data['email'],
             'password' => $data['password']
         ];
         dump($credentials);
-
-
 
         return  new JsonResponse($credentials);
     }

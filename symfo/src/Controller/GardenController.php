@@ -2,95 +2,80 @@
 
 namespace App\Controller;
 
+use App\Entity\User;
 use App\Entity\Garden;
-use App\Form\GardenType;
 use App\Repository\GardenRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+
 
 /**
- * @Route("/garden")
+ * @Route("/api/garden")
  */
 class GardenController extends AbstractController
 {
     /**
      * @Route("/", name="garden_index", methods={"GET"})
      */
-    public function index(GardenRepository $gardenRepository): Response
+    public function index(GardenRepository $gardenRepository, SerializerInterface $serializer): Response
     {
-        return $this->render('garden/index.html.twig', [
-            'gardens' => $gardenRepository->findAll(),
-        ]);
+        $gardens = $gardenRepository->findAll();
+        $jsonGardens = $serializer->serialize($gardens, 'json',
+            ['groups' => 'garden_get']
+        );
+
+        return JsonResponse::fromJsonString($jsonGardens);
     }
 
+
     /**
-     * @Route("/new", name="garden_new", methods={"GET","POST"})
+     * @Route("/{id}", name="garden_show", methods={"GET"})
      */
-    public function new(Request $request, SerializerInterface $serializer, EntityManagerInterface $manager, ValidatorInterface $validator)
+    public function show($id,GardenRepository $gardenRepository,SerializerInterface $serializer, Garden $gardens): Response
     {
-        // On doit créer un Department à partir de la requête reçue
-        // Objectif : récupérer le corps de la requête (JSON)
-        // puis le convertir en entité Doctrine pour le sauvegarder
-        $content = $request->getContent();
-        // Désérialisons le JSON
-        $garden = $serializer->deserialize($content, Garden::class, 'json');
-        // Utilisons le validator directement
-        // cf : https://symfony.com/doc/current/validation.html
-        // car le form n'est plus là pour le faire à notre place
-        $errors = $validator->validate($garden);
-        // si erreurs ($errors étant un tableau d'erreurs)
-        if (count($errors) > 0) {
-            dd($errors);
-            // @TODO : boucler sur la liste d'erreurs et la renvoyer en JSON
-            // + le bon HTTP status code 
+        $currentUser = $this->get('security.token_storage')->getToken()->getUser();
+        $user = $gardens->getUser();
+        $statut = $currentUser->getStatut();
+        $garden = $gardenRepository->find($id);
+
+        if( $currentUser!= $user && $statut != "ok"){ 
+            throw new HttpException(400, " not valid.");
         }
-        // Pas d'erreurs
-        $manager->persist($garden);
-        $manager->flush();
-        return $this->redirectToRoute('garden_show', [
-            'id' => $garden->getId(),
-        ], Response::HTTP_CREATED); // Response::HTTP_CREATED = 201
-    }
-
-
-    /**
-     * @Route("/{id}/edit", name="garden_edit", methods={"GET","POST"})
-     */
-    public function edit(Request $request, Garden $garden): Response
-    {
-        $form = $this->createForm(GardenType::class, $garden);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
-
-            return $this->redirectToRoute('garden_index', [
-                'id' => $garden->getId(),
-            ]);
-        }
-
-        return $this->render('garden/edit.html.twig', [
-            'garden' => $garden,
-            'form' => $form->createView(),
-        ]);
+            $jsonGarden = $serializer->serialize(
+            $garden,
+            'json',
+            ['groups' => 'garden_get']
+        );
+    
+        return JsonResponse::fromJsonString($jsonGarden);
+    
     }
 
     /**
+     * @IsGranted("ROLE_ADMIN")
      * @Route("/{id}", name="garden_delete", methods={"DELETE"})
      */
-    public function delete(Request $request, Garden $garden): Response
+    public function delete($id,Request $request, Garden $garden, SerializerInterface $serializer, EntityManagerInterface $manager, ValidatorInterface $validator): Response
     {
-        if ($this->isCsrfTokenValid('delete' . $garden->getId(), $request->request->get('_token'))) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->remove($garden);
-            $entityManager->flush();
+        if ($this->isCsrfTokenValid('delete'.$garden->getId(), $request->request->get('_token'))) {
+   
         }
 
-        return $this->redirectToRoute('garden_index');
+        $manager->remove($garden);
+        $manager->flush();
+
+        return $this->redirectToRoute('garden_index', [
+            'id' => $garden->getId(),
+        ], Response::HTTP_OK);
     }
+
 }
