@@ -6,19 +6,13 @@ use App\Entity\ForumQuestion;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\ForumQuestionRepository;
 use Symfony\Component\HttpFoundation\Request;
+use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Console\Question\Question;
-use Doctrine\Common\Persistence\ObjectManager;
-use Doctrine\ORM\EntityManager;
-use Symfony\Component\Serializer\Encoder\JsonEncode;
-use Doctrine\Common\Collections\ArrayCollection;
-use App\Entity\ForumTag;
-use App\Repository\ForumTagRepository;
 
 /**
  * @Route("/api/forum/question")
