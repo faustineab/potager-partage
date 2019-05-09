@@ -137,6 +137,8 @@ class EventController extends AbstractController
             $manager->flush();
 
             return new JsonResponse('supprimé', 200);
+        } else {
+            return new JsonResponse(["error" => "Vous n'êtes pas autorisé à supprimer"], 500);
         }
     }
 }
