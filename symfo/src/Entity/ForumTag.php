@@ -40,6 +40,7 @@ class ForumTag
 
     /**
      * @ORM\ManyToMany(targetEntity="App\Entity\ForumQuestion", inversedBy="tags")
+     * @Groups({"forum_questions"})
      */
     private $questions;
 

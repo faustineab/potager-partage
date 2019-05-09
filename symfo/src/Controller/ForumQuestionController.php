@@ -13,6 +13,11 @@ use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Console\Question\Question;
+use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\ORM\EntityManager;
+use Symfony\Component\Serializer\Encoder\JsonEncode;
+use Doctrine\Common\Collections\ArrayCollection;
+use App\Entity\ForumTag;
 
 /**
  * @Route("/api/forum/question")
@@ -42,9 +47,15 @@ class ForumQuestionController extends AbstractController
         $question = $this->get('serializer')->deserialize($content, ForumQuestion::class, 'json');
         
         $errors = $validator->validate($question);
-        if (count($errors) > 0) {
-            dd($errors);
-        }
+        if (count($errors) > 0)
+            {
+                foreach ($errors as $error) 
+                {
+                    return new JsonResponse(
+                        'message: Votre question comporte des erreurs : '.$error.'.', 
+                        406);
+                }
+            }
         
         $user = $this->get('security.token_storage')->getToken()->getUser();
         $question->setUser($user);
@@ -52,7 +63,7 @@ class ForumQuestionController extends AbstractController
         $entityManager->persist($question);
         $entityManager->flush();
         
-        return new JsonResponse('message: Votre question a été posée');
+        return new JsonResponse('message: Votre question a été posée', 200);
     }
 
     /**
@@ -67,27 +78,72 @@ class ForumQuestionController extends AbstractController
         return JsonResponse::fromJsonString($jsonQuestion);
     }
 
-    // /**
-    //  * @Route("/{id}/edit", name="garden_edit", methods={"GET","POST"})
-    //  */
-    // public function edit(Request $request, Garden $garden): Response
-    // {
-    //     $form = $this->createForm(GardenType::class, $garden);
-    //     $form->handleRequest($request);
+    /**
+     * @Route("/{id}/edit", name="forum_question_edit", methods={"PATCH"})
+     */
+    public function edit(ForumTag $forumtag, Request $request, ForumQuestion $forumQuestion, EntityManagerInterface $entityManager, ValidatorInterface $validator, SerializerInterface $serializer): Response
+    {
+        $user = $this->get('security.token_storage')->getToken()->getUser();
 
-    //     if ($form->isSubmitted() && $form->isValid()) {
-    //         $this->getDoctrine()->getManager()->flush();
+        if ($user == $forumQuestion->getUser())
+        {
+            $content = $request->getContent();
 
-    //         return $this->redirectToRoute('garden_index', [
-    //             'id' => $garden->getId(),
-    //         ]);
-    //     }
+            $editedQuestion = $serializer->deserialize($content, ForumQuestion::class, 'json');
+            dd($editedQuestion);
 
-    //     return $this->render('garden/edit.html.twig', [
-    //         'garden' => $garden,
-    //         'form' => $form->createView(),
-    //     ]);
-    // }
+            $errors = $validator->validate($editedQuestion);
+
+            if (count($errors) > 0)
+            {
+                foreach ($errors as $error) 
+                {
+                    return new JsonResponse(
+                        'message: Votre modification comporte des erreurs : '.$error.'.', 
+                        304);
+                }
+            }
+
+            $title = $editedQuestion->getTitle();
+            if ($title != null)
+            {
+                $forumQuestion->setTitle($title);
+            }
+            
+            $text = $editedQuestion->getText();
+            if ($text != null)
+            {
+                $forumQuestion->setText($text);
+            }
+
+            $forumQuestion->setUpdatedAt(new \Datetime());
+
+            $entityManager->persist($forumQuestion);
+            $entityManager->flush();
+
+            $tags = $editedQuestion->getTags();
+            
+            foreach ($forumTag as $tag) {
+                if ($tag = $tags) 
+                {
+                    
+                }
+            }
+            // if ($tags != null)
+            // {
+                
+            //     $tag = new Tag($tags);
+            //     $forumQuestion->setText($text);
+            // }
+            
+            
+            // $forumTag->addQuestion()
+
+            return new JsonResponse('message: Votre question a été modifiée', 200);
+        }
+
+        return new JsonResponse('message: Vous n\'êtes pas autorisé à modifier cette question', 405);
+    }
 
     // /**
     //  * @Route("/{id}", name="garden_delete", methods={"DELETE"})
