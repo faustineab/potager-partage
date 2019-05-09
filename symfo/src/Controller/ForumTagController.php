@@ -41,7 +41,7 @@ class ForumTagController extends AbstractController
         
         $user = $this->get('security.token_storage')->getToken()->getUser();
 
-        if ($user->getRoles() == 'ROLE_ADMIN') {            
+        if ($user->getRoles()[0] == 'ROLE_ADMIN') {            
             $errors = $validator->validate($tag);
             
             if (count($errors) > 0)
@@ -53,9 +53,7 @@ class ForumTagController extends AbstractController
                         406);
                     }
                 }
-                
-                $tag->setUser($user);
-                
+                                
                 $entityManager->persist($tag);
                 $entityManager->flush();
 
@@ -84,7 +82,7 @@ class ForumTagController extends AbstractController
     {
         $user = $this->get('security.token_storage')->getToken()->getUser();
         
-        if ($user->getRoles() == 'ROLE_ADMIN') {
+        if ($user->getRoles()[0] == 'ROLE_ADMIN') {
             $admin = $user;
         }       
 
@@ -132,7 +130,7 @@ class ForumTagController extends AbstractController
     {
         $user = $this->get('security.token_storage')->getToken()->getUser();
 
-        if ($user->getRoles() == 'ROLE_ADMIN') {
+        if ($user->getRoles()[0] == 'ROLE_ADMIN') {
             $admin = $user;
         }
 

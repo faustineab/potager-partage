@@ -78,7 +78,7 @@ class ForumQuestionController extends AbstractController
     {
         $user = $this->get('security.token_storage')->getToken()->getUser();
         
-        if ($user->getRoles() == 'ROLE_ADMIN') {
+        if ($user->getRoles()[0] == 'ROLE_ADMIN') {
             $admin = $user;
         }       
 
@@ -142,7 +142,7 @@ class ForumQuestionController extends AbstractController
     {
         $user = $this->get('security.token_storage')->getToken()->getUser();
 
-        if ($user->getRoles() == 'ROLE_ADMIN') {
+        if ($user->getRoles()[0] == 'ROLE_ADMIN') {
             $admin = $user;
         }
 
