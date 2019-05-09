@@ -1,0 +1,28 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello SubstitutionController!{% endblock %}
+
+{% block body %}
+
+<div class="container">
+  
+
+    {{ form_start(form)}}
+
+        {{ form_label(form.startDate)}}
+        {{ form_widget(form.startDate)}}
+
+        {{ form_label(form.endDate)}}
+        {{ form_widget(form.endDate)}}
+
+
+    <button type='submit' class="btn btn-primary mt-5"> Valider le remplacement </button>
+
+
+    {{ form_end(form)}}
+
+ 
+</div>
+
+
+{% endblock %}
