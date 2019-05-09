@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import Login from '../components/Login';
-import { loginInputChange, passwordInputChange, logUser } from '../store/reducer';
+import { inputChange, logUser } from '../store/reducer';
 
 const mapStateToProps = state => ({
   username: state.username,
@@ -10,12 +10,10 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  usernameChange: (username) => {
-    dispatch(loginInputChange(username));
+  inputChange: (name, value) => {
+    dispatch(inputChange(name, value));
   },
-  passwordChange: (password) => {
-    dispatch(passwordInputChange(password));
-  },
+
   onFormSubmit: () => {
     dispatch(logUser());
   },

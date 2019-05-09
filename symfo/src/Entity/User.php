@@ -43,9 +43,10 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"event"})
      * @Groups({"forum_questions"})
      * @Groups({"forum_tags"})
+     * @Groups({"event","garden_get"})
+
      */
     private $name;
 
@@ -95,6 +96,7 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups("garden_get")
      */
     private $statut;
 
@@ -268,6 +270,9 @@ class User implements UserInterface
         }
         return $this;
     }
+
+
+
     public function removeGarden(Garden $garden): self
     {
         if ($this->gardens->contains($garden)) {

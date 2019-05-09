@@ -1,23 +1,26 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Button, Form } from 'semantic-ui-react';
 
 import './index.scss';
 
-const JoinGarden = () => (
+const JoinGarden = ({ gardenList }) => (
   <main className="subscription">
     <Form className="subscriptionForm">
       <h1>Rejoindre un jardin</h1>
-      <Form.Field>
-        <label>Prénom</label>
-        <input placeholder='Prénom' />
-      </Form.Field>
-      <Form.Field>
-        <label>Nom</label>
-        <input placeholder='Nom' />
-      </Form.Field>
+      <Form.Select options={gardenList} placeholder="Choisissez un jardin" />
       <Button type='submit'>Rejoindre</Button>
     </Form>
   </main>
 );
+
+
+JoinGarden.propTypes = {
+  gardenList: PropTypes.arrayOf(PropTypes.object.isRequired),
+};
+
+JoinGarden.defaultProps = {
+  gardenList: [],
+};
 
 export default JoinGarden;
