@@ -21,12 +21,14 @@ class Garden
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      * @Groups("garden_get")
+     * @Groups({"garden_register"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=60)
      * @Groups("garden_get")
+     * @Groups({"garden_register"})
      */
     private $name;
 
@@ -96,7 +98,7 @@ class Garden
      */
     private $plots;
 
-    
+
 
     public function __construct()
     {
@@ -238,6 +240,8 @@ class Garden
     {
         return $this->user;
     }
+
+
 
     public function addUser(User $user): self
     {
