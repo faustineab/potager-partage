@@ -28,18 +28,21 @@ class User implements UserInterface
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     * @Groups("garden_get")
+     * @Groups({"garden_get"})
+     * @Groups({"forum_questions"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
+     * @Groups({"forum_questions"})
      */
     private $email;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Groups({"event"})
+     * @Groups({"forum_questions"})
      */
     private $name;
 
