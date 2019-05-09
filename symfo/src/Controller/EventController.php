@@ -4,14 +4,15 @@ namespace App\Controller;
 
 use App\Entity\Event;
 use App\Form\EventType;
+use App\Repository\EventRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use App\Repository\EventRepository;
 
 class EventController extends AbstractController
 {
@@ -45,7 +46,7 @@ class EventController extends AbstractController
     }
 
     /**
-     * @Route("/event/{id}", name="show_event", methods={"GET"})
+     * @Route("api/event/{id}", name="show_event", methods={"GET"})
      */
     public function show(Event $event, Request $request, ObjectManager $manager)
     {
@@ -57,16 +58,22 @@ class EventController extends AbstractController
     }
 
     /**
-     * @Route("/event/{id}/edit", name="edit_event", methods={"GET"})
+     * @Route("api/event/{id}/edit", name="edit_event", methods={"GET"})
      */
     public function edit(Event $event, Request $request, ObjectManager $manager, ValidatorInterface $validator)
     {
-        $data = $this->get('serializer')->serialize($event, 'json', ['groups' => ['event']]);
+        $user = $this->get('security.token_storage')->getToken()->getUser();
 
-        $response = new Response($data);
+        if ($user == $event->getUser()) {
 
-        $response->headers->set('Content-Type', 'application/json');
-        return $response;
+            $data = $this->get('serializer')->serialize($event, 'json', ['groups' => ['event']]);
+
+            $response = new Response($data);
+
+            $response->headers->set('Content-Type', 'application/json');
+            return $response;
+        }
+        return new JsonResponse(["error" => "Vous n'êtes pas autorisé à modifier"], 500);
     }
 
     /**
@@ -114,7 +121,7 @@ class EventController extends AbstractController
                 'id' => $event->getId(),
             ], Response::HTTP_CREATED);
         } else {
-            echo 'non autorisé';
+            return new JsonResponse(["error" => "Vous n'êtes pas autorisé à éditer"], 500);
         }
     }
 }

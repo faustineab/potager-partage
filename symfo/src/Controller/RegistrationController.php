@@ -16,6 +16,7 @@ use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Guard\GuardAuthenticatorHandler;
@@ -87,6 +88,7 @@ class RegistrationController extends AbstractController
             ->setPhone($phone)
             ->setAddress($address);
 
+
         $manager->persist($user);
         dump($user);
 
@@ -136,10 +138,24 @@ class RegistrationController extends AbstractController
         return  new JsonResponse($credentials);
     }
 
+    /**
+     * @Route("/register/user", name="registration_get", methods={"GET"})
+     *  @return JsonResponse|\Symfony\Component\HttpFoundation\RedirectResponse
+
+     */
+    public function registerUserGet(GardenRepository $gardenRepository, Request $request, ObjectManager $manager, UserPasswordEncoderInterface $encoder, User $user = null, UserRepository $userRepository, SerializerInterface $serializer): Response
+    {
+        $gardens = $gardenRepository->findAll();
+        // dump($gardens);
+
+        $data = $serializer->serialize($gardens, 'json', ['groups' => ['garden_register']]);
+
+        return new Response($data);
+    }
 
 
     /**
-     * @Route("/register/user", name="registration", methods={"GET","POST"})
+     * @Route("/register/user", name="registration", methods={"POST"})
      *  @return JsonResponse|\Symfony\Component\HttpFoundation\RedirectResponse
 
      */
