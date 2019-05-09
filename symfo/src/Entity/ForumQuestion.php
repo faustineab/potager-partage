@@ -45,7 +45,7 @@ class ForumQuestion
     private $updatedAt;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\ForumAnswer", mappedBy="question")
+     * @ORM\OneToMany(targetEntity="App\Entity\ForumAnswer", mappedBy="question", orphanRemoval=true)
      * @Groups({"forum_questions"})
      */
     private $answers;

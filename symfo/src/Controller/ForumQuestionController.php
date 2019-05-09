@@ -139,17 +139,18 @@ class ForumQuestionController extends AbstractController
         return new JsonResponse('message: Vous n\'êtes pas autorisé à modifier cette question', 403);
     }
 
-    // /**
-    //  * @Route("/{id}", name="garden_delete", methods={"DELETE"})
-    //  */
-    // public function delete(Request $request, Garden $garden): Response
-    // {
-    //     if ($this->isCsrfTokenValid('delete' . $garden->getId(), $request->request->get('_token'))) {
-    //         $entityManager = $this->getDoctrine()->getManager();
-    //         $entityManager->remove($garden);
-    //         $entityManager->flush();
-    //     }
+    /**
+     * @Route("/{id}", name="forum_question_delete", methods={"DELETE"})
+     */
+    public function delete(ObjectManager $objectManager, ForumQuestion $forumQuestion): Response
+    {
+        $user = $this->get('security.token_storage')->getToken()->getUser();
 
-    //     return $this->redirectToRoute('garden_index');
-    // }
+        if ($user = $forumQuestion->getUser()) {
+            $objectManager->remove($forumQuestion);
+            $objectManager->flush();
+        }
+
+        return new JsonResponse('message: Votre question a été supprimée', 200);
+    }
 }
