@@ -17,29 +17,34 @@ class ForumTag
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      * @Groups({"forum_questions"})
+     * @Groups({"forum_tags"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=100)
      * @Groups({"forum_questions"})
+     * @Groups({"forum_tags"})     * 
      */
     private $name;
 
     /**
      * @ORM\Column(type="datetime")
      * @Groups({"forum_questions"})
+     * @Groups({"forum_tags"})
      */
     private $createdAt;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
      * @Groups({"forum_questions"})
+     * @Groups({"forum_tags"})
      */
     private $updatedAt;
 
     /**
      * @ORM\ManyToMany(targetEntity="App\Entity\ForumQuestion", inversedBy="tags")
+     * @Groups({"forum_tags"})
      */
     private $questions;
 

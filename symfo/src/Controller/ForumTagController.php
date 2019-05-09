@@ -1,0 +1,158 @@
+<?php
+
+namespace App\Controller;
+
+use App\Entity\ForumTag;
+use Doctrine\ORM\EntityManagerInterface;
+use App\Repository\ForumTagRepository;
+use Symfony\Component\HttpFoundation\Request;
+use Doctrine\Common\Persistence\ObjectManager;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+
+/**
+ * @Route("/api/forum/tag")
+ */
+class ForumTagController extends AbstractController
+{
+    /**
+     * @Route("/", name="forum_tag_index", methods={"GET"})
+     */
+    public function index(SerializerInterface $serializer, ForumTagRepository $forumTagRepository): Response
+    {
+        $tags = $forumTagRepository->findAll();
+        $jsonTags = $serializer->serialize($tags, 'json',['groups' => 'forum_tags']);
+ 
+        return JsonResponse::fromJsonString($jsonTags);
+    }
+
+    // /**
+    //  * @Route("/new", name="forum_question_new", methods={"POST"})
+    //  */
+    // public function new(Request $request, SerializerInterface $serializer, EntityManagerInterface $entityManager, ValidatorInterface $validator)
+    // {
+    //     $content = $request->getContent();
+        
+    //     $question = $serializer->deserialize($content, ForumQuestion::class, 'json');
+        
+    //     $errors = $validator->validate($question);
+    //     if (count($errors) > 0)
+    //         {
+    //             foreach ($errors as $error) 
+    //             {
+    //                 return new JsonResponse(
+    //                     'message: Votre question comporte des erreurs : '.$error.'.', 
+    //                     406);
+    //             }
+    //         }
+        
+    //     $user = $this->get('security.token_storage')->getToken()->getUser();
+    //     $question->setUser($user);
+        
+    //     $entityManager->persist($question);
+    //     $entityManager->flush();
+        
+    //     return new JsonResponse('message: Votre question a été posée', 200);
+    // }
+
+    // /**
+    //  * @Route("/{id}", name="forum_question_show", methods={"GET"})
+    //  */
+    // public function show(ForumQuestion $question, Request $request, SerializerInterface $serializer): Response
+    // {
+    //     $jsonQuestion = $serializer->serialize($question, 'json',
+    //         ['groups' => 'forum_questions']
+    //     );
+ 
+    //     return JsonResponse::fromJsonString($jsonQuestion);
+    // }
+
+    // /**
+    //  * @Route("/{id}/edit", name="forum_question_edit", methods={"PUT"})
+    //  */
+    // public function edit(Request $request, ForumQuestion $forumQuestion, EntityManagerInterface $entityManager, ValidatorInterface $validator, SerializerInterface $serializer): Response
+    // {
+    //     $user = $this->get('security.token_storage')->getToken()->getUser();
+        
+    //     if ($user->getRoles() == 'ROLE_ADMIN') {
+    //         $admin = $user;
+    //     }       
+
+    //     if ($user == $forumQuestion->getUser() || $admin)
+    //     {
+    //         $content = $request->getContent();
+
+    //         $editedQuestion = $serializer->deserialize($content, ForumQuestion::class, 'json');
+    //         // dd($editedQuestion);
+
+    //         $errors = $validator->validate($editedQuestion);
+
+    //         if (count($errors) > 0)
+    //         {
+    //             foreach ($errors as $error) 
+    //             {
+    //                 return new JsonResponse(
+    //                     'message: Votre modification comporte des erreurs : '.$error.'.', 
+    //                     304);
+    //             }
+    //         }
+
+    //         $title = $editedQuestion->getTitle();
+    //         if ($title != null)
+    //         {
+    //             $forumQuestion->setTitle($title);
+    //         }
+            
+    //         $text = $editedQuestion->getText();
+    //         if ($text != null)
+    //         {
+    //             $forumQuestion->setText($text);
+    //         }
+
+    //         $forumQuestion->setUpdatedAt(new \Datetime());
+
+    //         foreach ($editedQuestion->getTags() as $editedTag) 
+    //         {
+    //             if ($editedTag = $forumQuestion->getTags()) {
+    //                 $editedQuestion->addTag($editedTag);
+    //             }
+    //             if ($editedTag != $forumQuestion->getTags()) {
+    //                 $editedQuestion->removeTag($editedTag);
+    //             }
+    //         }
+            
+    //         $entityManager->merge($forumQuestion);
+    //         $entityManager->persist($forumQuestion);
+    //         $entityManager->flush();
+
+    //         return new JsonResponse('message: Votre question a été modifiée', 200);
+    //     }
+
+    //     return new JsonResponse('message: Vous n\'êtes pas autorisé à modifier cette question', 403);
+    // }
+
+    // /**
+    //  * @Route("/{id}", name="forum_question_delete", methods={"DELETE"})
+    //  */
+    // public function delete(ObjectManager $objectManager, ForumQuestion $forumQuestion): Response
+    // {
+    //     $user = $this->get('security.token_storage')->getToken()->getUser();
+
+    //     if ($user->getRoles() == 'ROLE_ADMIN') {
+    //         $admin = $user;
+    //     }
+
+    //     if ($user = $forumQuestion->getUser() || $admin) {
+    //         $objectManager->remove($forumQuestion);
+    //         $objectManager->flush();
+            
+    //         return new JsonResponse('message: Votre question a été supprimée', 200);
+    //     }
+
+    //     return new JsonResponse('message: Vous n\'êtes pas autorisé à supprimer cette question', 406);
+    // }
+}

@@ -57,7 +57,11 @@ class ForumAnswerController extends AbstractController
     {
         $user = $this->get('security.token_storage')->getToken()->getUser();
 
-        if ($user == $forumAnswer->getUser())
+        if ($user->getRoles() == 'ROLE_ADMIN') {
+            $admin = $user;
+        }
+
+        if ($user == $forumAnswer->getUser() || $admin)
         {
             $content = $request->getContent();
 
@@ -101,7 +105,11 @@ class ForumAnswerController extends AbstractController
     {
         $user = $this->get('security.token_storage')->getToken()->getUser();
 
-        if ($user = $forumAnswer->getUser()) {
+        if ($user->getRoles() == 'ROLE_ADMIN') {
+            $admin = $user;
+        }
+
+        if ($user = $forumAnswer->getUser() || $admin) {
             $objectManager->remove($forumAnswer);
             $objectManager->flush();
             

@@ -77,8 +77,12 @@ class ForumQuestionController extends AbstractController
     public function edit(Request $request, ForumQuestion $forumQuestion, EntityManagerInterface $entityManager, ValidatorInterface $validator, SerializerInterface $serializer): Response
     {
         $user = $this->get('security.token_storage')->getToken()->getUser();
+        
+        if ($user->getRoles() == 'ROLE_ADMIN') {
+            $admin = $user;
+        }       
 
-        if ($user == $forumQuestion->getUser())
+        if ($user == $forumQuestion->getUser() || $admin)
         {
             $content = $request->getContent();
 
@@ -138,7 +142,11 @@ class ForumQuestionController extends AbstractController
     {
         $user = $this->get('security.token_storage')->getToken()->getUser();
 
-        if ($user = $forumQuestion->getUser()) {
+        if ($user->getRoles() == 'ROLE_ADMIN') {
+            $admin = $user;
+        }
+
+        if ($user = $forumQuestion->getUser() || $admin) {
             $objectManager->remove($forumQuestion);
             $objectManager->flush();
             

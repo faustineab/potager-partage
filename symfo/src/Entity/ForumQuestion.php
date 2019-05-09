@@ -17,30 +17,35 @@ class ForumQuestion
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      * @Groups({"forum_questions"})
+     * @Groups({"forum_tags"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="text")
      * @Groups({"forum_questions"})
+     * @Groups({"forum_tags"})
      */
     private $title;
 
     /**
      * @ORM\Column(type="text")
      * @Groups({"forum_questions"})
+     * @Groups({"forum_tags"})
      */
     private $text;
 
     /**
      * @ORM\Column(type="datetime")
      * @Groups({"forum_questions"})
+     * @Groups({"forum_tags"})
      */
     private $createdAt;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
      * @Groups({"forum_questions"})
+     * @Groups({"forum_tags"})
      */
     private $updatedAt;
 
@@ -58,6 +63,7 @@ class ForumQuestion
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="forumQuestions")
      * @ORM\JoinColumn(nullable=false)
      * @Groups({"forum_questions"})
+     * @Groups({"forum_tags"})
      */
     private $user;
 
