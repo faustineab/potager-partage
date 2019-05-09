@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Entity\Vacancy;
 use App\Form\VacancyType;
+use App\Repository\VacancyRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\HttpFoundation\Response;
@@ -37,6 +38,26 @@ class VacancyController extends AbstractController
         $manager->flush();
 
         return new JsonResponse("L'absence à bien été créée", 200);
+    }
+
+    /**
+     * @Route("api/user/{id}/absences", name="show_all_vacancies", methods={"GET"})
+     */
+    public function showAll(User $user, VacancyRepository $vacancyRepository, Request $request, ObjectManager $manager)
+    {
+        $currentUser = $this->get('security.token_storage')->getToken()->getUser();
+        if ($user == $currentUser) {
+
+            $vacancies = $user->getVacancies();
+
+            $data = $this->get('serializer')->serialize($vacancies, 'json', ['groups' => ['vacancy']]);
+            $response = new Response($data);
+            $response->headers->set('Content-Type', 'application/json');
+
+            return $response;
+        } else {
+            return new JsonResponse(["error" => "Vous n'êtes pas autorisé à voir cette page"], 500);
+        }
     }
 
     /**
