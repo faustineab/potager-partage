@@ -21,7 +21,7 @@ class Garden
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=60)
+     * @ORM\Column(type="string", length=60, unique=true)
      * @Groups({"garden_register"})
      */
     private $name;

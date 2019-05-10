@@ -33,6 +33,7 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
+     * @Groups({"admin"})
      */
     private $email;
 
@@ -41,6 +42,7 @@ class User implements UserInterface
      * @Groups({"event"})
      * @Groups({"vacancy"})
      * @Groups({"remplacement"})
+     * @Groups({"admin"})
      */
     private $name;
 
@@ -52,11 +54,13 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="integer")
+     * @Groups({"admin"})
      */
     private $phone;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"admin"})
      */
     private $address;
 
@@ -90,6 +94,7 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"admin"})
      */
     private $statut;
 
@@ -455,7 +460,7 @@ class User implements UserInterface
     {
 
         $roles = $this->roles->map(function ($role) {
-            return $role->getLabel();
+            return $role->getName();
         })->toArray();
         $roles[] = 'ROLE_USER';
         return $roles;
