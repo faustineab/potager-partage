@@ -21,7 +21,7 @@ const initialState = {
   gardenAddressSpecificities: '',
   gardenCity: '',
   gardenNbPlotsRow: 1,
-  gardenPlotsColumn: 1,
+  gardenNbPlotsColumn: 1,
   gardenSize: '',
   askingQuestion: false,
   questionToAsk: '',
@@ -38,8 +38,9 @@ const initialState = {
  * Types
  */
 
-export const LOG_USER = 'LOG_USER';
+export const CREATE_GARDEN = 'CREATE_GARDEN';
 export const JOIN_GARDEN = 'JOIN_GARDEN';
+export const LOG_USER = 'LOG_USER';
 const CHANGE_LOGIN_MESSAGE = 'CHANGE_LOGIN_MESSAGE';
 const USER_LOGGED = 'USER_LOGGED';
 const USER_LOGOUT = 'USER_LOGOUT';
@@ -59,6 +60,14 @@ export const RECEIVED_GARDENLIST = 'RECEIVED_GARDENLIST';
 
 const reducer = (state = initialState, action = {}) => {
   switch (action.type) {
+    case CREATE_GARDEN:
+      return {
+        ...state,
+      };
+    case JOIN_GARDEN:
+      return {
+        ...state,
+      };
     case USER_LOGGED:
       return {
         ...state,
@@ -136,14 +145,18 @@ const reducer = (state = initialState, action = {}) => {
 /**
  * Action Creators
  */
+export const joinGarden = () => ({
+  type: JOIN_GARDEN,
+});
+
+export const createGarden = () => ({
+  type: CREATE_GARDEN,
+});
 
 export const logUser = () => ({
   type: LOG_USER,
 });
 
-export const joinGarden = () => ({
-  type: JOIN_GARDEN,
-});
 
 export const changeLoginMessage = text => ({
   type: CHANGE_LOGIN_MESSAGE,

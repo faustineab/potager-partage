@@ -15,18 +15,23 @@ const CreateGarden = ({
   gardenNbPlotsColumn,
   gardenSize,
   inputChange,
-
+  createGarden,
 }) => {
   const handleInputChange = (evt) => {
     const { name } = evt.target;
     const { value } = evt.target;
-    console.log(name, value);
+    // console.log(name, value);
     inputChange(name, value);
+  };
+
+  const handleSubmit = (evt) => {
+    evt.preventDefault();
+    createGarden();
   };
 
   return (
     <main className="subscription">
-      <Form className="subscriptionForm">
+      <Form className="subscriptionForm" onSubmit={handleSubmit}>
         <h1>Créer votre jardin</h1>
         <Form.Field>
           <label>Nom du jardin</label>
@@ -76,6 +81,7 @@ CreateGarden.propTypes = {
   gardenNbPlotsColumn: PropTypes.number,
   gardenSize: PropTypes.string,
   inputChange: PropTypes.func.isRequired,
+  createGarden: PropTypes.func.isRequired,
 };
 
 CreateGarden.defaultProps = {

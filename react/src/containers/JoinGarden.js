@@ -12,7 +12,7 @@ const mapDispatchToProps = dispatch => ({
   inputChange: (name, value) => {
     dispatch(inputChange(name, value));
   },
-  onSubmit: () => {
+  joinGarden: () => {
     dispatch(joinGarden());
   },
 });

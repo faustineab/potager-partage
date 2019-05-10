@@ -4,14 +4,14 @@ import { Button, Form } from 'semantic-ui-react';
 
 import './index.scss';
 
-const JoinGarden = ({ gardenList, inputChange, onSubmit }) => {
+const JoinGarden = ({ gardenList, inputChange, joinGarden }) => {
   const handleInputChange = (evt, { name, value }) => {
     inputChange(name, value);
   };
 
   const handleSubmit = (evt) => {
     evt.preventDefault();
-    onSubmit();
+    joinGarden();
   };
 
 
@@ -33,7 +33,7 @@ JoinGarden.propTypes = {
     name: PropTypes.string,
   })),
   inputChange: PropTypes.func.isRequired,
-  onSubmit: PropTypes.func.isRequired,
+  joinGarden: PropTypes.func.isRequired,
 };
 
 JoinGarden.defaultProps = {

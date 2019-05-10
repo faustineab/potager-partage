@@ -2,6 +2,7 @@ import axios from 'axios';
 
 import {
   FETCH_GARDENLIST,
+  CREATE_GARDEN,
   JOIN_GARDEN,
   receivedGardenList,
 } from 'src/store/reducer';
@@ -10,7 +11,6 @@ const ajaxMiddleware = store => next => (action) => {
   switch (action.type) {
     case FETCH_GARDENLIST:
       next(action);
-
       axios.get('http://localhost/Projet/potager-partage/symfo/public/register/user')
         .then((response) => {
           // console.log('response data', response.data);
@@ -25,6 +25,32 @@ const ajaxMiddleware = store => next => (action) => {
           console.log(error);
         });
       break;
+
+    case CREATE_GARDEN:
+      next(action);
+      axios.post('http://localhost/Projet/potager-partage/symfo/public/register/admin', {
+        name: `${store.getState().firstName} ${store.getState().lastName}`,
+        email: store.getState().email,
+        password: store.getState().password,
+        phone: store.getState().phoneNumber,
+        address: store.getState().address,
+        gardenName: store.getState().gardenName,
+        gardenAddress: store.getState().gardenAddress,
+        gardenSpecificities: store.getState().gardenAddressSpecificities,
+        gardenZipCode: store.getState().gardenZipcode,
+        gardenCity: store.getState().gardenCity,
+        gardenMeters: store.getState().gardenSize,
+        gardenPlots_Row: store.getState().gardenNbPlotsRow,
+        gardenPlots_Column: store.getState().gardenNbPlotsColumn,
+      })
+        .then((response) => {
+          console.log(response);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+      break;
+
     case JOIN_GARDEN:
       next(action);
 
@@ -38,9 +64,12 @@ const ajaxMiddleware = store => next => (action) => {
       })
         .then((response) => {
           console.log(response);
+
+          // window.location.href = '/';
         })
         .catch((error) => {
           console.log(error);
+          window.location.href = '/subscribe';
         });
       break;
     default:
