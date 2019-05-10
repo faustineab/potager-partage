@@ -33,39 +33,17 @@ class SubstitutionController extends AbstractController
 
         $substitution->setVacancy($vacancy);
         $manager->persist($substitution);
-        // dump($substitution);
 
         $availableDates = $vacancy->getAvailableDays();
-        // dump($availableDates);
 
-        // foreach ($availableDates as $availableDate) {
-        //     $availableDates = [];
-        //     $availableDates[] = $availableDate->format('Y-m-d H:i:s');
-        // }
-
-        // dump($substitution->getDays());
-        // exit;
         $substitutionDates = $substitution->getDays();
 
-        dump($substitutionDates);
 
-
-        dump($availableDates);
-
-        // foreach ($substitutionDates as $substitutionDate) {
-        // if (array_search($substitutionDate, $availableDates) !== null) 
-
-
-        if (!empty(array_diff($substitutionDates, $availableDates)))
-
-        //  !== null) 
-        {
+        if (!empty(array_diff($substitutionDates, $availableDates))) {
             return new JsonResponse("Les dates choisies ne correspondent pas aux dates d' absences", 500);
-            // dump($substitutionDate);
         }
         if ($substitution->isBookableDate()) {
-            // dump($substitution->isBookableDate());
-            // exit;
+
             $substitution->setUser($user);
 
             $manager->persist($substitution);
