@@ -58,7 +58,7 @@ class Subscribe extends Component {
           </Form.Field>
           <Form.Field>
             <label>adresse</label>
-            <input type="text" placeholder="ex : 12 rue des jardiniers ..." value={address} name="address1" onChange={this.handleChange} />
+            <input type="text" placeholder="ex : 12 rue des jardiniers ..." value={address} name="address" onChange={this.handleChange} />
           </Form.Field>
           <Form.Field>
             <label>mot de passe</label>

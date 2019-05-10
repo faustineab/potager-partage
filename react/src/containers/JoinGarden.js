@@ -2,7 +2,7 @@ import { connect } from 'react-redux';
 
 import JoinGarden from 'src/components/Subscribe/joinGarden';
 
-import { inputChange } from '../store/reducer';
+import { inputChange, joinGarden } from '../store/reducer';
 
 const mapStateToProps = state => ({
   gardenList: state.gardenList,
@@ -11,6 +11,9 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   inputChange: (name, value) => {
     dispatch(inputChange(name, value));
+  },
+  onSubmit: () => {
+    dispatch(joinGarden());
   },
 });
 

@@ -3,7 +3,6 @@
  */
 
 const initialState = {
-  username: '',
   password: '',
   firstName: '',
   lastName: '',
@@ -40,6 +39,7 @@ const initialState = {
  */
 
 export const LOG_USER = 'LOG_USER';
+export const JOIN_GARDEN = 'JOIN_GARDEN';
 const CHANGE_LOGIN_MESSAGE = 'CHANGE_LOGIN_MESSAGE';
 const USER_LOGGED = 'USER_LOGGED';
 const USER_LOGOUT = 'USER_LOGOUT';
@@ -139,6 +139,10 @@ const reducer = (state = initialState, action = {}) => {
 
 export const logUser = () => ({
   type: LOG_USER,
+});
+
+export const joinGarden = () => ({
+  type: JOIN_GARDEN,
 });
 
 export const changeLoginMessage = text => ({
