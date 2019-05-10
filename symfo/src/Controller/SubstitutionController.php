@@ -96,6 +96,28 @@ class SubstitutionController extends AbstractController
     }
 
     /**
+     * @Route("api/remplacement/{id}/edit", name="edit_substitutions_get", methods={"GET"})
+     */
+    public function editSubstitutionsGet(VacancySubstitute $vacancySubstitute)
+    {
+
+        $user = $this->get('security.token_storage')->getToken()->getUser();
+
+        if ($user == $vacancySubstitute->getUser()) {
+
+            $data = $this->get('serializer')->serialize($vacancySubstitute, 'json', [
+                'groups' => ['remplacement']
+            ]);
+            $response = new Response($data);
+            $response->headers->set('Content-Type', 'application/json');
+
+            return $response;
+        } else {
+            return new JsonResponse(["error" => "Vous n'êtes pas autorisé à voir cette page"], 500);
+        }
+    }
+
+    /**
      * @Route("api/remplacement/{id}/edit", name="edit_substitutions", methods={"POST"})
      */
 
