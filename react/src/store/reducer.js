@@ -15,6 +15,7 @@ const initialState = {
   loggedIn: true,
   user: {},
   gardenList: [],
+  gardenId: '',
   gardenName: '',
   gardenAddress: '',
   gardenZipcode: '',
