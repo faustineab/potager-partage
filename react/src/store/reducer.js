@@ -9,17 +9,12 @@ const initialState = {
   lastName: '',
   email: '',
   phoneNumber: '',
-  address1: '',
-  address2: '',
-  zipcode: '',
+  address: '',
   loading: false,
   loginMessage: 'Message personnalisé',
-  loggedIn: false,
+  loggedIn: true,
   user: {},
-  gardenList: [
-    { key: 'm', text: 'garden1', value: 'garden1' },
-    { key: 'n', text: 'garden2', value: 'garden2' },
-  ],
+  gardenList: [],
   gardenName: '',
   gardenAddress: '',
   gardenZipcode: '',
@@ -49,11 +44,12 @@ const USER_LOGGED = 'USER_LOGGED';
 const USER_LOGOUT = 'USER_LOGOUT';
 export const INPUT_CHANGE = 'INPUT_CHANGE';
 export const MODIFY_USER_INFOS = 'MODIFY_USER_INFOS';
-export const REGISTER_USER = 'REGISTER_USER';
+export const FETCH_GARDENLIST = 'FETCH_GARDENLIST';
 export const USER_ASKING_QUESTION = 'USER_ASKING_QUESTION';
 export const ADD_TAG_TO_QUESTION = 'ADD_TAG_TO_QUESTION';
 export const REMOVE_QUESTION_TAG = 'REMOVE_QUESTION_TAG';
 export const QUESTION_ASKED = 'QUESTION_ASKED';
+export const RECEIVED_GARDENLIST = 'RECEIVED_GARDENLIST';
 
 
 /**
@@ -92,10 +88,16 @@ const reducer = (state = initialState, action = {}) => {
         ...state,
         [action.name]: action.value,
       };
-    case REGISTER_USER:
+    case FETCH_GARDENLIST:
       return {
         ...state,
         loading: true,
+      };
+    case RECEIVED_GARDENLIST:
+      return {
+        ...state,
+        loading: false,
+        gardenList: [...action.gardenList],
       };
     case MODIFY_USER_INFOS:
       return {
@@ -163,8 +165,13 @@ export const ModifyUserInfos = () => ({
   type: MODIFY_USER_INFOS,
 });
 
-export const registerUser = () => ({
-  type: REGISTER_USER,
+export const fetchGardenlist = () => ({
+  type: FETCH_GARDENLIST,
+});
+
+export const receivedGardenList = gardenList => ({
+  type: RECEIVED_GARDENLIST,
+  gardenList,
 });
 
 export const userAskingQuestion = () => ({

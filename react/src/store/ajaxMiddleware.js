@@ -1,34 +1,24 @@
 import axios from 'axios';
 
 import {
-  REGISTER_USER,
+  FETCH_GARDENLIST,
+  receivedGardenList,
 } from 'src/store/reducer';
 
-const ajaxMiddleware = store => next => (action) => { 
+const ajaxMiddleware = store => next => (action) => {
   switch (action.type) {
-    case REGISTER_USER:
+    case FETCH_GARDENLIST:
       next(action);
 
-      const firstName = store.getState().firstName;
-      const lastName = store.getState().lastName;
-      const password = store.getState().password;
-      const email = store.getState().email;
-      const phone = store.getState().phoneNumber;
-      const address = store.getState().address1;
-      const address_specificities = store.getState().address2;
-      const zipcode = store.getState().zipcode;
-
-      axios.post(url, {
-        name: `${firstName} ${lastName}`,
-        password,
-        email,
-        phone,
-        address,
-        address_specificities,
-        zipcode,
-      })
+      axios.get('http://localhost/Projet/potager-partage/symfo/public/register/user')
         .then((response) => {
-          console.log(response);
+          console.log(response.data);
+          const gardenList = response.data.map(garden => ({
+            key: garden.id,
+            text: garden.name,
+            value: garden.name,
+          }));
+          store.dispatch(receivedGardenList(gardenList));
         })
         .catch((error) => {
           console.log(error);

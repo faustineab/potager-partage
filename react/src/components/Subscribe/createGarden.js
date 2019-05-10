@@ -75,6 +75,7 @@ CreateGarden.propTypes = {
   gardenNbPlotsRow: PropTypes.number,
   gardenNbPlotsColumn: PropTypes.number,
   gardenSize: PropTypes.string,
+  inputChange: PropTypes.func.isRequired,
 };
 
 CreateGarden.defaultProps = {

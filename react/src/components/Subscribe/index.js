@@ -33,9 +33,7 @@ class Subscribe extends Component {
       lastName,
       email,
       phoneNumber,
-      address1,
-      address2,
-      zipcode,
+      address,
       password,
     } = this.props;
     return (
@@ -59,16 +57,8 @@ class Subscribe extends Component {
             <input type="text" placeholder="téléphone" value={phoneNumber} name="phoneNumber" onChange={this.handleChange} />
           </Form.Field>
           <Form.Field>
-            <label>adresse 1</label>
-            <input type="text" placeholder="ex : 12 rue des jardiniers ..." value={address1} name="address1" onChange={this.handleChange} />
-          </Form.Field>
-          <Form.Field>
-            <label>adresse 2</label>
-            <input type="text" placeholder="" value={address2} onChange={this.handleChange} />
-          </Form.Field>
-          <Form.Field>
-            <label>code postal</label>
-            <input type="text" placeholder="code postal" value={zipcode} name="zipcode" onChange={this.handleChange} />
+            <label>adresse</label>
+            <input type="text" placeholder="ex : 12 rue des jardiniers ..." value={address} name="address1" onChange={this.handleChange} />
           </Form.Field>
           <Form.Field>
             <label>mot de passe</label>
@@ -90,9 +80,7 @@ Subscribe.propTypes = {
   email: PropTypes.string,
   password: PropTypes.string,
   phoneNumber: PropTypes.string,
-  address1: PropTypes.string,
-  address2: PropTypes.string,
-  zipcode: PropTypes.string,
+  address: PropTypes.string,
   inputChange: PropTypes.func.isRequired,
   onFormSubmit: PropTypes.func.isRequired,
 };
@@ -103,9 +91,7 @@ Subscribe.defaultProps = {
   email: PropTypes.string,
   password: PropTypes.string,
   phoneNumber: PropTypes.string,
-  address1: PropTypes.string,
-  address2: PropTypes.string,
-  zipcode: PropTypes.string,
-}
+  address: PropTypes.string,
+};
 
 export default withRouter(Subscribe);
