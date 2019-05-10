@@ -57,6 +57,8 @@ class SubstitutionController extends AbstractController
     /**
      * @Route("api/absence/{id}/remplacements", name="show_substitutions", methods={"GET"})
      */
+
+    //montre tous les remplaçants pour une absence
     public function showSubstitutions(Vacancy $vacancy)
     {
 
@@ -69,8 +71,9 @@ class SubstitutionController extends AbstractController
     }
 
     /**
-     * @Route("api/user/{id}/remplacements", name="show_substitutions", methods={"GET"})
+     * @Route("api/user/{id}/remplacements", name="show_user_substitutions", methods={"GET"})
      */
+    //montre tous les remplacement d'un user
     public function showUserSubstitutions(User $user)
     {
 
@@ -89,6 +92,40 @@ class SubstitutionController extends AbstractController
             return $response;
         } else {
             return new JsonResponse(["error" => "Vous n'êtes pas autorisé à voir cette page"], 500);
+        }
+    }
+
+    /**
+     * @Route("api/remplacement/{id}/edit", name="edit_substitutions", methods={"POST"})
+     */
+
+    public function editRemplacement(VacancySubstitute $vacancySubstitute, Request $request, ValidatorInterface $validator, ObjectManager $manager)
+    {
+
+        $user = $this->get('security.token_storage')->getToken()->getUser();
+
+        if ($user == $vacancySubstitute->getUser()) {
+            $content = $request->getContent();
+            $currentVacancySubstitute = $this->get('serializer')->deserialize($content, VacancySubstitute::class, 'json');
+
+            $errors = $validator->validate($currentVacancySubstitute);
+
+            if (count($errors) > 0) {
+                dd($errors);
+            }
+
+            $startDate = $currentVacancySubstitute->getStartDate();
+            $endDate = $currentVacancySubstitute->getEndDate();
+
+            $vacancySubstitute->setStartDate($startDate)
+                ->setEndDate($endDate);
+
+            $manager->persist($vacancySubstitute);
+            $manager->flush();
+
+            return new JsonResponse("L'absence à bien été édité", 200);
+        } else {
+            return new JsonResponse(["error" => "Vous n'êtes pas autorisé à éditer"], 500);
         }
     }
 }
