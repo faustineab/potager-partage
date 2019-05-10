@@ -50,7 +50,7 @@ class VacancySubstitute
     private $vacancy;
 
     /**
-     * @ORM\OneToOne(targetEntity="App\Entity\User", inversedBy="vacancySubstitute", cascade={"persist", "remove"})
+     * @ORM\OneToOne(targetEntity="App\Entity\User", inversedBy="vacancySubstitute")
      * @ORM\JoinColumn(nullable=false)
      * @Groups({"vacancy"})
      * 

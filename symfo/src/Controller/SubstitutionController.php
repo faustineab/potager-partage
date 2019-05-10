@@ -50,7 +50,7 @@ class SubstitutionController extends AbstractController
 
             $manager->persist($substitution);
             $manager->flush();
-            return new JsonResponse("L'absence à bien été créée", 200);
+            return new JsonResponse("Le remplacement à bien été créée", 200);
         }
         return new JsonResponse('les dates choisies ont déja été réservées', 500);
     }
@@ -148,6 +148,23 @@ class SubstitutionController extends AbstractController
             return new JsonResponse("L'absence à bien été édité", 200);
         } else {
             return new JsonResponse(["error" => "Vous n'êtes pas autorisé à éditer"], 500);
+        }
+    }
+    /**
+     * @Route("api/remplacement/{id}/delete", name="delete_remplacement", methods={"POST"})
+     */
+    public function delete(VacancySubstitute $vacancySubstitute, ObjectManager $manager)
+    {
+
+        $user = $this->get('security.token_storage')->getToken()->getUser();
+
+        if ($user == $vacancySubstitute->getUser()) {
+            $manager->remove($vacancySubstitute);
+            $manager->flush();
+
+            return new JsonResponse('supprimé', 200);
+        } else {
+            return new JsonResponse(["error" => "Vous n'êtes pas autorisé à supprimer"], 500);
         }
     }
 }
