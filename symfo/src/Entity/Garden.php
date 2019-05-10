@@ -24,6 +24,7 @@ class Garden
      * @ORM\Column(type="string", length=60)
      * @Groups("garden_get")
      * @Groups({"garden_register","garden_edit", "plot"})
+
      */
     private $name;
     /**
@@ -81,6 +82,7 @@ class Garden
      * @ORM\OneToMany(targetEntity="App\Entity\Plot", mappedBy="garden")
      */
     private $plots;
+
     public function __construct()
     {
         $this->user = new ArrayCollection();
@@ -189,6 +191,7 @@ class Garden
     {
         return $this->user;
     }
+
     public function addUser(User $user): self
     {
         if (!$this->user->contains($user)) {

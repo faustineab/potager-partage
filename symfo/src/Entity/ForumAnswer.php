@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
+
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ForumAnswerRepository")
@@ -13,21 +15,25 @@ class ForumAnswer
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     * @Groups({"forum_questions"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="text")
+     * @Groups({"forum_questions"})
      */
     private $text;
 
     /**
      * @ORM\Column(type="datetime")
+     * @Groups({"forum_questions"})
      */
     private $createdAt;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
+     * @Groups({"forum_questions"})
      */
     private $updatedAt;
 
@@ -46,7 +52,6 @@ class ForumAnswer
     public function __construct()
     {
         $this->createdAt = new \DateTime();
-        $this->updatedAt = new \DateTime();
     }
 
     public function getId(): ?int

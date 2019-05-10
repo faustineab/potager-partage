@@ -11,6 +11,8 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+
+
 class EventController extends AbstractController
 {
     /**
@@ -24,9 +26,12 @@ class EventController extends AbstractController
         if (count($errors) > 0) {
             dd($errors);
         }
+
         $user = $this->get('security.token_storage')->getToken()->getUser();
         $event->setUser($user);
+
         $manager->persist($event);
+
         $manager->flush();
         return $this->redirectToRoute('show_event', [
             'id' => $event->getId(),
@@ -42,45 +47,70 @@ class EventController extends AbstractController
         $response->headers->set('Content-Type', 'application/json');
         return $response;
     }
+
+
     /**
      * @Route("api/event/{id}/edit", name="edit_event", methods={"GET"})
      */
     public function edit(Event $event, Request $request, ObjectManager $manager, ValidatorInterface $validator)
     {
         $user = $this->get('security.token_storage')->getToken()->getUser();
+
+
         if ($user == $event->getUser()) {
+
             $data = $this->get('serializer')->serialize($event, 'json', ['groups' => ['event']]);
+
             $response = new Response($data);
+
             $response->headers->set('Content-Type', 'application/json');
             return $response;
         }
         return new JsonResponse(["error" => "Vous n'êtes pas autorisé à modifier"], 500);
     }
+
     /**
      * @Route("api/event/{id}/edit", name="edit_event_post", methods={"POST"})
      */
     public function edit_post(Event $event, Request $request, ObjectManager $manager, ValidatorInterface $validator, EventRepository $eventRepository)
     {
+
+
         $user = $this->get('security.token_storage')->getToken()->getUser();
+
         if ($user == $event->getUser()) {
+
+
+
             $content = $request->getContent();
+
             $currentEvent = $this->get('serializer')->deserialize($content, Event::class, 'json');
             // dump($currentEvent);
             $errors = $validator->validate($currentEvent);
+
             if (count($errors) > 0) {
                 dd($errors);
             }
+
             $description = $currentEvent->getDescription();
             $title = $currentEvent->getTitle();
             $startDate = $currentEvent->getStartDate();
             $endDate = $currentEvent->getEndDate();
+
             $event->setDescription($description)
                 ->setTitle($title)
                 ->setStartDate($startDate)
                 ->setEndDate($endDate);
+
+
+
             // $event->setUser($user);
+
             $manager->persist($event);
+
             $manager->flush();
+
+
             return $this->redirectToRoute('show_event', [
                 'id' => $event->getId(),
             ], Response::HTTP_CREATED);
@@ -88,6 +118,7 @@ class EventController extends AbstractController
             return new JsonResponse(["error" => "Vous n'êtes pas autorisé à éditer"], 500);
         }
     }
+  
     /**
      * @Route("api/event/{id}/delete", name="delete_event", methods={"POST"})
      */
@@ -100,6 +131,9 @@ class EventController extends AbstractController
             return new JsonResponse('supprimé', 200);
         } else {
             return new JsonResponse(["error" => "Vous n'êtes pas autorisé à supprimer"], 500);
+
+
+
         }
     }
 }
