@@ -2,16 +2,15 @@
 namespace App\Controller;
 use App\Entity\Event;
 use App\Form\EventType;
+use App\Repository\EventRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use App\Repository\EventRepository;
-
-
 class EventController extends AbstractController
 {
     /**
@@ -34,7 +33,7 @@ class EventController extends AbstractController
         ], Response::HTTP_CREATED);
     }
     /**
-     * @Route("/event/{id}", name="show_event", methods={"GET"})
+     * @Route("api/event/{id}", name="show_event", methods={"GET"})
      */
     public function show(Event $event, Request $request, ObjectManager $manager)
     {
@@ -44,14 +43,18 @@ class EventController extends AbstractController
         return $response;
     }
     /**
-     * @Route("/event/{id}/edit", name="edit_event", methods={"GET"})
+     * @Route("api/event/{id}/edit", name="edit_event", methods={"GET"})
      */
     public function edit(Event $event, Request $request, ObjectManager $manager, ValidatorInterface $validator)
     {
-        $data = $this->get('serializer')->serialize($event, 'json', ['groups' => ['event']]);
-        $response = new Response($data);
-        $response->headers->set('Content-Type', 'application/json');
-        return $response;
+        $user = $this->get('security.token_storage')->getToken()->getUser();
+        if ($user == $event->getUser()) {
+            $data = $this->get('serializer')->serialize($event, 'json', ['groups' => ['event']]);
+            $response = new Response($data);
+            $response->headers->set('Content-Type', 'application/json');
+            return $response;
+        }
+        return new JsonResponse(["error" => "Vous n'êtes pas autorisé à modifier"], 500);
     }
     /**
      * @Route("api/event/{id}/edit", name="edit_event_post", methods={"POST"})
@@ -62,8 +65,8 @@ class EventController extends AbstractController
         if ($user == $event->getUser()) {
             $content = $request->getContent();
             $currentEvent = $this->get('serializer')->deserialize($content, Event::class, 'json');
-            dump($currentEvent);
-            $errors = $validator->validate($event);
+            // dump($currentEvent);
+            $errors = $validator->validate($currentEvent);
             if (count($errors) > 0) {
                 dd($errors);
             }
@@ -82,7 +85,21 @@ class EventController extends AbstractController
                 'id' => $event->getId(),
             ], Response::HTTP_CREATED);
         } else {
-            echo 'non autorisé';
+            return new JsonResponse(["error" => "Vous n'êtes pas autorisé à éditer"], 500);
+        }
+    }
+    /**
+     * @Route("api/event/{id}/delete", name="delete_event", methods={"POST"})
+     */
+    public function delete_post(Event $event, Request $request, ObjectManager $manager, ValidatorInterface $validator, EventRepository $eventRepository)
+    {
+        $user = $this->get('security.token_storage')->getToken()->getUser();
+        if ($user == $event->getUser()) {
+            $manager->remove($event);
+            $manager->flush();
+            return new JsonResponse('supprimé', 200);
+        } else {
+            return new JsonResponse(["error" => "Vous n'êtes pas autorisé à supprimer"], 500);
         }
     }
 }
