@@ -62,7 +62,7 @@ class ForumQuestionController extends AbstractController
     /**
      * @Route("/{id}", name="forum_question_show", methods={"GET"})
      */
-    public function show(ForumQuestion $question, Request $request, SerializerInterface $serializer): Response
+    public function show(ForumQuestion $question, SerializerInterface $serializer): Response
     {
         $jsonQuestion = $serializer->serialize($question, 'json',
             ['groups' => 'forum_questions']

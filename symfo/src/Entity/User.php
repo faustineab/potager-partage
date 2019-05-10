@@ -31,6 +31,7 @@ class User implements UserInterface
      * @Groups({"garden_get"})
      * @Groups({"forum_questions"})
      * @Groups({"forum_tags"})
+     * @Groups({"user"})
      */
     private $id;
 
@@ -38,6 +39,7 @@ class User implements UserInterface
      * @ORM\Column(type="string", length=180, unique=true)
      * @Groups({"forum_questions"})
      * @Groups({"forum_tags"})
+     * @Groups({"user"})
      */
     private $email;
 
@@ -46,33 +48,38 @@ class User implements UserInterface
      * @Groups({"forum_questions"})
      * @Groups({"forum_tags"})
      * @Groups({"event","garden_get"})
-
+     * @Groups({"user"})
      */
     private $name;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"user"})
      */
     private $password;
 
 
     /**
      * @ORM\Column(type="integer")
+     * @Groups({"user"})
      */
     private $phone;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"user"})
      */
     private $address;
 
     /**
      * @ORM\Column(type="datetime")
+     * @Groups({"user"})
      */
     private $created_at;
 
     /**
      * @ORM\Column(type="datetime")
+     * @Groups({"user"})
      */
     private $updated_at;
 
@@ -97,6 +104,7 @@ class User implements UserInterface
     /**
      * @ORM\Column(type="string", length=255)
      * @Groups("garden_get")
+     * @Groups({"user"})
      */
     private $statut;
 

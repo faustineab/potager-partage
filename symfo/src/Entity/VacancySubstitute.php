@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\VacancySubstituteRepository")
@@ -45,6 +46,7 @@ class VacancySubstitute
     /**
      * @ORM\OneToOne(targetEntity="App\Entity\User", inversedBy="vacancySubstitute", cascade={"persist", "remove"})
      * @ORM\JoinColumn(nullable=false)
+     * @Groups({"user"})
      */
     private $user;
 

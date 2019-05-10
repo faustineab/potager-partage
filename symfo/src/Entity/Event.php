@@ -56,6 +56,7 @@ class Event
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="events")
      * @ORM\JoinColumn(nullable=false)
      * @Groups({"event"})
+     * @Groups({"user"})
      */
     private $user;
 

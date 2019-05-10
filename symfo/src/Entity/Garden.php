@@ -88,6 +88,7 @@ class Garden
     /**
      * @ORM\ManyToMany(targetEntity="App\Entity\User", inversedBy="gardens")
      * @Groups("garden_get")
+     * @Groups({"user"})
      * 
      */
     private $user;

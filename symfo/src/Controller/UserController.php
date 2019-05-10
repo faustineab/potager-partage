@@ -3,90 +3,35 @@
 namespace App\Controller;
 
 use App\Entity\User;
-use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Doctrine\Common\Persistence\ObjectManager;
+use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
+/**
+ * @Route("/api/user")
+ */
 class UserController extends AbstractController
 {
     /**
-     * @Route("/user/{id}", name="user")
+     * @Route("/", name="user_show")
      */
-    public function index()
+    public function profile(SerializerInterface $serializer)
     {
-        return $this->render('user/index.html.twig', [
-            'controller_name' => 'UserController',
-        ]);
-    }
+        $user = $this->get('security.token_storage')->getToken()->getUser();
+        //$userGardens = $user->getGardens();
 
-
-    /**
-     * @Route("/user/{id}/validation", name="validation")
-     */
-    public function validation(User $user, ObjectManager $manager)
-    {
+        // dd($user);
         
-  
-            if($user->getStatut() == 'à valider'){
-                $user->setStatut('validé');
-                
-                $manager->persist($user);
-                $manager->flush();
-                
-                return $this->render('user/index.html.twig', [
-                'controller_name' => 'UserController',
-            ]);
-            }  
-        
-    }
-
-    /**
-     * @Route("/user/{id}/refus", name="refus")
-     */
-    public function refus(User $user, ObjectManager $manager)
-    {
-        if($user->getStatut() == 'à valider'){
-            $user->setStatut('refusé');
-            
-            $manager->persist($user);
-            $manager->flush();
-            
-            return $this->render('user/index.html.twig', [
-            'controller_name' => 'UserController',
-        ]);
-        }  
-      
-    }
-    
-    /**
-     * @Route("/user/{id}/edit", name="validation")
-     */
-    public function edit(User $user, ObjectManager $manager)
-    {
-        
-  
-            if($user->getStatut() == 'validé'){
-                $user->setStatut('refusé');
-            
-                $manager->persist($user);
-                $manager->flush();
-                
-                return $this->render('user/index.html.twig', [
-                    'controller_name' => 'UserController',
-                ]);
-            
+        $userJson = $serializer->serialize($user, 'json', [
+            'skip_null_values' => true,
+            'circular_reference_handler' => function ($object) {
+                return $object->getId();
             }
-            
-            if($user->getStatut() == 'refusé'){
-                    $user->setStatut('validé');}
+        ]);
 
-                    $manager->persist($user);
-                    $manager->flush();
-                
-                return $this->render('user/index.html.twig', [
-                'controller_name' => 'UserController',
-            ]);
-            }  
-        
-    
+        return JsonResponse::fromJsonString($userJson);
+    }
+
 }

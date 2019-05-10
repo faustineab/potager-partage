@@ -42,6 +42,7 @@ class Role
     /**
      * @ORM\ManyToMany(targetEntity="App\Entity\User", inversedBy="roles")
      * @Groups({"forum_tags"})
+     * @Groups({"user"})
      */
     private $users;
 

@@ -64,6 +64,7 @@ class ForumQuestion
      * @ORM\JoinColumn(nullable=false)
      * @Groups({"forum_questions"})
      * @Groups({"forum_tags"})
+     * @Groups({"user"})
      */
     private $user;
 
