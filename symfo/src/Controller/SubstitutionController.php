@@ -2,11 +2,13 @@
 
 namespace App\Controller;
 
+use App\Entity\User;
 use App\Entity\Vacancy;
 use App\Form\SubstitutionType;
 use App\Entity\VacancySubstitute;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\Common\Persistence\ObjectManager;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
@@ -51,5 +53,42 @@ class SubstitutionController extends AbstractController
             return new JsonResponse("L'absence à bien été créée", 200);
         }
         return new JsonResponse('les dates choisies ont déja été réservées', 500);
+    }
+    /**
+     * @Route("api/absence/{id}/remplacements", name="show_substitutions", methods={"GET"})
+     */
+    public function showSubstitutions(Vacancy $vacancy)
+    {
+
+        $substitutions = $this->get('serializer')->serialize($vacancy, 'json', ['groups' => ['vacancy']]);
+
+
+        $response = new Response($substitutions);
+
+        return $response;
+    }
+
+    /**
+     * @Route("api/user/{id}/remplacements", name="show_substitutions", methods={"GET"})
+     */
+    public function showUserSubstitutions(User $user)
+    {
+
+        $currentUser = $this->get('security.token_storage')->getToken()->getUser();
+
+        if ($user == $currentUser) {
+
+            $vacancySubstitutes = $user->getVacancySubstitute();
+
+            $data = $this->get('serializer')->serialize($vacancySubstitutes, 'json', [
+                'groups' => ['remplacement']
+            ]);
+            $response = new Response($data);
+            $response->headers->set('Content-Type', 'application/json');
+
+            return $response;
+        } else {
+            return new JsonResponse(["error" => "Vous n'êtes pas autorisé à voir cette page"], 500);
+        }
     }
 }
