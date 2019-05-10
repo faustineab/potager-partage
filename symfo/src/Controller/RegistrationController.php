@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Plot;
 use App\Entity\User;
 use App\Entity\Garden;
 use App\Form\AdminType;
@@ -79,11 +80,11 @@ class RegistrationController extends AbstractController
 
 
         $user = new User();
-        // $hashedPassword = $encoder->encodePassword($user, $password);
+        $hashedPassword = $encoder->encodePassword($user, $password);
 
         $user->setStatut('ok')
             ->setName($username)
-            ->setPassword($password)
+            ->setPassword($hashedPassword)
             ->setEmail($email)
             ->setPhone($phone)
             ->setAddress($address);
@@ -116,9 +117,23 @@ class RegistrationController extends AbstractController
         $garden->addUser($user);
         dump($garden);
 
+        $plots =  $gardenPlots_Row * $gardenPlots_Column;
+        dump($plots);
 
+
+        for ($p = 0; $p < $plots; $p++) {
+            $plot = new Plot();
+            $manager->persist($plot);
+
+            $plot->setStatus('inactif');
+            $garden->addPlot($plot);
+        }
+
+        $manager->persist($plot);
         $manager->persist($garden);
-        dump($garden);
+        // dump($garden);
+        // exit;
+
 
         $role = $roleRepository->findOneBy([
             'label' => 'Administrateur'

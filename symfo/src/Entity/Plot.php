@@ -19,7 +19,7 @@ class Plot
     private $id;
 
     /**
-     * @ORM\Column(type="boolean")
+     * @ORM\Column(type="string")
      */
     private $status;
 
@@ -34,7 +34,7 @@ class Plot
     private $updated_at;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Garden", inversedBy="plots")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Garden", inversedBy="plots", cascade={"persist"})
      * @ORM\JoinColumn(nullable=false)
      */
     private $garden;
@@ -61,12 +61,12 @@ class Plot
         return $this->id;
     }
 
-    public function getStatus(): ?bool
+    public function getStatus(): ?string
     {
         return $this->status;
     }
 
-    public function setStatus(bool $status): self
+    public function setStatus(string $status): self
     {
         $this->status = $status;
 

@@ -40,7 +40,7 @@ class Vacancy
 
     /**
      * @ORM\OneToOne(targetEntity="App\Entity\User", inversedBy="vacancy", cascade={"persist", "remove"})
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=false, unique=false)
      */
     private $user;
 
@@ -54,31 +54,32 @@ class Vacancy
         $this->vacancySubstitutes = new ArrayCollection();
         $this->createdAt = new \DateTime();
         $this->updatedAt = new \DateTime();
-
     }
 
     /**
      * @return array 
      */
-    
-    public function getNotAvailableDays(){
+
+    public function getNotAvailableDays()
+    {
         $notAvailableDays = [];
 
-        foreach ($this->vacancySubstitutes as $vacancySubstitute){
+        foreach ($this->vacancySubstitutes as $vacancySubstitute) {
             // je calcul les jours qui se trouvent entre la date d'arrivée et de départ
-            
+
             $resultat = range(
                 $vacancySubstitute->getStartDate()->getTimestamp(),
                 $vacancySubstitute->getEndDate()->getTimestamp(),
-                24*60*60); // nbr de secondes entre les dates d'arrivée et de départ
+                24 * 60 * 60
+            ); // nbr de secondes entre les dates d'arrivée et de départ
 
-            $days = array_map(function($dayTimestamp){
+            $days = array_map(function ($dayTimestamp) {
                 return new \DateTime(date('Y-m-d', $dayTimestamp));
             }, $resultat); // transformation du tableau résultat(seconde) en tableau (jours)
 
             $notAvailableDays = array_merge($notAvailableDays, $days);
         };
-        
+
         return  $notAvailableDays;
     }
 
