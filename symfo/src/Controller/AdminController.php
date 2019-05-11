@@ -17,7 +17,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class AdminController extends AbstractController
 {
     /**
-     * @Route("api/admin/status/show/validation", name="admin_status_validation", methods={"GET"})
+     * @Route("api/admin/status/show/validation", name="admin_status_a_valider", methods={"GET"})
      */
     public function showStatus(UserRepository $userRepository, RoleRepository $roleRepository)
     {
@@ -32,21 +32,29 @@ class AdminController extends AbstractController
             dump($user);
             if (array_search($user, $currentUserRoles) !== false) {
 
+
                 $usersToBeAuthorized = $userRepository->findby(['statut' => 'à valider']);
 
-                $data = $this->get('serializer')->serialize($usersToBeAuthorized, 'json', [
-                    'groups' => ['admin']
-                ]);
-                $response = new Response($data);
+                if ($usersToBeAuthorized !== null) {
 
-                $response->headers->set('Content-Type', 'application/json');
+                    $data = $this->get('serializer')->serialize($usersToBeAuthorized, 'json', [
+                        'groups' => ['admin']
+                    ]);
 
-                return $response;
+                    $response = new Response($data);
+
+                    $response->headers->set('Content-Type', 'application/json');
+
+                    return $response;
+                } else {
+                    return new JsonResponse("Aucun user en attente de validation", 200);
+                }
             } else {
-                return new JsonResponse("Vous n' êtes pas autorisé à accéder à cette page", 500);
+                return new JsonResponse("Vous n'êtes pas autorisé à accéder à ce contenu", 500);
             }
         }
     }
+
 
     /**
      * @Route("api/admin/status/user/{id}/validation", name="admin_status_validation", methods={"POST"})
@@ -84,18 +92,51 @@ class AdminController extends AbstractController
 
                     $statut = $data->getStatut();
 
-                    $user->setStatut($statut);
 
+                    $user->setStatut($statut);
+                    $manager->persist($user);
+
+                    if ($statut == 'ok') {
+
+                        $member = $roleRepository->findBy(['label' => 'membre']);
+
+                        foreach ($member as $roleMember) {
+
+                            $user->addRole($roleMember);
+                        }
+                    }
 
                     $manager->persist($user);
                     $manager->flush();
 
-                    return new JsonResponse("le statut à bien été modifié", 200);
+                    return new JsonResponse("le statut et le rôle ont bien été modifiés", 200);
                 } else {
                     return new JsonResponse("Votre statut à déjà été confirmé", 500);
                 }
             } else
                 return new JsonResponse("Vous n' êtes pas autorisé à accéder à cette page", 500);
         }
+    }
+
+    /**
+     * @Route("api/admin/create/role", name="admin_role", methods={"POST"})
+     */
+    public function create_role(ObjectManager $manager, Request $request, ValidatorInterface $validator)
+    {
+
+        $content = $request->getContent();
+
+        $role = $this->get('serializer')->deserialize($content, Role::class, 'json');
+
+        $errors = $validator->validate($role);
+
+        if (count($errors) > 0) {
+            dd($errors);
+        }
+
+        $manager->persist($role);
+        $manager->flush();
+
+        return new JsonResponse('Nouveau rôle créé', 200);
     }
 }

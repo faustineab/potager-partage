@@ -17,7 +17,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class VacancyController extends AbstractController
 {
     /**
-     * @Route("api/absence/add", name="create_vacancy", methods={"GET","POST"})
+     * @Route("api/absence/add", name="create_vacancy", methods={"POST"})
      */
     public function vacancy(Request $request, ObjectManager $manager, ValidatorInterface $validator)
     {
