@@ -103,13 +103,18 @@ class AdminController extends AbstractController
                         foreach ($member as $roleMember) {
 
                             $user->addRole($roleMember);
+
+                            $manager->persist($user);
+                            $manager->flush();
+
+                            return new JsonResponse("le statut et le rôle ont bien été modifiés", 200);
                         }
                     }
 
                     $manager->persist($user);
                     $manager->flush();
 
-                    return new JsonResponse("le statut et le rôle ont bien été modifiés", 200);
+                    return new JsonResponse("le statut a bien été modifié", 200);
                 } else {
                     return new JsonResponse("Votre statut à déjà été confirmé", 500);
                 }
@@ -121,22 +126,28 @@ class AdminController extends AbstractController
     /**
      * @Route("api/admin/create/role", name="admin_role", methods={"POST"})
      */
-    public function create_role(ObjectManager $manager, Request $request, ValidatorInterface $validator)
-    {
+    // public function create_role(ObjectManager $manager, Request $request, ValidatorInterface $validator)
+    // {
 
-        $content = $request->getContent();
+    //     $content = $request->getContent();
 
-        $role = $this->get('serializer')->deserialize($content, Role::class, 'json');
+    //     $role = $this->get('serializer')->deserialize($content, Role::class, 'json');
 
-        $errors = $validator->validate($role);
+    //     $errors = $validator->validate($role);
 
-        if (count($errors) > 0) {
-            dd($errors);
-        }
+    //     if (count($errors) > 0) {
+    //         dd($errors);
+    //     }
 
-        $manager->persist($role);
-        $manager->flush();
+    //     $manager->persist($role);
+    //     $manager->flush();
 
-        return new JsonResponse('Nouveau rôle créé', 200);
-    }
+    //     return new JsonResponse('Nouveau rôle créé', 200);
+    // }
+
+
+
+
+
+
 }
