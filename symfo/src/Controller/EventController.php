@@ -3,8 +3,10 @@
 namespace App\Controller;
 
 use App\Entity\Event;
+use App\Entity\Garden;
 use App\Form\EventType;
 use App\Repository\EventRepository;
+use App\Repository\GardenRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\HttpFoundation\Response;
@@ -13,6 +15,8 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use App\Repository\UserRepository;
 
 class EventController extends AbstractController
 {
@@ -46,17 +50,50 @@ class EventController extends AbstractController
         ], Response::HTTP_CREATED);
     }
 
-    /**
-     * @Route("api/event/{id}", name="show_event", methods={"GET"})
-     */
-    public function show(Event $event, Request $request, ObjectManager $manager)
-    {
-        $data = $this->get('serializer')->serialize($event, 'json', ['groups' => ['event']]);
-        $response = new Response($data);
-        $response->headers->set('Content-Type', 'application/json');
 
-        return $response;
+
+    /**
+     * @Route("api/garden/{garden}/event/{id}", name="show_event", methods={"GET"})
+     * @ParamConverter("garden", options={"id" = "garden"})
+     * @ParamConverter("event", options={"id" = "id"})
+     */
+    public function show(Garden $garden, Event $event)
+    {
+
+        // dump($garden);
+        $gardenUsers = $garden->getUsers()->getValues();
+        // dump($gardenUsers);
+        $user = [];
+        $user[] = $this->get('security.token_storage')->getToken()->getUser();
+        // dump($user);
+        // $userId = $user->getId();
+        // dump($userId);
+        $comparaison =  function ($obj_a, $obj_b) {
+            $objAid = $obj_a->getId();
+            dump($obj_a->getId());
+            $objBid = $obj_b->getId();
+            dump($obj_b->getId());
+
+            return $objAid == $objBid ? -1  : 0;
+        };
+
+        $result = array_udiff($gardenUsers, $user,    $comparaison);
+        dump($user);
+        dump($gardenUsers);
+        dd($result);
+
+        if (!empty(array_udiff($user, $gardenUsers, $comparaison))) {
+
+            $data = $this->get('serializer')->serialize($event, 'json', ['groups' => ['event']]);
+            $response  = new Response($data);
+            $response->headers->set('Content-Type', 'application/json');
+
+            return $response;
+        }
     }
+
+
+    // return new JsonResponse(["Vous n'êtes pas autorisé à voir cette événement"], 500);
 
     /**
      * @Route("api/event/{id}/edit", name="edit_event", methods={"GET"})
