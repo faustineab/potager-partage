@@ -2,32 +2,34 @@
     background-image: url(../../img/loginbackground.jpg);
     background-size: cover;
     background-position: center;
-    height: 100vh;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    padding: 1em;
       h1{
         text-align: center;
-        font-size: 1.8em;
+        font-size: 1.5em;
         margin: 1em;
         color:  #5e5250;
       }
     .subscriptionForm{
       margin: 0 auto;
       width: 500px;
-      height: 100vh;
       display: flex;
       flex-direction: column;
       justify-content: center;
       font-family: 'Fresca', sans-serif;
-      font-size: 1.5em;
+      font-size: 1.2em;
       .field label{
         color: #5e5250;
       }
       .button{
         background-color: #7ba566;
         color: white;
-        margin-bottom: 1em;
+        margin: 1em 0;
         padding: 0.8em;
         font-family: 'Fresca', sans-serif;
-        font-size: 1em;
+        font-size: 0.9em;
+
       }
     }
   }

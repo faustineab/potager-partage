@@ -20,10 +20,10 @@ class SecurityController extends AbstractController
         $username = $utils->getLastUsername();
 
 
-        return $this->render('security/login.html.twig', [
+        return $this->redirectToRoute('garden_show', [
             'error' => $error !== null,
             'username' => $username
 
-        ]);
+        ], Response::HTTP_OK);
     }
 }
