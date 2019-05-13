@@ -1,8 +1,11 @@
 <?php
 namespace App\Controller;
+
 use App\Entity\Event;
 use App\Entity\Garden;
 use App\Form\EventType;
+use App\Repository\RoleRepository;
+use App\Repository\UserRepository;
 use App\Repository\EventRepository;
 use App\Repository\GardenRepository;
 use Symfony\Component\HttpFoundation\Request;
@@ -14,7 +17,6 @@ use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
-use App\Repository\UserRepository;
 
 
 class EventController extends AbstractController
@@ -60,12 +62,6 @@ class EventController extends AbstractController
             return spl_object_hash($user) <=> spl_object_hash($gardenUsers);
         };
 
-        // $resultat = array_uintersect(
-        //     $user,
-        //     $gardenUsers,
-        //     $compare
-        // );
-
         if (!empty(array_uintersect($user, $gardenUsers, $compare))) {
 
             $data = $this->get('serializer')->serialize($event, 'json', ['groups' => ['event']]);
@@ -83,21 +79,31 @@ class EventController extends AbstractController
     /**
      * @Route("api/event/{id}/edit", name="edit_event", methods={"GET"})
      */
-    public function edit(Event $event, Request $request, ObjectManager $manager, ValidatorInterface $validator)
+    public function edit(Event $event, Request $request, ObjectManager $manager, ValidatorInterface $validator, RoleRepository $roleRepository)
     {
-        $user = $this->get('security.token_storage')->getToken()->getUser();
+
+        $currentUser = $this->get('security.token_storage')->getToken()->getUser();
+        $currentUserRoles = $currentUser->getRoles();
+
+        $role = $roleRepository->findBy(['label' => 'administrateur']);
+
+        dump($currentUserRoles);
+
+        foreach ($role as $roleName) {
+            $user = $roleName->getName();
+            dump($user);
+            if (array_search($user, $currentUserRoles) !== false || $currentUser == $event->getUser()) {
 
 
-        if ($user == $event->getUser()) {
+                $data = $this->get('serializer')->serialize($event, 'json', ['groups' => ['event']]);
 
-            $data = $this->get('serializer')->serialize($event, 'json', ['groups' => ['event']]);
+                $response = new Response($data);
 
-            $response = new Response($data);
-
-            $response->headers->set('Content-Type', 'application/json');
-            return $response;
+                $response->headers->set('Content-Type', 'application/json');
+                return $response;
+            }
+            return new JsonResponse(["error" => "Vous n'êtes pas autorisé à modifier"], 500);
         }
-        return new JsonResponse(["error" => "Vous n'êtes pas autorisé à modifier"], 500);
     }
 
     /**
@@ -161,8 +167,6 @@ class EventController extends AbstractController
             return new JsonResponse('supprimé', 200);
         } else {
             return new JsonResponse(["error" => "Vous n'êtes pas autorisé à supprimer"], 500);
-
         }
     }
 }
-
