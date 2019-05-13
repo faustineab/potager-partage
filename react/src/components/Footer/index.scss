@@ -1,0 +1,24 @@
+.footer {
+    width: 100%;
+    height: 250px;
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
+    background-color: #5e5250;
+    .listbox{
+        width: 550px;
+        height: 175px;
+        text-align: center;
+        h1{
+            color: #faf0ca;
+            font-size: 1.8em;
+            padding-bottom: 40px;
+            font-family: 'Fresca', sans-serif;
+            transition: all 300ms;
+            &:hover{
+                transform: scale(1.12);
+            }        
+        }
+    }
+}

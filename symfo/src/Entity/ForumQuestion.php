@@ -2,9 +2,10 @@
 
 namespace App\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ForumQuestionRepository")
@@ -15,31 +16,46 @@ class ForumQuestion
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     * @Groups({"forum_questions"})
+     * @Groups({"forum_tags"})
+     * @Groups({"user"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="text")
+     * @Groups({"forum_questions"})
+     * @Groups({"forum_tags"})
+     * @Groups({"user"})
      */
     private $title;
 
     /**
      * @ORM\Column(type="text")
+     * @Groups({"forum_questions"})
+     * @Groups({"forum_tags"})
+     * @Groups({"user"})
      */
     private $text;
 
     /**
      * @ORM\Column(type="datetime")
+     * @Groups({"forum_questions"})
+     * @Groups({"forum_tags"})
+     * @Groups({"user"})
      */
     private $createdAt;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
+     * @Groups({"forum_questions"})
+     * @Groups({"forum_tags"})
+     * @Groups({"user"})
      */
     private $updatedAt;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\ForumAnswer", mappedBy="question")
+     * @ORM\OneToMany(targetEntity="App\Entity\ForumAnswer", mappedBy="question", orphanRemoval=true)
      */
     private $answers;
 
@@ -51,15 +67,22 @@ class ForumQuestion
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="forumQuestions")
      * @ORM\JoinColumn(nullable=false)
+     * @Groups({"forum_questions"})
+     * @Groups({"forum_tags"})
+     * @Groups({"user"})
      */
     private $user;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Garden", inversedBy="forumQuestions")
+     */
+    private $garden;
 
     public function __construct()
     {
         $this->answers = new ArrayCollection();
         $this->tags = new ArrayCollection();
         $this->createdAt = new \Datetime();
-        $this->updatedAt = new \Datetime();
     }
 
     public function getId(): ?int
@@ -188,6 +211,18 @@ class ForumQuestion
     public function setUser(?User $user): self
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    public function getGarden(): ?Garden
+    {
+        return $this->garden;
+    }
+
+    public function setGarden(?Garden $garden): self
+    {
+        $this->garden = $garden;
 
         return $this;
     }
