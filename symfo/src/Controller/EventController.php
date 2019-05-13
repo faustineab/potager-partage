@@ -21,6 +21,7 @@ class EventController extends AbstractController
     public function create(Request $request, ObjectManager $manager, ValidatorInterface $validator)
     {
         $content = $request->getContent();
+
         $event = $this->get('serializer')->deserialize($content, Event::class, 'json');
         $errors = $validator->validate($event);
         if (count($errors) > 0) {
@@ -56,6 +57,7 @@ class EventController extends AbstractController
     {
         $user = $this->get('security.token_storage')->getToken()->getUser();
 
+
         if ($user == $event->getUser()) {
 
             $data = $this->get('serializer')->serialize($event, 'json', ['groups' => ['event']]);
@@ -79,14 +81,12 @@ class EventController extends AbstractController
 
         if ($user == $event->getUser()) {
 
-
-
             $content = $request->getContent();
 
             $currentEvent = $this->get('serializer')->deserialize($content, Event::class, 'json');
-            dump($currentEvent);
+            // dump($currentEvent);
 
-            $errors = $validator->validate($event);
+            $errors = $validator->validate($currentEvent);
 
             if (count($errors) > 0) {
                 dd($errors);
@@ -115,9 +115,24 @@ class EventController extends AbstractController
                 'id' => $event->getId(),
             ], Response::HTTP_CREATED);
         } else {
-
             return new JsonResponse(["error" => "Vous n'êtes pas autorisé à éditer"], 500);
+        }
+    }
+    /**
+     * @Route("api/event/{id}/delete", name="delete_event", methods={"POST"})
+     */
+    public function delete_post(Event $event, Request $request, ObjectManager $manager, ValidatorInterface $validator, EventRepository $eventRepository)
+    {
+
+        $user = $this->get('security.token_storage')->getToken()->getUser();
+        if ($user == $event->getUser()) {
+            $manager->remove($event);
+            $manager->flush();
+            return new JsonResponse('supprimé', 200);
+        } else {
+            return new JsonResponse(["error" => "Vous n'êtes pas autorisé à supprimer"], 500);
 
         }
     }
 }
+

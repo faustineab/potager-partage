@@ -45,11 +45,10 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"event", "plot", "garden_get"})
      * @Groups({"forum_questions"})
-     * @Groups({"forum_tags"})
-     * @Groups({"event","garden_get"})
-     * @Groups({"user"})
-     * @Groups({"user_garden"})
+     * @Groups({"forum_tags","event","garden_get"})
+     * @Groups({"user","user_garden"})
      */
     private $name;
 
@@ -110,16 +109,15 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups("garden_get")
-     * @Groups({"user"})
+     * @Groups({"user","garden_get"})
      */
     private $statut;
 
     /**
-     * @ORM\OneToOne(targetEntity="App\Entity\Vacancy", mappedBy="user", cascade={"persist", "remove"})
+     * @ORM\OneToMany(targetEntity="App\Entity\Vacancy", mappedBy="user", orphanRemoval=true
      * @Groups({"user"})
      */
-    private $vacancy;
+    private $vacancies;
 
     /**
      * @ORM\OneToOne(targetEntity="App\Entity\VacancySubstitute", mappedBy="user", cascade={"persist", "remove"})
@@ -148,6 +146,7 @@ class User implements UserInterface
         $this->forumAnswers = new ArrayCollection();
         $this->forumQuestions = new ArrayCollection();
         $this->events = new ArrayCollection();
+        $this->vacancies = new ArrayCollection();
         $this->created_at = new \DateTime();
         $this->updated_at = new \DateTime();
         $this->roles = new ArrayCollection();
@@ -397,18 +396,32 @@ class User implements UserInterface
         return $this;
     }
 
-    public function getVacancy(): ?Vacancy
+    /**
+     * @return Collection|Vacancy[]
+     */
+    public function getVacancies(): Collection
     {
-        return $this->vacancy;
+        return $this->vacancies;
     }
 
-    public function setVacancy(Vacancy $vacancy): self
+    public function addVacancy(Vacancy $vacancy): self
     {
-        $this->vacancy = $vacancy;
-
-        // set the owning side of the relation if necessary
-        if ($this !== $vacancy->getUser()) {
+        if (!$this->vacancies->contains($vacancy)) {
+            $this->vacancys[] = $vacancy;
             $vacancy->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeVacancy(Vacancy $vacancy): self
+    {
+        if ($this->vacancies->contains($vacancy)) {
+            $this->events->removeElement($vacancy);
+            // set the owning side to null (unless already changed)
+            if ($vacancy->getUser() === $this) {
+                $vacancy->setUser(null);
+            }
         }
 
         return $this;
