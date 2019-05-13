@@ -10,7 +10,7 @@ const initialState = {
   zipcode: '',
   loading: false,
   loginMessage: 'Message personnalisé',
-  loggedIn: false,
+  loggedIn: true,
   user: {},
   gardenList: [
     { key: 'm', text: 'garden1', value: 'garden1' },
@@ -63,11 +63,6 @@ const reducer = (state = initialState, action = {}) => {
       return {
         ...state,
         loading: true,
-      };
-    case INPUT_CHANGE:
-      return {
-        ...state,
-        [action.name]: action.value,
       };
     case MODIFY_USER_INFOS:
       return {

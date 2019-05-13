@@ -6,7 +6,6 @@
     text-align: center;
     max-width: 33%;
     margin: 0 auto;
-    padding-top: 50px;
     font-family: 'Fresca', sans-serif;
     h1{
         font-size: 2.5em;
@@ -24,7 +23,16 @@
           margin-top: 20px;
           width: 170px;
           height: 55px;
-          font-family: 'Fresca', sans-serif;
           font-size: 1.4em;
+          width: 170px;
+          height: 55px;
+          font-family: 'Fresca', sans-serif;
+          background-color: white;
+          border: solid 1px #7ba566;
+          color: #7ba566;
+          &:hover{
+              background-color: #7ba566;
+              color: white;
+          }
       }
 }

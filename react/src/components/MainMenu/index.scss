@@ -1,0 +1,17 @@
+.menuitem {
+    font-family: 'Fresca', sans-serif;
+    font-size: 2em;
+    height: 80px;
+    border-radius: solid 2px black; 
+}
+.menudiv{
+    h1{
+        color: #5e5250;
+    }
+    &:hover{
+        background-color: #7ba566;
+        h1{
+            color: white;
+        }
+    }
+}

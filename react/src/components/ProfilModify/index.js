@@ -1,5 +1,6 @@
 import React from 'react';
 import { Form, Button } from 'semantic-ui-react';
+import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 import './index.scss';
@@ -54,7 +55,8 @@ const ProfileModify = ({
           <input placeholder="code postal" value={zipcode} name="zipcode" onChange={handleInputChange} />
         </Form.Field>
         <Form.Group id="buttons">
-          <Button inverted color="olive" className="submit_button" type="submit">Confirmer</Button>
+          <Button className="submit_button" as={Link} to="/profile">Annuler</Button>
+          <Button className="submit_button" type="submit">Confirmer</Button>
         </Form.Group>
       </Form>
     </main>
