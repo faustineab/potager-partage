@@ -68,6 +68,17 @@ const reducer = (state = initialState, action = {}) => {
       return {
         ...state,
       };
+    case LOG_USER:
+      return {
+        ...state,
+        loading: true,
+        loginMessage: 'Logging user',
+      };
+    case CHANGE_LOGIN_MESSAGE:
+      return {
+        ...state,
+        loginMessage: action.text,
+      };
     case USER_LOGGED:
       return {
         ...state,
@@ -81,17 +92,6 @@ const reducer = (state = initialState, action = {}) => {
       return {
         ...state,
         loggedIn: false,
-      };
-    case LOG_USER:
-      return {
-        ...state,
-        loading: true,
-        loginMessage: 'Logging user',
-      };
-    case CHANGE_LOGIN_MESSAGE:
-      return {
-        ...state,
-        loginMessage: action.text,
       };
     case INPUT_CHANGE:
       return {

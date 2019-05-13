@@ -4,6 +4,7 @@ import {
   FETCH_GARDENLIST,
   CREATE_GARDEN,
   JOIN_GARDEN,
+  LOG_USER,
   receivedGardenList,
 } from 'src/store/reducer';
 
@@ -53,7 +54,6 @@ const ajaxMiddleware = store => next => (action) => {
 
     case JOIN_GARDEN:
       next(action);
-
       axios.post('http://localhost/Projet/potager-partage/symfo/public/register/user', {
         name: `${store.getState().firstName} ${store.getState().lastName}`,
         gardenId: store.getState().gardenId,
@@ -72,6 +72,20 @@ const ajaxMiddleware = store => next => (action) => {
           window.location.href = '/subscribe';
         });
       break;
+    case LOG_USER:
+      next(action);
+      axios.post('http://localhost/Projet/potager-partage/symfo/public/login', {
+        username: store.getState().email,
+        password: store.getState().password,
+      })
+        .then((response) => {
+          console.log(response);
+        })
+        .then((error) => {
+          console.log(error);
+        });
+      break;
+
     default:
       next(action);
       break;
