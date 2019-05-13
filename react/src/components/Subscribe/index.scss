@@ -1,8 +1,4 @@
 .subscription{
-  background-image: url(../../img/carrots-food-fresh-616404.jpg);
-  background-size: cover;
-  background-position: center;
-  height: 100vh;
     h1{
       text-align: center;
       font-size: 1.8em;
@@ -12,7 +8,7 @@
   .subscriptionForm{
     margin: 0 auto;
     width: 500px;
-    height: 100vh;
+    // height: 100vh;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -21,15 +17,29 @@
     .field label{
       color: #5e5250;
     }
-    .button{
+    .field input {
+      height: em;
+    }
+    .field input::placeholder{
+      font-size: 0.8em;
+      font-style: italic;
+    }
+  }
+  #buttons {
+    display: flex;
+    justify-content: center;
+
+    .subscriptionButton{
       background-color: #7ba566;
       color: white;
-      margin-bottom: 1em;
-      padding: 0.8em;
+      width: 245px;
+      font-size:1em;
+      margin: 0.2em;
+      text-align: center;
+      padding: 0.5em;
+      border-radius: 5px;
+      border: none;
       font-family: 'Fresca', sans-serif;
-      font-size: 1em;
-      margin: 0;
-      border-radius: 10px;
     }
   }
 }

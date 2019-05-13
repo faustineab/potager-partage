@@ -11,115 +11,92 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Serializer\SerializerInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
+
+
+/**
+ * @Route("/api/user")
+ */
 class UserController extends AbstractController
 {
     /**
-     * @Route("/user/{id}", name="user")
+     * @Route("/{id}", name="user_show", methods={"GET"})
      */
-    public function index()
-    {
-        return $this->render('user/index.html.twig', [
-            'controller_name' => 'UserController',
-        ]);
-    }
-
-
-    /**
-     * @Route("/user/{id}/validation", name="validation")
-     */
-    public function validation(User $user, ObjectManager $manager)
+    public function profile(User $user, SerializerInterface $serializer)
     {
 
-
-        if ($user->getStatut() == 'à valider') {
-            $user->setStatut('validé');
-
-            $manager->persist($user);
-            $manager->flush();
-
-            return $this->render('user/index.html.twig', [
-                'controller_name' => 'UserController',
+        if ($user == $this->get('security.token_storage')->getToken()->getUser()) 
+        {
+            $user = $serializer->serialize($user, 'json',[
+                'groups' => 'user',
+                'circular_reference_handler' => function ($user) {
+                   return $user->getId();
+                }
             ]);
-        }
+         
+            return JsonResponse::fromJsonString($user);
+        }        
+
+        return JsonResponse::fromJsonString('Vous n\'êtes pas autorisé à visualiser cette page', 403);
     }
 
     /**
-     * @Route("/user/{id}/refus", name="refus")
+     * @Route("/{id}/edit", name="user_edit", methods={"PUT"})
      */
-    public function refus(User $user, ObjectManager $manager)
+    public function edit(Request $request, User $user, EntityManagerInterface $entityManager, ValidatorInterface $validator, SerializerInterface $serializer): Response
     {
-        if ($user->getStatut() == 'à valider') {
-            $user->setStatut('refusé');
+     if ($user == $this->get('security.token_storage')->getToken()->getUser()) 
+        {
+            $content = $request->getContent();
 
-            $manager->persist($user);
-            $manager->flush();
-
-            return $this->render('user/index.html.twig', [
-                'controller_name' => 'UserController',
-            ]);
-        }
-    }
-
-    /**
-     * @Route("/user/{id}/edit", name="validation")
-     */
-    public function edit(User $user, ObjectManager $manager)
-    {
-
-
-        if ($user->getStatut() == 'validé') {
-            $user->setStatut('refusé');
-
-            $manager->persist($user);
-            $manager->flush();
-
-            return $this->render('user/index.html.twig', [
-                'controller_name' => 'UserController',
-            ]);
-        }
-
-        if ($user->getStatut() == 'refusé') {
-            $user->setStatut('validé');
-        }
-
-        $manager->persist($user);
-        $manager->flush();
-
-        return $this->render('user/index.html.twig', [
-            'controller_name' => 'UserController',
-        ]);
-    }
-
-    /**
-     * @Route("api/user/{id}/add/garden", name="add_garden", methods={"POST"})
-     */
-    public function addGarden(User $user, Request $request,  ValidatorInterface $validator, GardenRepository $gardenRepository, ObjectManager $manager)
-    {
-        $currentUser = $this->get('security.token_storage')->getToken()->getUser();
-        if ($user == $currentUser) {
-
-            $garden = json_decode($request->getContent(), true);
-
-            dump($garden);
-
-
-            $errors = $validator->validate($garden);
-
-            if (count($errors) > 0) {
-                dd($errors);
+            $editedUser = $serializer->deserialize($content, User::class, 'json');
+            
+            $errors = $validator->validate($editedUser);
+            if (count($errors) > 0)
+            {
+                foreach ($errors as $error) 
+                {
+                    return new JsonResponse($error, 304);
+                }
+            }
+            
+            $email = $editedUser->getEmail();
+            if ($email != null)
+            {
+                $user->setEmail($email);
             }
 
-            $id = $garden['id'];
+            $password = 
 
-            $garden = $gardenRepository->find($id);
+            $user->setUpdatedAt(new \Datetime());
+            
+            $entityManager->merge($user);
+            $entityManager->persist($user);
+            $entityManager->flush();
+        }      
 
-            $garden->addUser($currentUser);
-
-            $manager->persist($garden);
-            $manager->flush();
-
-            return new JsonResponse('le jardin a été ajouté', 200);
-        }
+            
+            // foreach ($editedQuestion->getTags() as $editedTag) 
+            // {
+            //     if ($editedTag = $user->getTags()) {
+            //         $editedQuestion->addTag($editedTag);
+            //     }
+            //     if ($editedTag != $user->getTags()) {
+            //         $editedQuestion->removeTag($editedTag);
+            //     }
+            // }
+            
+            
+            return JsonResponse::fromJsonString('message: Votre question a été modifiée', 200);
     }
+
+        return JsonResponse::fromJsonString('message: Vous n\'êtes pas autorisé à modifier cette question', 403);
+    }
+    
+
+    
 }
+
+
