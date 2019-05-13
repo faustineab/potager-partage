@@ -22,9 +22,9 @@ class AdminController extends AbstractController
     public function showStatus(UserRepository $userRepository, RoleRepository $roleRepository)
     {
         $currentUser = $this->get('security.token_storage')->getToken()->getUser();
-
-        $role = $roleRepository->findBy(['label' => 'administrateur']);
         $currentUserRoles = $currentUser->getRoles();
+        $role = $roleRepository->findBy(['label' => 'administrateur']);
+
         dump($currentUserRoles);
 
         foreach ($role as $roleName) {
@@ -148,5 +148,5 @@ class AdminController extends AbstractController
 
 
 
- 
+
 }

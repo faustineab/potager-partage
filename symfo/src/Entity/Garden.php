@@ -1,5 +1,6 @@
 <?php
 namespace App\Entity;
+
 use App\Entity\Plot;
 use App\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
@@ -7,6 +8,7 @@ use Doctrine\Common\Collections\Collection;
 use Symfony\Component\Serializer\Serializer;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Serializer\Annotation\Groups;
+
 /**
  * @ORM\Entity(repositoryClass="App\Repository\GardenRepository")
  */
@@ -82,7 +84,6 @@ class Garden
      */
     private $plots;
 
-<<<<<<< HEAD
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Vacancy", mappedBy="garden")
      */
@@ -105,8 +106,6 @@ class Garden
 
 
 
-=======
->>>>>>> 92da26e598e3b7aa533999eb5d61651b19562635
     public function __construct()
     {
         $this->user = new ArrayCollection();

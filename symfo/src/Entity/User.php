@@ -29,31 +29,24 @@ class User implements UserInterface
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      * @Groups({"admin"})
-     * @Groups({"garden_get"})
-     * @Groups({"forum_questions"})
-     * @Groups({"forum_tags"})
-     * @Groups({"user"})
+     * @Groups({"login"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
      * @Groups({"admin"})
-     * @Groups({"forum_questions"})
-     * @Groups({"forum_tags"})
-     * @Groups({"user"})
+     * @Groups({"login"})
      */
     private $email;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"event"})
      * @Groups({"vacancy"})
      * @Groups({"remplacement"})
      * @Groups({"admin"})
-     * @Groups({"event", "plot", "garden_get"})
-     * @Groups({"forum_questions"})
-     * @Groups({"forum_tags","event","garden_get"})
-     * @Groups({"user","user_garden"})
+     * @Groups({"login"})
      */
     private $name;
 
@@ -66,82 +59,67 @@ class User implements UserInterface
     /**
      * @ORM\Column(type="integer")
      * @Groups({"admin"})
-     * @Groups({"user"})
      */
     private $phone;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Groups({"admin"})
-     * @Groups({"user"})
      */
     private $address;
 
     /**
      * @ORM\Column(type="datetime")
-     * @Groups({"user"})
      */
     private $created_at;
 
     /**
      * @ORM\Column(type="datetime")
-     * @Groups({"user"})
      */
     private $updated_at;
 
 
     /**
      * @ORM\ManyToMany(targetEntity="App\Entity\Garden", mappedBy="users")
-     * @Groups({"user"})
+     * @Groups({"login"})
      */
     private $gardens;
-
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Plot", mappedBy="user")
-     * @Groups({"user"})
      */
     private $plots;
-
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\ForumAnswer", mappedBy="user")
-     * @Groups({"user"})
      */
     private $forumAnswers;
-
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\ForumQuestion", mappedBy="user")
-     * @Groups({"user"})
      */
     private $forumQuestions;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Groups({"admin"})
-     * @Groups({"user","garden_get"})
      */
     private $statut;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Vacancy", mappedBy="user", orphanRemoval=true
-     * @Groups({"user"})
+     * @ORM\OneToMany(targetEntity="App\Entity\Vacancy", mappedBy="user", orphanRemoval=true)
      */
     private $vacancies;
 
     /**
      * @ORM\OneToOne(targetEntity="App\Entity\VacancySubstitute", mappedBy="user", cascade={"persist", "remove"})
-     * @Groups({"user"})
      */
     private $vacancySubstitute;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Event", mappedBy="user", orphanRemoval=true)
-     * @Groups({"user"})
      */
     private $events;
 
     /**
      * @ORM\ManyToMany(targetEntity="App\Entity\Role", mappedBy="users", cascade={"persist"})
-     * @Groups({"user"})
      */
     private $roles;
 
@@ -488,7 +466,6 @@ class User implements UserInterface
 
         $roles = $this->roles->map(function ($role) {
             return $role->getName();
-
         })->toArray();
         $roles[] = 'ROLE_USER';
         return $roles;
