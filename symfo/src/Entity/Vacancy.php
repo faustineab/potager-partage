@@ -42,10 +42,13 @@ class Vacancy
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="vacancies")
      * @ORM\JoinColumn(nullable=false, unique = false)
+     * @Groups({"vacancy"})
+     * @Groups({"remplacement"})
      */
     private $user;
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\VacancySubstitute", mappedBy="vacancy", orphanRemoval=true)
+     * @Groups({"vacancy"})
      */
     private $vacancySubstitutes;
     public function __construct()

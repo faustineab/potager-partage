@@ -20,12 +20,16 @@ class VacancySubstitute
 
     /**
      * @ORM\Column(type="datetime")
+     * @Groups({"vacancy"})
+     * @Groups({"remplacement"})
      * @Groups({"user"})
      */
     private $startDate;
 
     /**
      * @ORM\Column(type="datetime")
+     * @Groups({"vacancy"})
+     * @Groups({"remplacement"})
      * @Groups({"user"})
      */
     private $endDate;
@@ -45,12 +49,15 @@ class VacancySubstitute
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Vacancy", inversedBy="vacancySubstitutes")
      * @ORM\JoinColumn(nullable=false)
+     * @Groups({"remplacement"})
      */
     private $vacancy;
 
     /**
-     * @ORM\OneToOne(targetEntity="App\Entity\User", inversedBy="vacancySubstitute", cascade={"persist", "remove"})
+     * @ORM\OneToOne(targetEntity="App\Entity\User", inversedBy="vacancySubstitute")
      * @ORM\JoinColumn(nullable=false)
+     * @Groups({"vacancy"})
+     * 
      */
     private $user;
 

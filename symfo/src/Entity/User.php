@@ -45,6 +45,8 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"vacancy"})
+     * @Groups({"remplacement"})
      * @Groups({"event", "plot", "garden_get"})
      * @Groups({"forum_questions"})
      * @Groups({"forum_tags","event","garden_get"})
@@ -479,7 +481,9 @@ class User implements UserInterface
     {
 
         $roles = $this->roles->map(function ($role) {
+
             return $role->getName();
+
         })->toArray();
         $roles[] = 'ROLE_USER';
         return $roles;
