@@ -1,8 +1,12 @@
 <?php
 namespace App\Entity;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
+
+
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Serializer\Annotation\Groups;
+
 /**
  * @ORM\Entity(repositoryClass="App\Repository\VacancyRepository")
  */
@@ -16,10 +20,12 @@ class Vacancy
     private $id;
     /**
      * @ORM\Column(type="datetime")
+     * @Groups({"vacancy"})
      */
     private $startDate;
     /**
      * @ORM\Column(type="datetime")
+     * @Groups({"vacancy"})
      */
     private $endDate;
     /**
@@ -31,8 +37,8 @@ class Vacancy
      */
     private $updatedAt;
     /**
-     * @ORM\OneToOne(targetEntity="App\Entity\User", inversedBy="vacancy", cascade={"persist", "remove"})
-     * @ORM\JoinColumn(nullable=false, unique=false)
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="vacancies")
+     * @ORM\JoinColumn(nullable=false, unique = false)
      */
     private $user;
     /**
@@ -65,14 +71,42 @@ class Vacancy
             ); // nbr de secondes entre les dates d'arrivée et de départ
 
             $days = array_map(function ($dayTimestamp) {
+                $day = new \DateTime(date('Y-m-d', $dayTimestamp));
+                return $day->format('Y-m-d H:i:s');
 
-                return new \DateTime(date('Y-m-d', $dayTimestamp));
             }, $resultat); // transformation du tableau résultat(seconde) en tableau (jours)
             $notAvailableDays = array_merge($notAvailableDays, $days);
         };
 
         return  $notAvailableDays;
     }
+
+
+    public function getAvailableDays()
+    {
+        $availableDays = [];
+
+
+        // je calcul les jours qui se trouvent entre la date de début d'absence et de retour
+
+        $resultat = range(
+            $this->getStartDate()->getTimestamp(),
+            $this->getEndDate()->getTimestamp(),
+            24 * 60 * 60
+        ); // nbr de secondes entre les dates d'arrivée et de départ
+
+        $days = array_map(function ($dayTimestamp) {
+
+            $day = new \DateTime(date('Y-m-d', $dayTimestamp));
+            return $day->format('Y-m-d H:i:s');
+        }, $resultat); // transformation du tableau résultat(seconde) en tableau (jours)
+
+        $availableDays = array_merge($availableDays, $days);
+
+        return  $availableDays;
+    }
+
+
     public function getId(): ?int
     {
         return $this->id;

@@ -81,12 +81,11 @@ class EventController extends AbstractController
 
         if ($user == $event->getUser()) {
 
-
-
             $content = $request->getContent();
 
             $currentEvent = $this->get('serializer')->deserialize($content, Event::class, 'json');
             // dump($currentEvent);
+
             $errors = $validator->validate($currentEvent);
 
             if (count($errors) > 0) {
@@ -132,8 +131,6 @@ class EventController extends AbstractController
             return new JsonResponse('supprimé', 200);
         } else {
             return new JsonResponse(["error" => "Vous n'êtes pas autorisé à supprimer"], 500);
-
-
 
         }
     }

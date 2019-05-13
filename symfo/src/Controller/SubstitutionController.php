@@ -2,43 +2,54 @@
 
 namespace App\Controller;
 
+use App\Entity\Vacancy;
 use App\Form\SubstitutionType;
 use App\Entity\VacancySubstitute;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use App\Entity\Vacancy;
 
 class SubstitutionController extends AbstractController
 {
     /**
-     * @Route("/absence/{id}/remplacement", name="create_substitution")
+     * @Route("api/absence/{id}/remplacement", name="create_substitution", methods={"GET","POST"})
      */
-    public function substitution(Request $request, ObjectManager $manager, Vacancy $vacancy)
+    public function substitution(Request $request, ObjectManager $manager, Vacancy $vacancy, ValidatorInterface $validator)
     {
-        
-        $substitution = new VacancySubstitute();
 
-        $form = $this->createForm(SubstitutionType::class, $substitution);
+        $user = $this->get('security.token_storage')->getToken()->getUser();
 
-        $form->handleRequest($request);
+        $content = $request->getContent();
+        $substitution = $this->get('serializer')->deserialize($content, VacancySubstitute::class, 'json');
 
-        if($form->isSubmitted() && $form->isValid()){
+        $errors = $validator->validate($substitution);
 
-            $substitution->setVacancy($vacancy);
-            $substitution->setUser($this->getUser());
+        if (count($errors) > 0) {
+            dd($errors);
+        }
 
-            
+        $substitution->setVacancy($vacancy);
+        $manager->persist($substitution);
+
+        $availableDates = $vacancy->getAvailableDays();
+
+        $substitutionDates = $substitution->getDays();
+
+
+        if (!empty(array_diff($substitutionDates, $availableDates))) {
+            return new JsonResponse("Les dates choisies ne correspondent pas aux dates d' absences", 500);
+        }
+        if ($substitution->isBookableDate()) {
+
+            $substitution->setUser($user);
+
             $manager->persist($substitution);
             $manager->flush();
-
-
-            return $this->redirectToRoute('registration');
+            return new JsonResponse("L'absence à bien été créée", 200);
         }
-        
-        return $this->render('substitution/index.html.twig', [
-            'form' => $form->createView(),
-        ]);
+        return new JsonResponse('les dates choisies ont déja été réservées', 500);
     }
 }
