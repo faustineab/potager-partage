@@ -21,6 +21,7 @@ class EventController extends AbstractController
     public function create(Request $request, ObjectManager $manager, ValidatorInterface $validator)
     {
         $content = $request->getContent();
+
         $event = $this->get('serializer')->deserialize($content, Event::class, 'json');
         $errors = $validator->validate($event);
         if (count($errors) > 0) {
@@ -118,12 +119,12 @@ class EventController extends AbstractController
             return new JsonResponse(["error" => "Vous n'êtes pas autorisé à éditer"], 500);
         }
     }
-  
     /**
      * @Route("api/event/{id}/delete", name="delete_event", methods={"POST"})
      */
     public function delete_post(Event $event, Request $request, ObjectManager $manager, ValidatorInterface $validator, EventRepository $eventRepository)
     {
+
         $user = $this->get('security.token_storage')->getToken()->getUser();
         if ($user == $event->getUser()) {
             $manager->remove($event);
@@ -137,3 +138,4 @@ class EventController extends AbstractController
         }
     }
 }
+

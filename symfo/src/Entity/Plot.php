@@ -39,7 +39,7 @@ class Plot
     private $updated_at;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Garden", inversedBy="plots")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Garden", inversedBy="plots", cascade={"persist"})
      * @ORM\JoinColumn(nullable=false)
      * @Groups("plot")
      */
