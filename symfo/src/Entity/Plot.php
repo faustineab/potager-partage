@@ -2,9 +2,10 @@
 
 namespace App\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\PlotRepository")
@@ -15,32 +16,38 @@ class Plot
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     * @Groups({"user","plot"})
      */
     private $id;
 
     /**
-     * @ORM\Column(type="boolean")
+     * @ORM\Column(type="string", length=255)
+     * @Groups({"user","plot"})
      */
     private $status;
 
     /**
      * @ORM\Column(type="datetime")
+     * @Groups({"user","plot"})
      */
     private $created_at;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
+     * @Groups({"user","plot"})
      */
     private $updated_at;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Garden", inversedBy="plots")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Garden", inversedBy="plots", cascade={"persist"})
      * @ORM\JoinColumn(nullable=false)
+     * @Groups("plot")
      */
     private $garden;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="plots")
+     * @Groups({"user","plot"})
      */
     private $user;
 
@@ -61,12 +68,12 @@ class Plot
         return $this->id;
     }
 
-    public function getStatus(): ?bool
+    public function getStatus(): ?string
     {
         return $this->status;
     }
 
-    public function setStatus(bool $status): self
+    public function setStatus(string $status): self
     {
         $this->status = $status;
 

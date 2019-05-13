@@ -3,90 +3,90 @@
 namespace App\Controller;
 
 use App\Entity\User;
-use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Doctrine\Common\Persistence\ObjectManager;
+use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
+
+/**
+ * @Route("/api/user")
+ */
 class UserController extends AbstractController
 {
     /**
-     * @Route("/user/{id}", name="user")
+     * @Route("/{id}", name="user_show", methods={"GET"})
      */
-    public function index()
+    public function profile(User $user, SerializerInterface $serializer)
     {
-        return $this->render('user/index.html.twig', [
-            'controller_name' => 'UserController',
-        ]);
-    }
-
-
-    /**
-     * @Route("/user/{id}/validation", name="validation")
-     */
-    public function validation(User $user, ObjectManager $manager)
-    {
-        
-  
-            if($user->getStatut() == 'à valider'){
-                $user->setStatut('validé');
-                
-                $manager->persist($user);
-                $manager->flush();
-                
-                return $this->render('user/index.html.twig', [
-                'controller_name' => 'UserController',
+        if ($user == $this->get('security.token_storage')->getToken()->getUser()) 
+        {
+            $user = $serializer->serialize($user, 'json',[
+                'groups' => 'user',
+                'circular_reference_handler' => function ($user) {
+                   return $user->getId();
+                }
             ]);
-            }  
-        
+         
+            return JsonResponse::fromJsonString($user);
+        }        
+
+        return JsonResponse::fromJsonString('Vous n\'êtes pas autorisé à visualiser cette page', 403);
     }
 
     /**
-     * @Route("/user/{id}/refus", name="refus")
+     * @Route("/{id}/edit", name="user_edit", methods={"PUT"})
      */
-    public function refus(User $user, ObjectManager $manager)
+    public function edit(Request $request, User $user, EntityManagerInterface $entityManager, ValidatorInterface $validator, SerializerInterface $serializer): Response
     {
-        if($user->getStatut() == 'à valider'){
-            $user->setStatut('refusé');
+        if ($user == $this->get('security.token_storage')->getToken()->getUser()) 
+        {
+            $content = $request->getContent();
+
+            $editedUser = $serializer->deserialize($content, User::class, 'json');
             
-            $manager->persist($user);
-            $manager->flush();
-            
-            return $this->render('user/index.html.twig', [
-            'controller_name' => 'UserController',
-        ]);
-        }  
-      
-    }
-    
-    /**
-     * @Route("/user/{id}/edit", name="validation")
-     */
-    public function edit(User $user, ObjectManager $manager)
-    {
-        
-  
-            if($user->getStatut() == 'validé'){
-                $user->setStatut('refusé');
-            
-                $manager->persist($user);
-                $manager->flush();
-                
-                return $this->render('user/index.html.twig', [
-                    'controller_name' => 'UserController',
-                ]);
-            
+            $errors = $validator->validate($editedUser);
+            if (count($errors) > 0)
+            {
+                foreach ($errors as $error) 
+                {
+                    return new JsonResponse($error, 304);
+                }
             }
             
-            if($user->getStatut() == 'refusé'){
-                    $user->setStatut('validé');}
+            $email = $editedUser->getEmail();
+            if ($email != null)
+            {
+                $user->setEmail($email);
+            }
 
-                    $manager->persist($user);
-                    $manager->flush();
-                
-                return $this->render('user/index.html.twig', [
-                'controller_name' => 'UserController',
-            ]);
-            }  
+            $password = 
+
+            $user->setUpdatedAt(new \Datetime());
+            
+            $entityManager->merge($user);
+            $entityManager->persist($user);
+            $entityManager->flush();
+        }      
+
+            
+            // foreach ($editedQuestion->getTags() as $editedTag) 
+            // {
+            //     if ($editedTag = $user->getTags()) {
+            //         $editedQuestion->addTag($editedTag);
+            //     }
+            //     if ($editedTag != $user->getTags()) {
+            //         $editedQuestion->removeTag($editedTag);
+            //     }
+            // }
+            
+            
+            return JsonResponse::fromJsonString('message: Votre question a été modifiée', 200);
         
-    
-}
+
+        return JsonResponse::fromJsonString('message: Vous n\'êtes pas autorisé à modifier cette question', 403);
+    }
+
+

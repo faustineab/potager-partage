@@ -14,6 +14,7 @@ class VacancySubstitute
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     * @Groups({"user"})
      */
     private $id;
 
@@ -21,7 +22,7 @@ class VacancySubstitute
      * @ORM\Column(type="datetime")
      * @Groups({"vacancy"})
      * @Groups({"remplacement"})
-     * 
+     * @Groups({"user"})
      */
     private $startDate;
 
@@ -29,16 +30,19 @@ class VacancySubstitute
      * @ORM\Column(type="datetime")
      * @Groups({"vacancy"})
      * @Groups({"remplacement"})
+     * @Groups({"user"})
      */
     private $endDate;
 
     /**
      * @ORM\Column(type="datetime")
+     * @Groups({"user"})
      */
     private $createdAt;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
+     * @Groups({"user"})
      */
     private $updatedAt;
 
