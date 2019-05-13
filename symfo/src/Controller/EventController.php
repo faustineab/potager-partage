@@ -60,29 +60,22 @@ class EventController extends AbstractController
     public function show(Garden $garden, Event $event)
     {
 
-        // dump($garden);
         $gardenUsers = $garden->getUsers()->getValues();
-        // dump($gardenUsers);
+
         $user = [];
         $user[] = $this->get('security.token_storage')->getToken()->getUser();
-        // dump($user);
-        // $userId = $user->getId();
-        // dump($userId);
-        $comparaison =  function ($obj_a, $obj_b) {
-            $objAid = $obj_a->getId();
-            dump($obj_a->getId());
-            $objBid = $obj_b->getId();
-            dump($obj_b->getId());
 
-            return $objAid == $objBid ? -1  : 0;
+        $compare = function ($user, $gardenUsers) {
+            return spl_object_hash($user) <=> spl_object_hash($gardenUsers);
         };
 
-        $result = array_udiff($gardenUsers, $user,    $comparaison);
-        dump($user);
-        dump($gardenUsers);
-        dd($result);
+        // $resultat = array_uintersect(
+        //     $user,
+        //     $gardenUsers,
+        //     $compare
+        // );
 
-        if (!empty(array_udiff($user, $gardenUsers, $comparaison))) {
+        if (!empty(array_uintersect($user, $gardenUsers, $compare))) {
 
             $data = $this->get('serializer')->serialize($event, 'json', ['groups' => ['event']]);
             $response  = new Response($data);

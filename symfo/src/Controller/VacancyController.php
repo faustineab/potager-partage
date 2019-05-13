@@ -69,12 +69,8 @@ class VacancyController extends AbstractController
     public function show(Garden $garden, Vacancy $vacancy, Request $request, ObjectManager $manager)
     {
         $gardenUsers = $garden->getUsers()->getValues();
-        // dump($gardenUsers);
         $user = [];
         $user[] = $this->get('security.token_storage')->getToken()->getUser();
-        // dd($user);
-        // $userId = $user->getId();
-        // dd($user);
 
         $compare = function ($user, $gardenUsers) {
             return spl_object_hash($user) <=> spl_object_hash($gardenUsers);
