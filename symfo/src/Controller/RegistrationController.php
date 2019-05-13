@@ -107,22 +107,24 @@ class RegistrationController extends AbstractController
 
         $manager->persist($garden);
         $manager->flush();
-        dump($garden);
+        
+        $gardenId = $garden->getId();
 
+        $garden = $gardenRepository->find($gardenId);
+
+        $garden->addUser($user);
+
+        $manager->persist($garden);
 
 
         $garden = $gardenRepository->findOneBy([
             'name' => $gardenName
         ]);
-        dump($garden);
-
 
         $garden->addUser($user);
-        dump($garden);
-
+     
         $plots =  $gardenPlots_Row * $gardenPlots_Column;
-        dump($plots);
-
+       
 
         for ($p = 0; $p < $plots; $p++) {
             $plot = new Plot();
