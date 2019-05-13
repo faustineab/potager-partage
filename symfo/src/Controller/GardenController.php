@@ -42,6 +42,7 @@ class GardenController extends AbstractController
 
 
     /**
+     * @IsGranted("ROLE_MEMBER")
      * @Route("/{id}", name="garden_show", methods={"GET"})
      */
     public function show($id,GardenRepository $gardenRepository, SerializerInterface $serializer, Garden $garden): Response
@@ -76,14 +77,23 @@ class GardenController extends AbstractController
      */
     public function edit(Garden $garden, Request $request, ObjectManager $manager, ValidatorInterface $validator)
     {
-        //$user = $this->getUser();
+        $gardenUsers = $garden->getUsers()->getValues();
 
-        //if ($user == $garden->getUser()) {
+        $user = [];
+        $user[] = $this->get('security.token_storage')->getToken()->getUser();
+
+        $compare = function ($user, $gardenUsers) {
+            return spl_object_hash($user) <=> spl_object_hash($gardenUsers);
+        };
+
+        if (!empty(array_uintersect($user, $gardenUsers, $compare))) {
             $data = $this->get('serializer')->serialize($garden, 'json', ['groups' => 'garden_edit']);
             $response = new Response($data);
             $response->headers->set('Content-Type', 'application/json');
             return $response;
-        //
+        }
+            return new JsonResponse(["error" => "Vous n'êtes pas autorisé à modifier"], 500);
+        
     }
     /**
      * @IsGranted("ROLE_ADMIN")
