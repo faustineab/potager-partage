@@ -17,7 +17,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class SubstitutionController extends AbstractController
 {
     /**
-     * @Route("api/absence/{id}/remplacement", name="create_substitution", methods={"GET","POST"})
+     * @Route("api/absence/{id}/remplacement", name="create_substitution", methods={"POST"})
      */
     public function substitution(Request $request, ObjectManager $manager, Vacancy $vacancy, ValidatorInterface $validator)
     {

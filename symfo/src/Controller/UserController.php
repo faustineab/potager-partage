@@ -3,12 +3,17 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Entity\Garden;
+use App\Repository\GardenRepository;
+use Symfony\Component\HttpFoundation\Request;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Serializer\SerializerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+
 
 
 /**
@@ -21,6 +26,7 @@ class UserController extends AbstractController
      */
     public function profile(User $user, SerializerInterface $serializer)
     {
+
         if ($user == $this->get('security.token_storage')->getToken()->getUser()) 
         {
             $user = $serializer->serialize($user, 'json',[
@@ -41,7 +47,7 @@ class UserController extends AbstractController
      */
     public function edit(Request $request, User $user, EntityManagerInterface $entityManager, ValidatorInterface $validator, SerializerInterface $serializer): Response
     {
-        if ($user == $this->get('security.token_storage')->getToken()->getUser()) 
+     if ($user == $this->get('security.token_storage')->getToken()->getUser()) 
         {
             $content = $request->getContent();
 
@@ -84,9 +90,13 @@ class UserController extends AbstractController
             
             
             return JsonResponse::fromJsonString('message: Votre question a été modifiée', 200);
-        
+    }
 
         return JsonResponse::fromJsonString('message: Vous n\'êtes pas autorisé à modifier cette question', 403);
     }
+    
+
+    
+}
 
 

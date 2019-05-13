@@ -179,8 +179,7 @@ class RegistrationController extends AbstractController
      */
     public function registerUser(GardenRepository $gardenRepository, Request $request, ObjectManager $manager, UserPasswordEncoderInterface $encoder, User $user = null, UserRepository $userRepository): Response
     {
-        $content = $request->getContent();
-        dump($content);
+
         $data = json_decode($request->getContent(), true);
         $validator = Validation::createValidator();
         $constraint = new Assert\Collection(array(

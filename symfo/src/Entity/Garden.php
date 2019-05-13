@@ -75,7 +75,8 @@ class Garden
      * @ORM\ManyToMany(targetEntity="App\Entity\User", inversedBy="gardens")
      * @Groups("garden_get")
      */
-    private $user;
+    private $users;
+
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Plot", mappedBy="garden")
      */
@@ -185,22 +186,22 @@ class Garden
     /**
      * @return Collection|User[]
      */
-    public function getUser(): Collection
+    public function getUsers(): Collection
     {
-        return $this->user;
+        return $this->users;
     }
 
     public function addUser(User $user): self
     {
-        if (!$this->user->contains($user)) {
-            $this->user[] = $user;
+        if (!$this->users->contains($user)) {
+            $this->users[] = $user;
         }
         return $this;
     }
     public function removeUser(User $user): self
     {
-        if ($this->user->contains($user)) {
-            $this->user->removeElement($user);
+        if ($this->users->contains($user)) {
+            $this->users->removeElement($user);
         }
         return $this;
     }

@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Entity\Garden;
 use App\Entity\Vacancy;
 use App\Form\VacancyType;
 use App\Repository\VacancyRepository;
@@ -13,11 +14,12 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
 class VacancyController extends AbstractController
 {
     /**
-     * @Route("api/absence/add", name="create_vacancy", methods={"GET","POST"})
+     * @Route("api/absence/add", name="create_vacancy", methods={"POST"})
      */
     public function vacancy(Request $request, ObjectManager $manager, ValidatorInterface $validator)
     {
@@ -61,15 +63,36 @@ class VacancyController extends AbstractController
     }
 
     /**
-     * @Route("api/absence/{id}", name="show_vacancy", methods={"GET"})
+     * @Route("api/garden/{garden}/absence/{id}", name="show_vacancy", methods={"GET"})
+     * @ParamConverter("garden", options={"id" = "garden"})
      */
-    public function show(Vacancy $vacancy, Request $request, ObjectManager $manager)
+    public function show(Garden $garden, Vacancy $vacancy, Request $request, ObjectManager $manager)
     {
-        $data = $this->get('serializer')->serialize($vacancy, 'json', ['groups' => ['vacancy']]);
-        $response = new Response($data);
-        $response->headers->set('Content-Type', 'application/json');
+        $gardenUsers = $garden->getUsers()->getValues();
+        $user = [];
+        $user[] = $this->get('security.token_storage')->getToken()->getUser();
 
-        return $response;
+        $compare = function ($user, $gardenUsers) {
+            return spl_object_hash($user) <=> spl_object_hash($gardenUsers);
+        };
+
+        $resultat = array_uintersect(
+            $user,
+            $gardenUsers,
+            $compare
+        );
+
+        if (!empty(array_uintersect($user, $gardenUsers, $compare))) {
+
+
+            $data = $this->get('serializer')->serialize($vacancy, 'json', ['groups' => ['vacancy']]);
+            $response = new Response($data);
+            $response->headers->set('Content-Type', 'application/json');
+
+            return $response;
+        } else {
+            return new JsonResponse("Vous n'étes pas autorisé à voir ce contenu", 500);
+        }
     }
 
     /**
