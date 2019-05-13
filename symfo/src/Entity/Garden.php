@@ -98,6 +98,26 @@ class Garden
      */
     private $plots;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Vacancy", mappedBy="garden")
+     */
+    private $vacancies;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Event", mappedBy="garden")
+     */
+    private $events;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\ForumQuestion", mappedBy="garden")
+     */
+    private $forumQuestions;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\ForumTag", mappedBy="garden")
+     */
+    private $forumTags;
+
 
 
     public function __construct()
@@ -106,6 +126,10 @@ class Garden
         $this->plots = new ArrayCollection();
         $this->created_at = new \DateTime();
         $this->updated_at = new \DateTime();
+        $this->vacancies = new ArrayCollection();
+        $this->events = new ArrayCollection();
+        $this->forumQuestions = new ArrayCollection();
+        $this->forumTags = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -286,6 +310,130 @@ class Garden
             // set the owning side to null (unless already changed)
             if ($plot->getGarden() === $this) {
                 $plot->setGarden(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Vacancy[]
+     */
+    public function getVacancies(): Collection
+    {
+        return $this->vacancies;
+    }
+
+    public function addVacancy(Vacancy $vacancy): self
+    {
+        if (!$this->vacancies->contains($vacancy)) {
+            $this->vacancies[] = $vacancy;
+            $vacancy->setGarden($this);
+        }
+
+        return $this;
+    }
+
+    public function removeVacancy(Vacancy $vacancy): self
+    {
+        if ($this->vacancies->contains($vacancy)) {
+            $this->vacancies->removeElement($vacancy);
+            // set the owning side to null (unless already changed)
+            if ($vacancy->getGarden() === $this) {
+                $vacancy->setGarden(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Event[]
+     */
+    public function getEvents(): Collection
+    {
+        return $this->events;
+    }
+
+    public function addEvent(Event $event): self
+    {
+        if (!$this->events->contains($event)) {
+            $this->events[] = $event;
+            $event->setGarden($this);
+        }
+
+        return $this;
+    }
+
+    public function removeEvent(Event $event): self
+    {
+        if ($this->events->contains($event)) {
+            $this->events->removeElement($event);
+            // set the owning side to null (unless already changed)
+            if ($event->getGarden() === $this) {
+                $event->setGarden(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|ForumQuestion[]
+     */
+    public function getForumQuestions(): Collection
+    {
+        return $this->forumQuestions;
+    }
+
+    public function addForumQuestion(ForumQuestion $forumQuestion): self
+    {
+        if (!$this->forumQuestions->contains($forumQuestion)) {
+            $this->forumQuestions[] = $forumQuestion;
+            $forumQuestion->setGarden($this);
+        }
+
+        return $this;
+    }
+
+    public function removeForumQuestion(ForumQuestion $forumQuestion): self
+    {
+        if ($this->forumQuestions->contains($forumQuestion)) {
+            $this->forumQuestions->removeElement($forumQuestion);
+            // set the owning side to null (unless already changed)
+            if ($forumQuestion->getGarden() === $this) {
+                $forumQuestion->setGarden(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|ForumTag[]
+     */
+    public function getForumTags(): Collection
+    {
+        return $this->forumTags;
+    }
+
+    public function addForumTag(ForumTag $forumTag): self
+    {
+        if (!$this->forumTags->contains($forumTag)) {
+            $this->forumTags[] = $forumTag;
+            $forumTag->setGarden($this);
+        }
+
+        return $this;
+    }
+
+    public function removeForumTag(ForumTag $forumTag): self
+    {
+        if ($this->forumTags->contains($forumTag)) {
+            $this->forumTags->removeElement($forumTag);
+            // set the owning side to null (unless already changed)
+            if ($forumTag->getGarden() === $this) {
+                $forumTag->setGarden(null);
             }
         }
 

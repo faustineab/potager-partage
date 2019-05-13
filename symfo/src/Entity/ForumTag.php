@@ -48,6 +48,11 @@ class ForumTag
      */
     private $questions;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Garden", inversedBy="forumTags")
+     */
+    private $garden;
+
     public function __construct()
     {
         $this->questions = new ArrayCollection();
@@ -125,5 +130,17 @@ class ForumTag
     public function __toString()
     {
         $this->questions;
+    }
+
+    public function getGarden(): ?Garden
+    {
+        return $this->garden;
+    }
+
+    public function setGarden(?Garden $garden): self
+    {
+        $this->garden = $garden;
+
+        return $this;
     }
 }

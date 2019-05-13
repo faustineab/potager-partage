@@ -19,7 +19,7 @@ class Plot
     private $id;
 
     /**
-     * @ORM\Column(type="boolean")
+     * @ORM\Column(type="string", length=255)
      */
     private $status;
 

@@ -49,6 +49,11 @@ class Vacancy
      */
     private $vacancySubstitutes;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Garden", inversedBy="vacancies")
+     */
+    private $garden;
+
     public function __construct()
     {
         $this->vacancySubstitutes = new ArrayCollection();
@@ -174,6 +179,18 @@ class Vacancy
                 $vacancySubstitute->setVacancy(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getGarden(): ?Garden
+    {
+        return $this->garden;
+    }
+
+    public function setGarden(?Garden $garden): self
+    {
+        $this->garden = $garden;
 
         return $this;
     }

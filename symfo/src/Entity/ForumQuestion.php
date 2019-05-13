@@ -67,6 +67,11 @@ class ForumQuestion
      */
     private $user;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Garden", inversedBy="forumQuestions")
+     */
+    private $garden;
+
     public function __construct()
     {
         $this->answers = new ArrayCollection();
@@ -200,6 +205,18 @@ class ForumQuestion
     public function setUser(?User $user): self
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    public function getGarden(): ?Garden
+    {
+        return $this->garden;
+    }
+
+    public function setGarden(?Garden $garden): self
+    {
+        $this->garden = $garden;
 
         return $this;
     }
