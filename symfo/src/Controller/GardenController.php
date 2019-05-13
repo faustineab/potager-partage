@@ -47,19 +47,18 @@ class GardenController extends AbstractController
      */
     public function show($id,GardenRepository $gardenRepository, SerializerInterface $serializer, Garden $garden): Response
     {
-        // $currentUser = $this->get('security.token_storage')->getToken()->getUser();
-        // $currentUserArray = [$currentUser];
-        // $user = $garden->getUser();
-        
-        //dd($user);
+        $gardenUsers = $garden->getUsers()->getValues();
+
+        $user = [];
+        $user[] = $this->get('security.token_storage')->getToken()->getUser();
+
+        $compare = function ($user, $gardenUsers) {
+            return spl_object_hash($user) <=> spl_object_hash($gardenUsers);
+        };
+
+        if (!empty(array_uintersect($user, $gardenUsers, $compare))) {
         $gardenRep = $gardenRepository->find($id);
 
-        // foreach($user as $userId){
-        //     //$statut = $userId->getStatut();
-        //     //$userArray=[$userId]; 
-        // if( empty(array_intersect($currentUserArray, $userId))){ 
-        //     throw new HttpException(400, " not valid.");
-        // }
             $jsonGarden = $serializer->serialize(
             $gardenRep,
             'json',
@@ -67,7 +66,8 @@ class GardenController extends AbstractController
         );
     
         return JsonResponse::fromJsonString($jsonGarden);
-    // }
+    }
+    return new JsonResponse(["error" => "Vous n'êtes pas autorisé à rentrer dans ce jardin"], 500);
     }
     
 
@@ -101,8 +101,16 @@ class GardenController extends AbstractController
      */
     public function edit_post(Garden $garden, Request $request, ObjectManager $manager, ValidatorInterface $validator, GardenRepository $gardenRepository)
     {
-        // $user = $this->get('security.token_storage')->getToken()->getUser();
-        // if ($user == $garden->getUser()) {
+        $gardenUsers = $garden->getUsers()->getValues();
+
+        $user = [];
+        $user[] = $this->get('security.token_storage')->getToken()->getUser();
+
+        $compare = function ($user, $gardenUsers) {
+            return spl_object_hash($user) <=> spl_object_hash($gardenUsers);
+        };
+
+        if (!empty(array_uintersect($user, $gardenUsers, $compare))) {
 
             $content = $request->getContent();
             $currentGarden = $this->get('serializer')->deserialize($content, Garden::class, 'json');
@@ -131,9 +139,9 @@ class GardenController extends AbstractController
             return $this->redirectToRoute('garden_show', [
                 'id' => $garden->getId(),
             ], Response::HTTP_CREATED);
-        // } else {
-        //     return new JsonResponse(["error" => "Vous n'êtes pas autorisé à éditer"], 500);
-        // }
+        } else {
+            return new JsonResponse(["error" => "Vous n'êtes pas autorisé à éditer"], 500);
+        }
          
     }
 
@@ -143,15 +151,23 @@ class GardenController extends AbstractController
      */
     public function delete(ObjectManager $objectManager, Garden $garden): Response
     {
-        // $user = $this->get('security.token_storage')->getToken()->getUser();
-        // if ($user == $garden->getUser()) {
+        $gardenUsers = $garden->getUsers()->getValues();
+
+        $user = [];
+        $user[] = $this->get('security.token_storage')->getToken()->getUser();
+
+        $compare = function ($user, $gardenUsers) {
+            return spl_object_hash($user) <=> spl_object_hash($gardenUsers);
+        };
+
+        if (!empty(array_uintersect($user, $gardenUsers, $compare))) {
 
             $objectManager->remove($garden);
             $objectManager->flush();
             
             return new JsonResponse('message: Votre jardin a été supprimée', 200);
-    // }
-    //     return new JsonResponse('message: Vous n\'êtes pas autorisé à supprimer ce jardin', 406);
+    }
+        return new JsonResponse('message: Vous n\'êtes pas autorisé à supprimer ce jardin', 406);
     }
 
 }
