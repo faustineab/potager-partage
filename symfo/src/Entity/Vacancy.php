@@ -51,15 +51,12 @@ class Vacancy
      * @Groups({"vacancy"})
      */
     private $vacancySubstitutes;
-<<<<<<< HEAD
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Garden", inversedBy="vacancies")
      */
     private $garden;
 
-=======
->>>>>>> 92da26e598e3b7aa533999eb5d61651b19562635
     public function __construct()
     {
         $this->vacancySubstitutes = new ArrayCollection();
@@ -88,7 +85,6 @@ class Vacancy
             $days = array_map(function ($dayTimestamp) {
                 $day = new \DateTime(date('Y-m-d', $dayTimestamp));
                 return $day->format('Y-m-d H:i:s');
-
             }, $resultat); // transformation du tableau résultat(seconde) en tableau (jours)
             $notAvailableDays = array_merge($notAvailableDays, $days);
         };
