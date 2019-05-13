@@ -15,40 +15,48 @@ class Event
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      * @Groups({"event"})
+     * @Groups({"user"})
+     * 
      */
     private $id;
 
     /**
      * @ORM\Column(type="datetime")
      * @Groups({"event"})
+     * @Groups({"user"})
      */
     private $startDate;
 
     /**
      * @ORM\Column(type="datetime")
      * @Groups({"event"})
+     * @Groups({"user"})
      */
     private $endDate;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Groups({"event"})
+     * @Groups({"user"})
      */
     private $title;
 
     /**
      * @ORM\Column(type="text", nullable=true)
      * @Groups({"event"})
+     * @Groups({"user"})
      */
     private $description;
 
     /**
      * @ORM\Column(type="datetime")
+     * @Groups({"user"})
      */
     private $createdAt;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
+     * @Groups({"user"})
      */
     private $updatedAt;
 

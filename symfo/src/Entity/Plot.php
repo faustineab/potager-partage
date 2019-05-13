@@ -16,21 +16,25 @@ class Plot
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     * @Groups({"user"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="boolean")
+     * @Groups({"user"})
      */
     private $status;
 
     /**
      * @ORM\Column(type="datetime")
+     * @Groups({"user"})
      */
     private $created_at;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
+     * @Groups({"user"})
      */
     private $updated_at;
 

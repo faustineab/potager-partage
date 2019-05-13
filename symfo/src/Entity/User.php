@@ -49,12 +49,12 @@ class User implements UserInterface
      * @Groups({"forum_tags"})
      * @Groups({"event","garden_get"})
      * @Groups({"user"})
+     * @Groups({"user_garden"})
      */
     private $name;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"user"})
      */
     private $password;
 
@@ -86,18 +86,25 @@ class User implements UserInterface
 
     /**
      * @ORM\ManyToMany(targetEntity="App\Entity\Garden", mappedBy="user")
+     * @Groups({"user"})
      */
     private $gardens;
+
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Plot", mappedBy="user")
+     * @Groups({"user"})
      */
     private $plots;
+
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\ForumAnswer", mappedBy="user")
+     * @Groups({"user"})
      */
     private $forumAnswers;
+
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\ForumQuestion", mappedBy="user")
+     * @Groups({"user"})
      */
     private $forumQuestions;
 
@@ -110,21 +117,25 @@ class User implements UserInterface
 
     /**
      * @ORM\OneToOne(targetEntity="App\Entity\Vacancy", mappedBy="user", cascade={"persist", "remove"})
+     * @Groups({"user"})
      */
     private $vacancy;
 
     /**
      * @ORM\OneToOne(targetEntity="App\Entity\VacancySubstitute", mappedBy="user", cascade={"persist", "remove"})
+     * @Groups({"user"})
      */
     private $vacancySubstitute;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Event", mappedBy="user", orphanRemoval=true)
+     * @Groups({"user"})
      */
     private $events;
 
     /**
      * @ORM\ManyToMany(targetEntity="App\Entity\Role", mappedBy="users", cascade={"persist"})
+     * @Groups({"user"})
      */
     private $roles;
 

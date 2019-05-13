@@ -14,26 +14,31 @@ class VacancySubstitute
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     * @Groups({"user"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="datetime")
+     * @Groups({"user"})
      */
     private $startDate;
 
     /**
      * @ORM\Column(type="datetime")
+     * @Groups({"user"})
      */
     private $endDate;
 
     /**
      * @ORM\Column(type="datetime")
+     * @Groups({"user"})
      */
     private $createdAt;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
+     * @Groups({"user"})
      */
     private $updatedAt;
 
@@ -46,7 +51,6 @@ class VacancySubstitute
     /**
      * @ORM\OneToOne(targetEntity="App\Entity\User", inversedBy="vacancySubstitute", cascade={"persist", "remove"})
      * @ORM\JoinColumn(nullable=false)
-     * @Groups({"user"})
      */
     private $user;
 

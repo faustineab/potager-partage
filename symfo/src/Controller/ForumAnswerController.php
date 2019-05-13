@@ -34,7 +34,7 @@ class ForumAnswerController extends AbstractController
             {
                 foreach ($errors as $error) 
                 {
-                    return new JsonResponse(
+                    return JsonResponse::fromJsonString(
                         'message: Votre réponse comporte des erreurs : '.$error.'.', 
                         406);
                 }
@@ -47,7 +47,7 @@ class ForumAnswerController extends AbstractController
         $entityManager->persist($answer);
         $entityManager->flush();
         
-        return new JsonResponse('message: Vous avez répondu à la question "'.$question->getTitle().'"', 200);
+        return JsonResponse::fromJsonString('message: Vous avez répondu à la question "'.$question->getTitle().'"', 200);
     }
 
     /**
@@ -74,7 +74,7 @@ class ForumAnswerController extends AbstractController
             {
                 foreach ($errors as $error) 
                 {
-                    return new JsonResponse(
+                    return JsonResponse::fromJsonString(
                         'message: Votre modification comporte des erreurs : '.$error.'.', 
                         304);
                 }
@@ -92,10 +92,10 @@ class ForumAnswerController extends AbstractController
             $entityManager->persist($forumAnswer);
             $entityManager->flush();
 
-            return new JsonResponse('message: Votre réponse a été modifiée', 200);
+            return JsonResponse::fromJsonString('message: Votre réponse a été modifiée', 200);
         }
 
-        return new JsonResponse('message: Vous n\'êtes pas autorisé à modifier cette réponse', 403);
+        return JsonResponse::fromJsonString('message: Vous n\'êtes pas autorisé à modifier cette réponse', 403);
     }
 
     /**
@@ -113,9 +113,9 @@ class ForumAnswerController extends AbstractController
             $objectManager->remove($forumAnswer);
             $objectManager->flush();
             
-            return new JsonResponse('message: Votre réponse a été supprimée', 200);
+            return JsonResponse::fromJsonString('message: Votre réponse a été supprimée', 200);
         }
 
-        return new JsonResponse('message: Vous n\'êtes pas autorisé à supprimer cette réponse', 406);
+        return JsonResponse::fromJsonString('message: Vous n\'êtes pas autorisé à supprimer cette réponse', 406);
     }
 }

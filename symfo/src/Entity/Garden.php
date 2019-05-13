@@ -22,36 +22,42 @@ class Garden
      * @ORM\Column(type="integer")
      * @Groups("garden_get")
      * @Groups({"garden_register"})
+     * @Groups({"user"})
      */
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=60)
+     * @ORM\Column(type="string", length=60, unique=true)
      * @Groups("garden_get")
      * @Groups({"garden_register"})
+     * @Groups({"user"})
      */
     private $name;
 
     /**
      * @ORM\Column(type="text")
      * @Groups("garden_get")
+     * @Groups({"user"})
      */
     private $address;
 
     /**
      * @ORM\Column(type="string", length=5)
      * @Groups("garden_get")
+     * @Groups({"user"})
      */
     private $zipcode;
 
     /**
      * @ORM\Column(type="string", length=60)
+     * @Groups({"user"})
      */
     private $city;
 
     /**
      * @ORM\Column(type="text", nullable=true)
      * @Groups("garden_get")
+     * @Groups({"user"})
      */
     private $address_specificities;
 
@@ -88,8 +94,6 @@ class Garden
     /**
      * @ORM\ManyToMany(targetEntity="App\Entity\User", inversedBy="gardens")
      * @Groups("garden_get")
-     * @Groups({"user"})
-     * 
      */
     private $user;
 

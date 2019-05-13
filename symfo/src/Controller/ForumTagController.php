@@ -48,7 +48,7 @@ class ForumTagController extends AbstractController
             {
                 foreach ($errors as $error) 
                 {
-                    return new JsonResponse(
+                    return JsonResponse::fromJsonString(
                         'message: Votre entrée comporte des erreurs : '.$error.'.', 
                         406);
                     }
@@ -57,10 +57,10 @@ class ForumTagController extends AbstractController
                 $entityManager->persist($tag);
                 $entityManager->flush();
 
-                return new JsonResponse('message: Votre tag a été créé', 200);
+                return JsonResponse::fromJsonString('message: Votre tag a été créé', 200);
         } 
         
-        return new JsonResponse('message: Vous n\'avez pas les droits nécessaires pour ajouter une catégorie', 403);
+        return JsonResponse::fromJsonString('message: Vous n\'avez pas les droits nécessaires pour ajouter une catégorie', 403);
     }
 
     /**
@@ -99,7 +99,7 @@ class ForumTagController extends AbstractController
             {
                 foreach ($errors as $error) 
                 {
-                    return new JsonResponse(
+                    return JsonResponse::fromJsonString(
                         'message: Votre modification comporte des erreurs : '.$error.'.', 
                         304);
                 }
@@ -117,10 +117,10 @@ class ForumTagController extends AbstractController
             $entityManager->persist($forumTag);
             $entityManager->flush();
 
-            return new JsonResponse('message: Votre catégorie a été modifiée', 200);
+            return JsonResponse::fromJsonString('message: Votre catégorie a été modifiée', 200);
         }
 
-        return new JsonResponse('message: Vous n\'êtes pas autorisé à modifier cette catégorie', 403);
+        return JsonResponse::fromJsonString('message: Vous n\'êtes pas autorisé à modifier cette catégorie', 403);
     }
 
     /**
@@ -138,9 +138,9 @@ class ForumTagController extends AbstractController
             $objectManager->remove($forumTag);
             $objectManager->flush();
             
-            return new JsonResponse('message: Votre catégorie a été supprimée', 200);
+            return JsonResponse::fromJsonString('message: Votre catégorie a été supprimée', 200);
         }
 
-        return new JsonResponse('message: Vous n\'êtes pas autorisé à supprimer cette catégorie', 406);
+        return JsonResponse::fromJsonString('message: Vous n\'êtes pas autorisé à supprimer cette catégorie', 406);
     }
 }
