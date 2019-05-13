@@ -23,6 +23,7 @@ class AdminController extends AbstractController
     {
         $currentUser = $this->get('security.token_storage')->getToken()->getUser();
         $currentUserRoles = $currentUser->getRoles();
+
         $role = $roleRepository->findBy(['label' => 'administrateur']);
 
         dump($currentUserRoles);
