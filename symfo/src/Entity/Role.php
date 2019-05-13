@@ -26,6 +26,7 @@ class Role
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"user"})
      */
     private $label;
 
