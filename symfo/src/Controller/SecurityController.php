@@ -26,4 +26,24 @@ class SecurityController extends AbstractController
 
         ], Response::HTTP_OK);
     }
+
+    /**
+     * @Route("api/login", name="app_login_GET", methods={"GET"})
+     */
+    public function api_login(AuthenticationUtils $utils, UserRepository $userRepository)
+    {
+
+        $currentUser =  $this->get('security.token_storage')->getToken()->getUser();
+
+
+        $user = $userRepository->find($currentUser->getId());
+
+        $data = $this->get('serializer')->serialize($user, 'json', ['groups' => ['login']]);
+
+        $response = new Response($data);
+
+        $response->headers->set('Content-Type', 'application/json');
+
+        return $response;
+    }
 }
