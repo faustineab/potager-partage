@@ -22,27 +22,71 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 class EventController extends AbstractController
 {
     /**
-     * @Route("/api/event", name="create_event", methods={"GET","POST"})
+     * @Route("/api/garden/{garden}/event", name="create_event", methods={"GET","POST"})
+     * @ParamConverter("garden", options={"id" = "garden"})
      */
-    public function create(Request $request, ObjectManager $manager, ValidatorInterface $validator)
+    public function create(Garden $garden, Request $request, ObjectManager $manager, ValidatorInterface $validator)
     {
-        $content = $request->getContent();
 
-        $event = $this->get('serializer')->deserialize($content, Event::class, 'json');
-        $errors = $validator->validate($event);
-        if (count($errors) > 0) {
-            dd($errors);
+        $gardenUsers = $garden->getUsers()->getValues();
+
+        $user = [];
+        $user[] = $this->get('security.token_storage')->getToken()->getUser();
+
+        $compare = function ($user, $gardenUsers) {
+            return spl_object_hash($user) <=> spl_object_hash($gardenUsers);
+        };
+
+        if (!empty(array_uintersect($user, $gardenUsers, $compare))) {
+
+
+            $content = $request->getContent();
+
+            $event = $this->get('serializer')->deserialize($content, Event::class, 'json');
+            $errors = $validator->validate($event);
+            if (count($errors) > 0) {
+                dd($errors);
+            }
+
+            $user = $this->get('security.token_storage')->getToken()->getUser();
+            $event->setUser($user);
+            $event->setGarden($garden);
+
+            $manager->persist($event);
+
+            $manager->flush();
+            return new JsonResponse("L'event à bien été créé", 200);
         }
+        return new JsonResponse("Vous n'êtes pas autorisé à créer un event", 500);
+    }
 
-        $user = $this->get('security.token_storage')->getToken()->getUser();
-        $event->setUser($user);
+    /**
+     * @Route("api/garden/{garden}/events", name="show_events", methods={"GET"})
+     * @ParamConverter("garden", options={"id" = "garden"})
+     * @ParamConverter("event", options={"id" = "id"})
+     */
+    public function showAll(Garden $garden, EventRepository $eventRepository)
+    {
 
-        $manager->persist($event);
+        $gardenUsers = $garden->getUsers()->getValues();
 
-        $manager->flush();
-        return $this->redirectToRoute('show_event', [
-            'id' => $event->getId(),
-        ], Response::HTTP_CREATED);
+        $user = [];
+        $user[] = $this->get('security.token_storage')->getToken()->getUser();
+
+        $compare = function ($user, $gardenUsers) {
+            return spl_object_hash($user) <=> spl_object_hash($gardenUsers);
+        };
+
+        if (!empty(array_uintersect($user, $gardenUsers, $compare))) {
+
+            $events = $garden->getEvents();
+            $data = $this->get('serializer')->serialize($events, 'json', ['groups' => ['event']]);
+            $response  = new Response($data);
+            $response->headers->set('Content-Type', 'application/json');
+
+            return $response;
+        }
+        return new JsonResponse("Vous n'êtes pas autorisé à voir cet event", 500);
     }
 
     /**
@@ -70,6 +114,7 @@ class EventController extends AbstractController
 
             return $response;
         }
+        return new JsonResponse("Vous n'êtes pas autorisé à voir cet event", 500);
     }
 
 
@@ -77,96 +122,140 @@ class EventController extends AbstractController
 
 
     /**
-     * @Route("api/event/{id}/edit", name="edit_event", methods={"GET"})
+     * @Route("api/garden/{garden}/event/{id}/edit", name="edit_event", methods={"GET"})
      */
-    public function edit(Event $event, Request $request, ObjectManager $manager, ValidatorInterface $validator, RoleRepository $roleRepository)
+    public function edit(Garden $garden, Event $event, Request $request, ObjectManager $manager, ValidatorInterface $validator, RoleRepository $roleRepository)
     {
 
-        $currentUser = $this->get('security.token_storage')->getToken()->getUser();
-        $currentUserRoles = $currentUser->getRoles();
+        $gardenUsers = $garden->getUsers()->getValues();
 
-        $role = $roleRepository->findBy(['label' => 'administrateur']);
+        $user = [];
+        $user[] = $this->get('security.token_storage')->getToken()->getUser();
 
-        dump($currentUserRoles);
+        $compare = function ($user, $gardenUsers) {
+            return spl_object_hash($user) <=> spl_object_hash($gardenUsers);
+        };
 
-        foreach ($role as $roleName) {
-            $user = $roleName->getName();
-            dump($user);
-            if (array_search($user, $currentUserRoles) !== false || $currentUser == $event->getUser()) {
+        if (!empty(array_uintersect($user, $gardenUsers, $compare))) {
+            $currentUser = $this->get('security.token_storage')->getToken()->getUser();
+            $currentUserRoles = $currentUser->getRoles();
+
+            $role = $roleRepository->findBy(['label' => 'administrateur']);
+
+            dump($currentUserRoles);
+
+            foreach ($role as $roleName) {
+                $user = $roleName->getName();
+                dump($user);
+                if (array_search($user, $currentUserRoles) !== false || $currentUser == $event->getUser()) {
 
 
-                $data = $this->get('serializer')->serialize($event, 'json', ['groups' => ['event']]);
+                    $data = $this->get('serializer')->serialize($event, 'json', ['groups' => ['event']]);
 
-                $response = new Response($data);
+                    $response = new Response($data);
 
-                $response->headers->set('Content-Type', 'application/json');
-                return $response;
+                    $response->headers->set('Content-Type', 'application/json');
+                    return $response;
+                }
+                return new JsonResponse(["error" => "Vous n'êtes pas autorisé à modifier"], 500);
             }
-            return new JsonResponse(["error" => "Vous n'êtes pas autorisé à modifier"], 500);
         }
+        return new JsonResponse(["error" => "Vous n'êtes pas autorisé à modifier car vous n'être pas membre du jardin"], 500);
     }
 
     /**
-     * @Route("api/event/{id}/edit", name="edit_event_post", methods={"POST"})
+     * @Route("api/garden/{garden}/event/{id}/edit", name="edit_event_post", methods={"POST"})
      */
-    public function edit_post(Event $event, Request $request, ObjectManager $manager, ValidatorInterface $validator, EventRepository $eventRepository)
+    public function edit_post(Garden $garden, Event $event, Request $request, ObjectManager $manager, ValidatorInterface $validator, EventRepository $eventRepository, RoleRepository $roleRepository)
     {
+        $gardenUsers = $garden->getUsers()->getValues();
+
+        $user = [];
+        $user[] = $this->get('security.token_storage')->getToken()->getUser();
+
+        $compare = function ($user, $gardenUsers) {
+            return spl_object_hash($user) <=> spl_object_hash($gardenUsers);
+        };
+
+        if (!empty(array_uintersect($user, $gardenUsers, $compare))) {
+            $currentUser = $this->get('security.token_storage')->getToken()->getUser();
+            $currentUserRoles = $currentUser->getRoles();
+
+            $role = $roleRepository->findBy(['label' => 'administrateur']);
+
+            foreach ($role as $roleName) {
+                $user = $roleName->getName();
+                dump($user);
+                if (array_search($user, $currentUserRoles) !== false || $currentUser == $event->getUser()) {
+
+                    $content = $request->getContent();
+
+                    $currentEvent = $this->get('serializer')->deserialize($content, Event::class, 'json');
+                    // dump($currentEvent);
+
+                    $errors = $validator->validate($currentEvent);
+
+                    if (count($errors) > 0) {
+                        dd($errors);
+                    }
+
+                    $description = $currentEvent->getDescription();
+                    $title = $currentEvent->getTitle();
+                    $startDate = $currentEvent->getStartDate();
+                    $endDate = $currentEvent->getEndDate();
+
+                    $event->setDescription($description)
+                        ->setTitle($title)
+                        ->setStartDate($startDate)
+                        ->setEndDate($endDate);
+
+                    $manager->persist($event);
+
+                    $manager->flush();
 
 
-        $user = $this->get('security.token_storage')->getToken()->getUser();
-
-        if ($user == $event->getUser()) {
-
-            $content = $request->getContent();
-
-            $currentEvent = $this->get('serializer')->deserialize($content, Event::class, 'json');
-            // dump($currentEvent);
-
-            $errors = $validator->validate($currentEvent);
-
-            if (count($errors) > 0) {
-                dd($errors);
+                    return new JsonResponse("l'event a bien été édité", 200);
+                }
+                return new JsonResponse(["error" => "Vous n'êtes pas autorisé à éditer"], 500);
             }
-
-            $description = $currentEvent->getDescription();
-            $title = $currentEvent->getTitle();
-            $startDate = $currentEvent->getStartDate();
-            $endDate = $currentEvent->getEndDate();
-
-            $event->setDescription($description)
-                ->setTitle($title)
-                ->setStartDate($startDate)
-                ->setEndDate($endDate);
-
-
-
-            // $event->setUser($user);
-
-            $manager->persist($event);
-
-            $manager->flush();
-
-
-            return $this->redirectToRoute('show_event', [
-                'id' => $event->getId(),
-            ], Response::HTTP_CREATED);
-        } else {
-            return new JsonResponse(["error" => "Vous n'êtes pas autorisé à éditer"], 500);
         }
+        return new JsonResponse("Vous n'êtes pas membre de ce jardin", 500);
     }
+
+
     /**
-     * @Route("api/event/{id}/delete", name="delete_event", methods={"POST"})
+     * @Route("api/arden/{garden}/event/{id}/delete", name="delete_event", methods={"POST"})
      */
-    public function delete_post(Event $event, Request $request, ObjectManager $manager, ValidatorInterface $validator, EventRepository $eventRepository)
+    public function delete_post(Garden $garden, Event $event, Request $request, ObjectManager $manager, ValidatorInterface $validator, EventRepository $eventRepository, RoleRepository
+    $roleRepository)
     {
 
-        $user = $this->get('security.token_storage')->getToken()->getUser();
-        if ($user == $event->getUser()) {
-            $manager->remove($event);
-            $manager->flush();
-            return new JsonResponse('supprimé', 200);
-        } else {
-            return new JsonResponse(["error" => "Vous n'êtes pas autorisé à supprimer"], 500);
+        $gardenUsers = $garden->getUsers()->getValues();
+
+        $user = [];
+        $user[] = $this->get('security.token_storage')->getToken()->getUser();
+
+        $compare = function ($user, $gardenUsers) {
+            return spl_object_hash($user) <=> spl_object_hash($gardenUsers);
+        };
+
+        if (!empty(array_uintersect($user, $gardenUsers, $compare))) {
+            $currentUser = $this->get('security.token_storage')->getToken()->getUser();
+            $currentUserRoles = $currentUser->getRoles();
+
+            $role = $roleRepository->findBy(['label' => 'administrateur']);
+
+            foreach ($role as $roleName) {
+                $user = $roleName->getName();
+                dump($user);
+                if (array_search($user, $currentUserRoles) !== false || $currentUser == $event->getUser()) {
+                    $manager->remove($event);
+                    $manager->flush();
+                    return new JsonResponse('supprimé', 200);
+                } else {
+                    return new JsonResponse(["error" => "Vous n'êtes pas autorisé à supprimer"], 500);
+                }
+            }
         }
     }
 }
