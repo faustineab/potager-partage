@@ -41,7 +41,7 @@ class Vacancy
     private $updatedAt;
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="vacancies")
-     * @ORM\JoinColumn(nullable=false, unique = false)
+     * @ORM\JoinColumn(nullable=false, unique=false)
      * @Groups({"vacancy"})
      * @Groups({"remplacement"})
      */

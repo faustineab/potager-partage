@@ -19,28 +19,44 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 class VacancyController extends AbstractController
 {
     /**
-     * @Route("api/absence/add", name="create_vacancy", methods={"POST"})
+     * @Route("api/garden/{garden}/absence/add", name="create_vacancy", methods={"POST"})
      */
-    public function vacancy(Request $request, ObjectManager $manager, ValidatorInterface $validator)
+    public function vacancy(Garden $garden, Request $request, ObjectManager $manager, ValidatorInterface $validator)
     {
-        $user = $this->get('security.token_storage')->getToken()->getUser();
 
-        $content = $request->getContent();
-        $vacancy = $this->get('serializer')->deserialize($content, Vacancy::class, 'json');
+        $gardenUsers = $garden->getUsers()->getValues();
 
-        $errors = $validator->validate($vacancy);
+        $user = [];
+        $user[] = $this->get('security.token_storage')->getToken()->getUser();
 
-        if (count($errors) > 0) {
-            dd($errors);
+        $compare = function ($user, $gardenUsers) {
+            return spl_object_hash($user) <=> spl_object_hash($gardenUsers);
+        };
+
+        if (!empty(array_uintersect($user, $gardenUsers, $compare))) {
+
+            $user = $this->get('security.token_storage')->getToken()->getUser();
+
+            $content = $request->getContent();
+            $vacancy = $this->get('serializer')->deserialize($content, Vacancy::class, 'json');
+
+            $errors = $validator->validate($vacancy);
+
+            if (count($errors) > 0) {
+                dd($errors);
+            }
+
+            $vacancy->setUser($user);
+            $vacancy->setGarden($garden);
+
+            $manager->persist($vacancy);
+            $manager->flush();
+
+            return new JsonResponse("L'absence à bien été créée", 200);
         }
-
-        $vacancy->setUser($user);
-
-        $manager->persist($vacancy);
-        $manager->flush();
-
-        return new JsonResponse("L'absence à bien été créée", 200);
+        return new JsonResponse("Vous n'êtes pas membre de ce jardin", 200);
     }
+
 
     /**
      * @Route("api/user/{id}/absences", name="show_all_vacancies", methods={"GET"})

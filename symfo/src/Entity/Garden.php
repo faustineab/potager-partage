@@ -80,7 +80,7 @@ class Garden
     private $users;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Plot", mappedBy="garden")
+     * @ORM\OneToMany(targetEntity="App\Entity\Plot", mappedBy="garden", orphanRemoval=true)
      */
     private $plots;
 
