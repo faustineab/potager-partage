@@ -28,17 +28,24 @@ class User implements UserInterface
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     * @Groups({"garden_get"})
+     * @Groups({"forum_questions"})
+     * @Groups({"forum_tags"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
+     * @Groups({"forum_questions"})
+     * @Groups({"forum_tags"})
      */
     private $email;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"event"})
+     * @Groups({"event", "plot", "garden_get"})
+     * @Groups({"forum_questions"})
+     * @Groups({"forum_tags"})
      */
     private $name;
 
@@ -453,7 +460,7 @@ class User implements UserInterface
     {
 
         $roles = $this->roles->map(function ($role) {
-            return $role->getTitle();
+            return $role->getName();
         })->toArray();
         $roles[] = 'ROLE_USER';
         return $roles;
