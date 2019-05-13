@@ -21,7 +21,7 @@ class SecurityController extends AbstractController
         $username = $utils->getLastUsername();
 
 
-        return $this->redirectToRoute('app_login', [
+        return $this->redirectToRoute('garden_show', [
             'error' => $error !== null,
             'username' => $username
 
