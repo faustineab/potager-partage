@@ -14,7 +14,7 @@ const initialState = {
   zipcode: '',
   loading: false,
   loginMessage: 'Message personnalisé',
-  loggedIn: false,
+  loggedIn: true,
   user: {},
   gardenList: [
     { key: 'm', text: 'garden1', value: 'garden1' },
