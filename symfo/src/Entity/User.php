@@ -91,7 +91,7 @@ class User implements UserInterface
 
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Garden", mappedBy="user")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Garden", mappedBy="users")
      * @Groups({"user"})
      */
     private $gardens;
