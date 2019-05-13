@@ -2,7 +2,7 @@ import { connect } from 'react-redux';
 
 import Subscribe from 'src/components/Subscribe';
 
-import { inputChange, registerUser } from '../store/reducer';
+import { inputChange, fetchGardenlist } from '../store/reducer';
 
 const mapStateToProps = state => ({
   firstName: state.firstName,
@@ -10,9 +10,7 @@ const mapStateToProps = state => ({
   password: state.password,
   email: state.email,
   phoneNumber: state.phoneNumber,
-  address1: state.address1,
-  address2: state.address2,
-  zipcode: state.zipcode,
+  address: state.address,
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -20,7 +18,7 @@ const mapDispatchToProps = dispatch => ({
     dispatch(inputChange(name, value));
   },
   onFormSubmit: () => {
-    dispatch(registerUser());
+    dispatch(fetchGardenlist());
   },
 });
 

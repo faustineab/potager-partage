@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 
 import './index.scss';
 
-const Login = ({ username, password, inputChange, loginMessage, onFormSubmit, loading }) => {
+const Login = ({ email, password, inputChange, loginMessage, onFormSubmit, loading }) => {
 
   const handleInputChange = (evt) => {
     const { name } = evt.target;
@@ -27,8 +27,8 @@ const Login = ({ username, password, inputChange, loginMessage, onFormSubmit, lo
           <Form.Input
             loading={loading}
             disabled={loading}
-            value={username}
-            name="username"
+            value={email}
+            name="email"
             onChange={handleInputChange}
             placeholder="Adresse e-mail"
           />
@@ -54,7 +54,7 @@ const Login = ({ username, password, inputChange, loginMessage, onFormSubmit, lo
 };
 
 Login.propTypes = {
-  username: PropTypes.string,
+  email: PropTypes.string,
   password: PropTypes.string,
   inputChange: PropTypes.func.isRequired,
   loginMessage: PropTypes.string.isRequired,
@@ -63,7 +63,7 @@ Login.propTypes = {
 };
 
 Login.defaultProps = {
-  username: '',
+  email: '',
   password: '',
 };
 

@@ -1,14 +1,15 @@
 import React from 'react';
+
 import {
   Switch, Route,
 } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
+
 /**
  * Local import
  */
-// Composants
-
+// Composant
 import Subscribe from 'src/containers/Subscribe';
 import CreateGarden from 'src/containers/CreateGarden';
 import JoinGarden from 'src/containers/JoinGarden';
@@ -25,6 +26,7 @@ import Potager from 'src/components/Potager';
 
 
 import './app.scss';
+
 
 const App = ({ loggedIn }) => (
   <div id="app">
