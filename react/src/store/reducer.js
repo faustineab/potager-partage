@@ -3,30 +3,25 @@
  */
 
 const initialState = {
-  username: '',
   password: '',
   firstName: '',
   lastName: '',
   email: '',
   phoneNumber: '',
-  address1: '',
-  address2: '',
-  zipcode: '',
+  address: '',
   loading: false,
   loginMessage: 'Message personnalisé',
   loggedIn: true,
   user: {},
-  gardenList: [
-    { key: 'm', text: 'garden1', value: 'garden1' },
-    { key: 'n', text: 'garden2', value: 'garden2' },
-  ],
+  gardenList: [],
+  gardenId: '',
   gardenName: '',
   gardenAddress: '',
   gardenZipcode: '',
   gardenAddressSpecificities: '',
   gardenCity: '',
   gardenNbPlotsRow: 1,
-  gardenPlotsColumn: 1,
+  gardenNbPlotsColumn: 1,
   gardenSize: '',
   askingQuestion: false,
   questionToAsk: '',
@@ -43,17 +38,20 @@ const initialState = {
  * Types
  */
 
+export const CREATE_GARDEN = 'CREATE_GARDEN';
+export const JOIN_GARDEN = 'JOIN_GARDEN';
 export const LOG_USER = 'LOG_USER';
 const CHANGE_LOGIN_MESSAGE = 'CHANGE_LOGIN_MESSAGE';
 const USER_LOGGED = 'USER_LOGGED';
 const USER_LOGOUT = 'USER_LOGOUT';
 export const INPUT_CHANGE = 'INPUT_CHANGE';
 export const MODIFY_USER_INFOS = 'MODIFY_USER_INFOS';
-export const REGISTER_USER = 'REGISTER_USER';
+export const FETCH_GARDENLIST = 'FETCH_GARDENLIST';
 export const USER_ASKING_QUESTION = 'USER_ASKING_QUESTION';
 export const ADD_TAG_TO_QUESTION = 'ADD_TAG_TO_QUESTION';
 export const REMOVE_QUESTION_TAG = 'REMOVE_QUESTION_TAG';
 export const QUESTION_ASKED = 'QUESTION_ASKED';
+export const RECEIVED_GARDENLIST = 'RECEIVED_GARDENLIST';
 
 
 /**
@@ -62,6 +60,25 @@ export const QUESTION_ASKED = 'QUESTION_ASKED';
 
 const reducer = (state = initialState, action = {}) => {
   switch (action.type) {
+    case CREATE_GARDEN:
+      return {
+        ...state,
+      };
+    case JOIN_GARDEN:
+      return {
+        ...state,
+      };
+    case LOG_USER:
+      return {
+        ...state,
+        loading: true,
+        loginMessage: 'Logging user',
+      };
+    case CHANGE_LOGIN_MESSAGE:
+      return {
+        ...state,
+        loginMessage: action.text,
+      };
     case USER_LOGGED:
       return {
         ...state,
@@ -76,26 +93,21 @@ const reducer = (state = initialState, action = {}) => {
         ...state,
         loggedIn: false,
       };
-    case LOG_USER:
-      return {
-        ...state,
-        loading: true,
-        loginMessage: 'Logging user',
-      };
-    case CHANGE_LOGIN_MESSAGE:
-      return {
-        ...state,
-        loginMessage: action.text,
-      };
     case INPUT_CHANGE:
       return {
         ...state,
         [action.name]: action.value,
       };
-    case REGISTER_USER:
+    case FETCH_GARDENLIST:
       return {
         ...state,
         loading: true,
+      };
+    case RECEIVED_GARDENLIST:
+      return {
+        ...state,
+        loading: false,
+        gardenList: [...action.gardenList],
       };
     case MODIFY_USER_INFOS:
       return {
@@ -133,10 +145,18 @@ const reducer = (state = initialState, action = {}) => {
 /**
  * Action Creators
  */
+export const joinGarden = () => ({
+  type: JOIN_GARDEN,
+});
+
+export const createGarden = () => ({
+  type: CREATE_GARDEN,
+});
 
 export const logUser = () => ({
   type: LOG_USER,
 });
+
 
 export const changeLoginMessage = text => ({
   type: CHANGE_LOGIN_MESSAGE,
@@ -163,8 +183,13 @@ export const ModifyUserInfos = () => ({
   type: MODIFY_USER_INFOS,
 });
 
-export const registerUser = () => ({
-  type: REGISTER_USER,
+export const fetchGardenlist = () => ({
+  type: FETCH_GARDENLIST,
+});
+
+export const receivedGardenList = gardenList => ({
+  type: RECEIVED_GARDENLIST,
+  gardenList,
 });
 
 export const userAskingQuestion = () => ({

@@ -4,7 +4,9 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
+ admin_api_master
     "content-hash": "3bec973cb753d6f58c5989d5896678ca",
+
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -1746,6 +1748,7 @@
             "time": "2016-12-05T07:27:31+00:00"
         },
         {
+
             "name": "nelmio/api-doc-bundle",
             "version": "v3.4.0",
             "source": {
@@ -1829,6 +1832,7 @@
             "time": "2019-02-18T16:27:10+00:00"
         },
         {
+
             "name": "nelmio/cors-bundle",
             "version": "1.5.5",
             "source": {

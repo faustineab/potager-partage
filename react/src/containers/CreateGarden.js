@@ -2,7 +2,7 @@ import { connect } from 'react-redux';
 
 import CreateGarden from 'src/components/Subscribe/createGarden';
 
-import { inputChange } from '../store/reducer';
+import { inputChange, createGarden } from '../store/reducer';
 
 
 const mapStateToProps = state => ({
@@ -19,6 +19,9 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   inputChange: (name, value) => {
     dispatch(inputChange(name, value));
+  },
+  createGarden: () => {
+    dispatch(createGarden());
   },
 });
 

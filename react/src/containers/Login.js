@@ -3,7 +3,7 @@ import Login from '../components/Login';
 import { inputChange, logUser } from '../store/reducer';
 
 const mapStateToProps = state => ({
-  username: state.username,
+  email: state.email,
   password: state.password,
   loginMessage: state.loginMessage,
   loading: state.loading,
