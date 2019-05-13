@@ -108,7 +108,7 @@ class Garden
 
     public function __construct()
     {
-        $this->user = new ArrayCollection();
+        $this->users = new ArrayCollection();
         $this->plots = new ArrayCollection();
         $this->created_at = new \DateTime();
         $this->updated_at = new \DateTime();
