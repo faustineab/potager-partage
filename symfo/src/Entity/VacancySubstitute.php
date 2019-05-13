@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\VacancySubstituteRepository")
@@ -13,38 +14,50 @@ class VacancySubstitute
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     * @Groups({"user"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="datetime")
+     * @Groups({"vacancy"})
+     * @Groups({"remplacement"})
+     * @Groups({"user"})
      */
     private $startDate;
 
     /**
      * @ORM\Column(type="datetime")
+     * @Groups({"vacancy"})
+     * @Groups({"remplacement"})
+     * @Groups({"user"})
      */
     private $endDate;
 
     /**
      * @ORM\Column(type="datetime")
+     * @Groups({"user"})
      */
     private $createdAt;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
+     * @Groups({"user"})
      */
     private $updatedAt;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Vacancy", inversedBy="vacancySubstitutes")
      * @ORM\JoinColumn(nullable=false)
+     * @Groups({"remplacement"})
      */
     private $vacancy;
 
     /**
-     * @ORM\OneToOne(targetEntity="App\Entity\User", inversedBy="vacancySubstitute", cascade={"persist", "remove"})
+     * @ORM\OneToOne(targetEntity="App\Entity\User", inversedBy="vacancySubstitute")
      * @ORM\JoinColumn(nullable=false)
+     * @Groups({"vacancy"})
+     * 
      */
     private $user;
 
@@ -54,9 +67,10 @@ class VacancySubstitute
         $this->updatedAt = new \DateTime();
     }
 
-    public function isBookableDate(){
+    public function isBookableDate()
+    {
 
-      //  1/ dates qui ne sont pas disponibles
+        //  1/ dates qui ne sont pas disponibles
 
         $notAvailableDays = $this->vacancy->getNotAvailableDays();
 
@@ -64,39 +78,42 @@ class VacancySubstitute
 
         $substituteDays = $this->getDays();
 
-        $formatDay = function($day){
-            return $day->format('Y-m-d');
-        };
+        // $formatDay = function ($day) {
+        //     return $day->format('Y-m-d');
+        // };
 
         // tableau contenant les chaines de caractère des journées 
-        $days = array_map($formatDay, $substituteDays);
+        // $days = array_map($formatDay, $substituteDays);
 
-        $notAvailable = array_map($formatDay, $notAvailableDays);
+        // $notAvailable = array_map($formatDay, $notAvailableDays);
 
-        foreach($days as $day) {
-            if(array_search($day, $notAvailable) !== false)
-            return false;
+        foreach ($substituteDays as $substituteDay) {
+            if (array_search($substituteDay, $notAvailableDays) !== false)
+                return false;
         }
         return true;
     }
 
-/** 
- * Permet de récupérer un tableau des journées qui correspondent à ma remplacement 
- * @return array Représente un tableau d'object DateTime des jours de remplacement 
- */
+    /** 
+     * Permet de récupérer un tableau des journées qui correspondent à ma remplacement 
+     * @return array Représente un tableau d'object DateTime des jours de remplacement 
+     */
 
-    public function getDays(){
+    public function getDays()
+    {
         $resultat = range(
             $this->startDate->getTimestamp(),
             $this->endDate->getTimestamp(),
-            24*60*60); // nbr de secondes entre les dates de début et de fin de remplacement
+            24 * 60 * 60
+        ); // nbr de secondes entre les dates de début et de fin de remplacement
 
-        $days = array_map(function($dayTimestamp){
-            return new \DateTime(date('Y-m-d', $dayTimestamp));
+        $days = array_map(function ($dayTimestamp) {
+            $day = new \DateTime(date('Y-m-d', $dayTimestamp));
+            return $day->format('Y-m-d H:i:s');
         }, $resultat);
 
-    
-    return  $days;
+
+        return  $days;
     }
 
     public function getId(): ?int

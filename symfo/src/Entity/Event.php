@@ -15,49 +15,63 @@ class Event
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      * @Groups({"event"})
+     * @Groups({"user"})
+     * 
      */
     private $id;
 
     /**
      * @ORM\Column(type="datetime")
      * @Groups({"event"})
+     * @Groups({"user"})
      */
     private $startDate;
 
     /**
      * @ORM\Column(type="datetime")
      * @Groups({"event"})
+     * @Groups({"user"})
      */
     private $endDate;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Groups({"event"})
+     * @Groups({"user"})
      */
     private $title;
 
     /**
      * @ORM\Column(type="text", nullable=true)
      * @Groups({"event"})
+     * @Groups({"user"})
      */
     private $description;
 
     /**
      * @ORM\Column(type="datetime")
+     * @Groups({"user"})
      */
     private $createdAt;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
+     * @Groups({"user"})
      */
     private $updatedAt;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="events")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=false, unique = false)
      * @Groups({"event"})
+     * @Groups({"user"})
      */
     private $user;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Garden", inversedBy="events")
+     */
+    private $garden;
 
     public function __construct()
     {
@@ -150,6 +164,18 @@ class Event
     public function setUser(?User $user): self
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    public function getGarden(): ?Garden
+    {
+        return $this->garden;
+    }
+
+    public function setGarden(?Garden $garden): self
+    {
+        $this->garden = $garden;
 
         return $this;
     }

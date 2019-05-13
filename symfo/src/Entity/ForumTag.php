@@ -5,6 +5,7 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ForumTagRepository")
@@ -15,28 +16,46 @@ class ForumTag
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     * @Groups({"forum_questions"})
+     * @Groups({"forum_tags"})
+     * @Groups({"user"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=100)
+     * @Groups({"forum_questions"})
+     * @Groups({"forum_tags"})    
+     * @Groups({"user"})
      */
     private $name;
 
     /**
      * @ORM\Column(type="datetime")
+     * @Groups({"forum_questions"})
+     * @Groups({"forum_tags"})
+     * @Groups({"user"})
      */
     private $createdAt;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
+     * @Groups({"forum_questions"})
+     * @Groups({"forum_tags"})
+     * @Groups({"user"})
      */
     private $updatedAt;
 
     /**
      * @ORM\ManyToMany(targetEntity="App\Entity\ForumQuestion", inversedBy="tags")
+     * @Groups({"forum_tags"})
      */
     private $questions;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Garden", inversedBy="forumTags")
+     */
+    private $garden;
 
     public function __construct()
     {
@@ -115,5 +134,17 @@ class ForumTag
     public function __toString()
     {
         $this->questions;
+    }
+
+    public function getGarden(): ?Garden
+    {
+        return $this->garden;
+    }
+
+    public function setGarden(?Garden $garden): self
+    {
+        $this->garden = $garden;
+
+        return $this;
     }
 }

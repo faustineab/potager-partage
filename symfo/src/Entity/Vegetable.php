@@ -25,13 +25,15 @@ class Vegetable
      */
     private $name;
 
+    // Type integer = date interval = datetime + integer 
     /**
-     * @ORM\Column(type="dateinterval")
+     * @ORM\Column(type="integer")
      */
     private $water_irrigation_interval;
 
+    // Type integer = date interval = datetime + integer 
     /**
-     * @ORM\Column(type="dateinterval")
+     * @ORM\Column(type="integer")
      */
     private $growing_interval;
 
@@ -64,9 +66,6 @@ class Vegetable
     {
         $this->isPlantedOns = new ArrayCollection();
         $this->created_at = new \DateTime();
-        $this->updated_at = new \DateTime();
-        $this->water_irrigation_interval = new DateInterval('P1D');
-        $this->growing_interval = new DateInterval('P1D');
     }
 
     public function getId(): ?int
