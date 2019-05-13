@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello VacancyController!{% endblock %}
+
+{% block body %}
+<div class="container">
+  
+
+    {{ form_start(form)}}
+
+        {{ form_label(form.startDate)}}
+        {{ form_widget(form.startDate)}}
+
+        {{ form_label(form.endDate)}}
+        {{ form_widget(form.endDate)}}
+
+
+    <button type='submit' class="btn btn-primary mt-5"> Valider l'absence </button>
+
+
+    {{ form_end(form)}}
+
+ 
+</div>
+{% endblock %}

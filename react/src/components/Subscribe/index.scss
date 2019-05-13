@@ -1,8 +1,4 @@
 .subscription{
-  background-image: url(../../img/carrots-food-fresh-616404.jpg);
-  background-size: cover;
-  background-position: center;
-  // height: 100vh;
     h1{
       text-align: center;
       font-size: 1.8em;
@@ -22,7 +18,7 @@
       color: #5e5250;
     }
     .field input {
-      height: 2em;
+      height: em;
     }
     .field input::placeholder{
       font-size: 0.8em;

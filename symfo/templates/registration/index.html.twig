@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Inscription{% endblock %}
+
+{% block body %}
+
+{% for message in app.flashes('success') %}
+    <div class="alert alert-dismissible alert-success">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+            {{message}}
+    </div>
+    {% endfor %}
+
+<div class="container">
+    <h1>Inscrivez-vous</h1>
+
+    {{ form_start(form)}}
+
+        {{ form_label(form.name)}}
+        {{ form_widget(form.name)}}
+
+        {{ form_label(form.email)}}
+        {{ form_widget(form.email)}}
+
+       {{ form_row(form.password) }}
+
+        {{ form_label(form.phone)}}
+        {{ form_widget(form.phone)}}
+
+        {{ form_label(form.address)}}
+        {{ form_widget(form.address)}}
+
+        {{ form_label(form.gardens)}}
+        {{ form_widget(form.gardens)}}
+
+    <button type='submit' class="btn btn-primary mt-5"> Valider mon inscription </button>
+
+
+    {{ form_end(form)}}
+
+ 
+</div>
+
+{% endblock %}

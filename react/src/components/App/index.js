@@ -12,12 +12,17 @@ import PropTypes from 'prop-types';
 import Subscribe from 'src/containers/Subscribe';
 import CreateGarden from 'src/containers/CreateGarden';
 import JoinGarden from 'src/containers/JoinGarden';
-import Login from '../../containers/Login';
-import Profil from '../../containers/Profil';
-import ProfilModify from '../../containers/ProfilModify';
-import MainMenu from '../MainMenu';
-import Footer from '../../containers/Footer';
-import Potager from '../Potager';
+
+import Login from 'src/containers/Login';
+import Profil from 'src/containers/Profil';
+import ProfilModify from 'src/containers/ProfilModify';
+import Forum from 'src/components/Forum';
+import MainMenu from 'src/components/MainMenu';
+import Footer from 'src/containers/Footer';
+import Potager from 'src/components/Potager';
+
+// Styles et assets
+
 
 import './app.scss';
 
@@ -32,6 +37,7 @@ const App = ({ loggedIn }) => (
       <Route path="/profile" component={Profil} />
       <Route path="/modify-profile" component={ProfilModify} />
       <Route path="/potager" component={Potager} />
+      <Route path="/forum" component={Forum} />
     </Switch>
     <Footer />
   </div>
