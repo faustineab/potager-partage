@@ -18,13 +18,15 @@ class ForumTag
      * @ORM\Column(type="integer")
      * @Groups({"forum_questions"})
      * @Groups({"forum_tags"})
+     * @Groups({"user"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=100)
      * @Groups({"forum_questions"})
-     * @Groups({"forum_tags"})     * 
+     * @Groups({"forum_tags"})    
+     * @Groups({"user"})
      */
     private $name;
 
@@ -32,6 +34,7 @@ class ForumTag
      * @ORM\Column(type="datetime")
      * @Groups({"forum_questions"})
      * @Groups({"forum_tags"})
+     * @Groups({"user"})
      */
     private $createdAt;
 
@@ -39,6 +42,7 @@ class ForumTag
      * @ORM\Column(type="datetime", nullable=true)
      * @Groups({"forum_questions"})
      * @Groups({"forum_tags"})
+     * @Groups({"user"})
      */
     private $updatedAt;
 

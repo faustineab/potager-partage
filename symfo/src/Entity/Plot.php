@@ -16,25 +16,25 @@ class Plot
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     * @Groups("plot")
+     * @Groups({"user","plot"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups("plot")
+     * @Groups({"user","plot"})
      */
     private $status;
 
     /**
      * @ORM\Column(type="datetime")
-     * @Groups("plot")
+     * @Groups({"user","plot"})
      */
     private $created_at;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
-     * @Groups("plot")
+     * @Groups({"user","plot"})
      */
     private $updated_at;
 
@@ -46,8 +46,8 @@ class Plot
     private $garden;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="plots",cascade={"persist"})
-     * @Groups("plot")
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="plots")
+     * @Groups({"user","plot"})
      */
     private $user;
 

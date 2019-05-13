@@ -16,24 +16,27 @@ class Vacancy
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     * @Groups({"user"})
      */
     private $id;
     /**
      * @ORM\Column(type="datetime")
-     * @Groups({"vacancy"})
+     * @Groups({"user","vacancy"})
      */
     private $startDate;
     /**
      * @ORM\Column(type="datetime")
-     * @Groups({"vacancy"})
+     * @Groups({"user","vacancy"})
      */
     private $endDate;
     /**
      * @ORM\Column(type="datetime")
+     * @Groups({"user"})
      */
     private $createdAt;
     /**
      * @ORM\Column(type="datetime", nullable=true)
+     * @Groups({"user"})
      */
     private $updatedAt;
     /**

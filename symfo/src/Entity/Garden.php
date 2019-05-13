@@ -18,33 +18,32 @@ class Garden
      * @ORM\Column(type="integer")
      * @Groups("garden_get")
      * @Groups({"garden_register"})
+     * @Groups({"user"})
      */
     private $id;
     /**
-     * @ORM\Column(type="string", length=60)
-     * @Groups("garden_get")
-     * @Groups({"garden_register","garden_edit", "plot"})
-
+     * @ORM\Column(type="string", length=60, unique=true)
+     * @Groups({"garden_register","garden_get","garden_edit", "plot","user"})
      */
     private $name;
     /**
      * @ORM\Column(type="text")
-     * @Groups({"garden_get","garden_edit"})
+     * @Groups({"garden_get","garden_edit","user"})
      */
     private $address;
     /**
      * @ORM\Column(type="string", length=5)
-     * @Groups({"garden_get","garden_edit"})
+     * @Groups({"garden_get","garden_edit","user"})
      */
     private $zipcode;
     /**
      * @ORM\Column(type="string", length=60)
-     * @Groups({"garden_get","garden_edit"})
+     * @Groups({"garden_get","garden_edit","user"})
      */
     private $city;
     /**
      * @ORM\Column(type="text", nullable=true)
-     * @Groups({"garden_get","garden_edit"})
+     * @Groups({"garden_get","garden_edit","user"})
      */
     private $address_specificities;
     /**
@@ -75,7 +74,6 @@ class Garden
     /**
      * @ORM\ManyToMany(targetEntity="App\Entity\User", inversedBy="gardens")
      * @Groups("garden_get")
-     * 
      */
     private $user;
     /**

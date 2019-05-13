@@ -44,7 +44,7 @@ class ForumQuestionController extends AbstractController
             {
                 foreach ($errors as $error) 
                 {
-                    return new JsonResponse(
+                    return JsonResponse::fromJsonString(
                         'message: Votre question comporte des erreurs : '.$error.'.', 
                         406);
                 }
@@ -56,13 +56,13 @@ class ForumQuestionController extends AbstractController
         $entityManager->persist($question);
         $entityManager->flush();
         
-        return new JsonResponse('message: Votre question a été posée', 200);
+        return JsonResponse::fromJsonString('message: Votre question a été posée', 200);
     }
 
     /**
      * @Route("/{id}", name="forum_question_show", methods={"GET"})
      */
-    public function show(ForumQuestion $question, Request $request, SerializerInterface $serializer): Response
+    public function show(ForumQuestion $question, SerializerInterface $serializer): Response
     {
         $jsonQuestion = $serializer->serialize($question, 'json',
             ['groups' => 'forum_questions']
@@ -95,7 +95,7 @@ class ForumQuestionController extends AbstractController
             {
                 foreach ($errors as $error) 
                 {
-                    return new JsonResponse(
+                    return JsonResponse::fromJsonString(
                         'message: Votre modification comporte des erreurs : '.$error.'.', 
                         304);
                 }
@@ -129,10 +129,10 @@ class ForumQuestionController extends AbstractController
             $entityManager->persist($forumQuestion);
             $entityManager->flush();
 
-            return new JsonResponse('message: Votre question a été modifiée', 200);
+            return JsonResponse::fromJsonString('message: Votre question a été modifiée', 200);
         }
 
-        return new JsonResponse('message: Vous n\'êtes pas autorisé à modifier cette question', 403);
+        return JsonResponse::fromJsonString('message: Vous n\'êtes pas autorisé à modifier cette question', 403);
     }
 
     /**
@@ -150,9 +150,9 @@ class ForumQuestionController extends AbstractController
             $objectManager->remove($forumQuestion);
             $objectManager->flush();
             
-            return new JsonResponse('message: Votre question a été supprimée', 200);
+            return JsonResponse::fromJsonString('message: Votre question a été supprimée', 200);
         }
 
-        return new JsonResponse('message: Vous n\'êtes pas autorisé à supprimer cette question', 406);
+        return JsonResponse::fromJsonString('message: Vous n\'êtes pas autorisé à supprimer cette question', 406);
     }
 }
