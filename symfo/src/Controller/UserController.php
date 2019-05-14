@@ -108,18 +108,27 @@ class UserController extends AbstractController
     /**
      * @Route("/{id}", name="user_delete", methods={"DELETE"})
      */
-    public function delete(ObjectManager $objectManager, User $user): Response
+    public function delete(ObjectManager $objectManager, User $user)
     {
-        if ($user->getRoles()[0] == 'ROLE_ADMIN') {
-            $admin = $user;
-        }
+        $currentUser = $this->get('security.token_storage')->getToken()->getUser();
 
-        if ($user = $this->get('security.token_storage')->getToken()->getUser() || $admin) {
+        if ($user == $currentUser) {
             $objectManager->remove($user);
             $objectManager->flush();
             
             return JsonResponse::fromJsonString('message: Votre profil a été supprimé', 200);
         }
+
+        //$userRole = $currentUser->getRoles();
+        //dd($userRole);
+        foreach ($currentUser->getRoles() as $key => $value) {
+            if ($value === "ROLE_ADMIN") {
+                $objectManager->remove($user);
+                $objectManager->flush();
+                
+                return JsonResponse::fromJsonString('message: Ce profil a été supprimé', 200);
+            }
+        }       
 
         return JsonResponse::fromJsonString('message: Vous n\'êtes pas autorisé à supprimer ce membre', 406);
     }
