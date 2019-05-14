@@ -7,6 +7,7 @@ use App\Entity\IsPlantedOn;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\VegetableRepository")
@@ -17,23 +18,27 @@ class Vegetable
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     * @Groups({"vegetable"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=60)
+     * @Groups({"vegetable"})
      */
     private $name;
 
     // Type integer = date interval = datetime + integer 
     /**
      * @ORM\Column(type="integer")
+     * @Groups({"vegetable"})
      */
     private $water_irrigation_interval;
 
     // Type integer = date interval = datetime + integer 
     /**
      * @ORM\Column(type="integer")
+     * @Groups({"vegetable"})
      */
     private $growing_interval;
 
@@ -54,6 +59,7 @@ class Vegetable
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"vegetable"})
      */
     private $image;
 
@@ -85,24 +91,24 @@ class Vegetable
         return $this;
     }
 
-    public function getWaterIrrigationInterval(): ?\DateInterval
+    public function getWaterIrrigationInterval(): ?int
     {
         return $this->water_irrigation_interval;
     }
 
-    public function setWaterIrrigationInterval(\DateInterval $water_irrigation_interval): self
+    public function setWaterIrrigationInterval(int $water_irrigation_interval): self
     {
         $this->water_irrigation_interval = $water_irrigation_interval;
 
         return $this;
     }
 
-    public function getGrowingInterval(): ?\DateInterval
+    public function getGrowingInterval(): ?int
     {
         return $this->growing_interval;
     }
 
-    public function setGrowingInterval(\DateInterval $growing_interval): self
+    public function setGrowingInterval(int $growing_interval): self
     {
         $this->growing_interval = $growing_interval;
 

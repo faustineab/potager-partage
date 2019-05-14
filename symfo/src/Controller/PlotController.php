@@ -123,8 +123,7 @@ class PlotController extends AbstractController
             
             
             $plot->setUpdatedAt(new \Datetime());
-            
-            
+        
             $entityManager->merge($plot);
             $entityManager->persist($plot);
             $entityManager->flush();
