@@ -88,6 +88,7 @@ const reducer = (state = initialState, action = {}) => {
       return {
         ...state,
         user: { ...action.user },
+        gardenId: action.gardenId,
         loginMessage: 'Récupération des données du jardin',
       };
     case USER_LOGGED:
@@ -172,8 +173,10 @@ export const fetchUserInfos = token => ({
   token,
 });
 
-export const fetchGardenInfos = () => ({
+export const fetchGardenInfos = (user, gardenId) => ({
   type: FETCH_GARDEN_INFOS,
+  user,
+  gardenId,
 });
 
 export const userLogged = (user, repos) => ({

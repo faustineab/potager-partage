@@ -9,6 +9,7 @@ import {
   receivedGardenList,
   fetchUserInfos,
 } from 'src/store/reducer';
+import { fetchGardenInfos } from './reducer';
 
 const ajaxMiddleware = store => next => (action) => {
   switch (action.type) {
@@ -96,8 +97,9 @@ const ajaxMiddleware = store => next => (action) => {
         },
       })
         .then((response) => {
-          console.log(response.data);
-          console.log(response.data.gardens);
+          const user = response.data;
+          const gardenId = response.data.gardens[0].id;
+          store.dispatch(fetchGardenInfos(user, gardenId));
         })
         .catch((error) => {
           console.log(error);
