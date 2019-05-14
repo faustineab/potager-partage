@@ -14,11 +14,13 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
 class SubstitutionController extends AbstractController
 {
     /**
      * @Route("api/garden/{garden}/absence/{id}/remplacement", name="create_substitution", methods={"POST"})
+     *  @ParamConverter("garden", options={"id" = "garden"})
      */
     public function substitution(Garden $garden, Request $request, ObjectManager $manager, Vacancy $vacancy, ValidatorInterface $validator)
     {
@@ -70,6 +72,7 @@ class SubstitutionController extends AbstractController
     }
     /**
      * @Route("api/garden/{garden}/absence/{id}/remplaçants", name="show_substitutions", methods={"GET"})
+     *  @ParamConverter("garden", options={"id" = "garden"})
      */
 
     //montre tous les remplaçants pour une absence
