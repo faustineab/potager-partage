@@ -78,6 +78,28 @@ class VacancyController extends AbstractController
         }
     }
 
+
+    /**
+     * @Route("api/garden/{garden}/absences", name="show_all_gardenVacancies", methods={"GET"})
+     */
+    public function showAllGarden(User $user, VacancyRepository $vacancyRepository, Request $request, ObjectManager $manager)
+    {
+        $currentUser = $this->get('security.token_storage')->getToken()->getUser();
+        if ($user == $currentUser) {
+
+            $vacancies = $user->getVacancies();
+
+            $data = $this->get('serializer')->serialize($vacancies, 'json', ['groups' => ['vacancy']]);
+            $response = new Response($data);
+            $response->headers->set('Content-Type', 'application/json');
+
+            return $response;
+        } else {
+            return new JsonResponse(["error" => "Vous n'êtes pas autorisé à voir cette page"], 500);
+        }
+    }
+
+
     /**
      * @Route("api/garden/{garden}/absence/{id}", name="show_vacancy", methods={"GET"})
      * @ParamConverter("garden", options={"id" = "garden"})
