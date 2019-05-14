@@ -5,7 +5,9 @@ import {
   CREATE_GARDEN,
   JOIN_GARDEN,
   LOG_USER,
+  FETCH_USER_INFOS,
   receivedGardenList,
+  fetchUserInfos,
 } from 'src/store/reducer';
 
 const ajaxMiddleware = store => next => (action) => {
@@ -79,13 +81,28 @@ const ajaxMiddleware = store => next => (action) => {
         password: store.getState().password,
       })
         .then((response) => {
-          console.log(response);
+          console.log(response.data.token);
+          store.dispatch(fetchUserInfos(response.data.token));
         })
-        .then((error) => {
+        .catch((error) => {
           console.log(error);
         });
       break;
-
+    case FETCH_USER_INFOS:
+      next(action);
+      axios.get('http://localhost/apo/potager-partage/symfo/public/api/login', {
+        headers: {
+          Authorization: `Bearer ${store.getState().token}`,
+        },
+      })
+        .then((response) => {
+          console.log(response.data);
+          console.log(response.data.gardens);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+      break;
     default:
       next(action);
       break;
