@@ -48,10 +48,20 @@ class IsPlantedOn
      */
     private $vegetable;
 
+    /**
+     * @ORM\Column(type="date", nullable=true)
+     */
+    private $harvestDate;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $sprayStatus;
+
     public function __construct()
     {
         $this->created_at = new \DateTime();
-        $this->updated_at = new \DateTime();
+        $this->sprayStatus = false;
     }
 
     public function getId(): ?int
@@ -127,6 +137,30 @@ class IsPlantedOn
     public function setVegetable(?Vegetable $vegetable): self
     {
         $this->vegetable = $vegetable;
+
+        return $this;
+    }
+
+    public function getHarvestDate(): ?\DateTimeInterface
+    {
+        return $this->harvestDate;
+    }
+
+    public function setHarvestDate(?\DateTimeInterface $harvestDate): self
+    {
+        $this->harvestDate = $harvestDate;
+
+        return $this;
+    }
+
+    public function getSprayStatus(): ?bool
+    {
+        return $this->sprayStatus;
+    }
+
+    public function setSprayStatus(bool $sprayStatus): self
+    {
+        $this->sprayStatus = $sprayStatus;
 
         return $this;
     }
