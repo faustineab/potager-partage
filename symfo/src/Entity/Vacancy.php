@@ -92,7 +92,6 @@ class Vacancy
         return  $notAvailableDays;
     }
 
-
     public function getAvailableDays()
     {
         $availableDays = [];
@@ -117,33 +116,38 @@ class Vacancy
         return  $availableDays;
     }
 
-
     public function getId(): ?int
     {
         return $this->id;
     }
+    
     public function getStartDate(): ?\DateTimeInterface
     {
         return $this->startDate;
     }
+    
     public function setStartDate(\DateTimeInterface $startDate): self
     {
         $this->startDate = $startDate;
         return $this;
     }
+    
     public function getEndDate(): ?\DateTimeInterface
     {
         return $this->endDate;
     }
+    
     public function setEndDate(\DateTimeInterface $endDate): self
     {
         $this->endDate = $endDate;
         return $this;
     }
+    
     public function getCreatedAt(): ?\DateTimeInterface
     {
         return $this->createdAt;
     }
+    
     public function setCreatedAt(\DateTimeInterface $createdAt): self
     {
         $this->createdAt = $createdAt;
