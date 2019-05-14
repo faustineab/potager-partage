@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Card, Image, Button, Icon } from 'semantic-ui-react';
+import { Link } from 'react-router-dom';
 
 import AskQuestion from 'src/containers/AskQuestion';
 import './index.scss';
@@ -10,7 +11,7 @@ const Forum = () => (
     <h2>Le coin des jardiniers</h2>
     <AskQuestion />
     <Card fluid className="forumCard">
-      <Card.Header className="cardHeader">A quelle fréquence arroser mes tomates ?</Card.Header>
+      <Card.Header className="cardHeader"><Link to="/forum/post">A quelle fréquence arroser mes tomates ?</Link></Card.Header>
       <Card.Content>
         <Image src="src/img/004-farmer.svg" avatar />
         <span className="postAuthor">Wassim Alkayar</span>
@@ -26,7 +27,7 @@ const Forum = () => (
     </Card>
 
     <Card fluid className="forumCard">
-      <Card.Header className="cardHeader">Une idée pour se débarasser des limaces ?</Card.Header>
+      <Card.Header className="cardHeader"><Link to="/forum/post">Une idée pour se débarasser des limaces ?</Link></Card.Header>
       <Card.Content>
         <Image src="src/img/001-farmer.svg" avatar />
         <span className="postAuthor">Vincent Costiou</span>
@@ -41,7 +42,7 @@ const Forum = () => (
       </div>
     </Card>
     <Card fluid className="forumCard">
-      <Card.Header className="cardHeader">Que planter avec des petits pois ?</Card.Header>
+      <Card.Header className="cardHeader"><Link to="/forum/post">Que planter avec des petits pois ?</Link></Card.Header>
       <Card.Content>
         <Image src="src/img/003-farmer.svg" avatar />
         <span className="postAuthor">Julie Muru</span>
@@ -56,7 +57,7 @@ const Forum = () => (
       </div>
     </Card>
     <Card fluid className="forumCard">
-      <Card.Header className="cardHeader">Achat d'un collecteur de pluie pour le jardin</Card.Header>
+      <Card.Header className="cardHeader"><Link to="/forum/post">Achat d'un collecteur de pluie pour le jardin</Link></Card.Header>
       <Card.Content>
         <Image src="src/img/003-farmer.svg" avatar />
         <span className="postAuthor">Faustine Amsellem-Barelli</span>
@@ -71,7 +72,7 @@ const Forum = () => (
       </div>
     </Card>
     <Card fluid className="forumCard">
-      <Card.Header className="cardHeader">Comment se prémunir du gel ?</Card.Header>
+      <Card.Header className="cardHeader"><Link to="/forum/post">Comment se prémunir du gel ?</Link></Card.Header>
       <Card.Content>
         <Image src="src/img/002-farmer.svg" avatar />
         <span className="postAuthor">Sophia Gautier</span>
