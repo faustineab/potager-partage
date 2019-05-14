@@ -106,6 +106,11 @@ class Garden
      */
     private $forumTags;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\MarketOffer", mappedBy="garden")
+     */
+    private $marketOffers;
+
 
 
     public function __construct()
@@ -118,6 +123,7 @@ class Garden
         $this->events = new ArrayCollection();
         $this->forumQuestions = new ArrayCollection();
         $this->forumTags = new ArrayCollection();
+        $this->marketOffers = new ArrayCollection();
     }
     public function getId(): ?int
     {
@@ -380,6 +386,37 @@ class Garden
             // set the owning side to null (unless already changed)
             if ($forumTag->getGarden() === $this) {
                 $forumTag->setGarden(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|MarketOffer[]
+     */
+    public function getMarketOffers(): Collection
+    {
+        return $this->marketOffers;
+    }
+
+    public function addMarketOffer(MarketOffer $marketOffer): self
+    {
+        if (!$this->marketOffers->contains($marketOffer)) {
+            $this->marketOffers[] = $marketOffer;
+            $marketOffer->setGarden($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMarketOffer(MarketOffer $marketOffer): self
+    {
+        if ($this->marketOffers->contains($marketOffer)) {
+            $this->marketOffers->removeElement($marketOffer);
+            // set the owning side to null (unless already changed)
+            if ($marketOffer->getGarden() === $this) {
+                $marketOffer->setGarden(null);
             }
         }
 

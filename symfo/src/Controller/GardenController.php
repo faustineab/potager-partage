@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Entity\Plot;
 use App\Entity\Garden;
 use App\Repository\GardenRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -133,6 +134,18 @@ class GardenController extends AbstractController
                 ->setMeters($gardenMeters)
                 ->setNumberPlotsRow($gardenPlots_Row)
                 ->setNumberPlotsColumn($gardenPlots_Column);
+            $plots =  $gardenPlots_Row * $gardenPlots_Column;
+       
+
+                for ($p = 0; $p < $plots; $p++) {
+                    $plot = new Plot();
+                    $manager->persist($plot);
+        
+                    $plot->setStatus('inactif');
+                    $garden->addPlot($plot);
+                }
+        
+            $manager->persist($plot);
             //$event->setUser($user);
             $manager->persist($garden);
             $manager->flush();
