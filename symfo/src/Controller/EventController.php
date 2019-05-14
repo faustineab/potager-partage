@@ -106,7 +106,7 @@ class EventController extends AbstractController
             return spl_object_hash($user) <=> spl_object_hash($gardenUsers);
         };
 
-        if (!empty(array_uintersect($user, $gardenUsers, $compare))) {
+        if ((!empty(array_uintersect($user, $gardenUsers, $compare))) && $event->getGarden($garden) == $garden) {
 
             $data = $this->get('serializer')->serialize($event, 'json', ['groups' => ['event']]);
             $response  = new Response($data);
