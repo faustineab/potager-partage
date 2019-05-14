@@ -104,4 +104,23 @@ class UserController extends AbstractController
         
         return JsonResponse::fromJsonString('message: Vous n\'êtes pas autorisé à accéder à cette page', 403);
     }
+
+    /**
+     * @Route("/{id}", name="user_delete", methods={"DELETE"})
+     */
+    public function delete(ObjectManager $objectManager, User $user): Response
+    {
+        if ($user->getRoles()[0] == 'ROLE_ADMIN') {
+            $admin = $user;
+        }
+
+        if ($user = $this->get('security.token_storage')->getToken()->getUser() || $admin) {
+            $objectManager->remove($user);
+            $objectManager->flush();
+            
+            return JsonResponse::fromJsonString('message: Votre profil a été supprimé', 200);
+        }
+
+        return JsonResponse::fromJsonString('message: Vous n\'êtes pas autorisé à supprimer ce membre', 406);
+    }
 }   
