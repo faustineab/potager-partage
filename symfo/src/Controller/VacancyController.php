@@ -82,7 +82,7 @@ class VacancyController extends AbstractController
     /**
      * @Route("api/garden/{garden}/absences", name="show_all_gardenVacancies", methods={"GET"})
      */
-    public function showAllGardenVacancies(User $user, VacancyRepository $vacancyRepository, Request $request, ObjectManager $manager)
+    public function showAllGardenVacancies(Garden $garden, User $user, VacancyRepository $vacancyRepository, Request $request, ObjectManager $manager)
     {
         $gardenUsers = $garden->getUsers()->getValues();
 
