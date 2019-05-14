@@ -82,10 +82,18 @@ class VacancyController extends AbstractController
     /**
      * @Route("api/garden/{garden}/absences", name="show_all_gardenVacancies", methods={"GET"})
      */
-    public function showAllGarden(User $user, VacancyRepository $vacancyRepository, Request $request, ObjectManager $manager)
+    public function showAllGardenVacancies(User $user, VacancyRepository $vacancyRepository, Request $request, ObjectManager $manager)
     {
-        $currentUser = $this->get('security.token_storage')->getToken()->getUser();
-        if ($user == $currentUser) {
+        $gardenUsers = $garden->getUsers()->getValues();
+
+        $user = [];
+        $user[] = $this->get('security.token_storage')->getToken()->getUser();
+
+        $compare = function ($user, $gardenUsers) {
+            return spl_object_hash($user) <=> spl_object_hash($gardenUsers);
+        };
+
+        if (!empty(array_uintersect($user, $gardenUsers, $compare))) {
 
             $vacancies = $user->getVacancies();
 
