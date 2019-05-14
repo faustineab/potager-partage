@@ -224,7 +224,7 @@ class EventController extends AbstractController
 
 
     /**
-     * @Route("api/arden/{garden}/event/{id}/delete", name="delete_event", methods={"POST"})
+     * @Route("api/garden/{garden}/event/{id}/delete", name="delete_event", methods={"POST"})
      */
     public function delete_post(Garden $garden, Event $event, Request $request, ObjectManager $manager, ValidatorInterface $validator, EventRepository $eventRepository, RoleRepository
     $roleRepository)

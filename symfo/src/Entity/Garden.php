@@ -21,6 +21,7 @@ class Garden
      * @Groups("garden_get")
      * @Groups({"garden_register"})
      * @Groups({"user"})
+     * 
      */
     private $id;
     /**

@@ -70,6 +70,7 @@ class Event
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Garden", inversedBy="events")
+     * 
      */
     private $garden;
 
