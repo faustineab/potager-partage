@@ -22,10 +22,7 @@ class Plot
 
     /**
      * @ORM\Column(type="string", length=255)
-<<<<<<< HEAD
-=======
      * @Groups({"user","plot"})
->>>>>>> 92da26e598e3b7aa533999eb5d61651b19562635
      */
     private $status;
 
@@ -49,7 +46,7 @@ class Plot
     private $garden;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="plots")
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="plots" , cascade={"persist"})
      * @Groups({"user","plot"})
      */
     private $user;

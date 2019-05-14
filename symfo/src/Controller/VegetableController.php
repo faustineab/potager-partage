@@ -119,5 +119,12 @@ class VegetableController extends AbstractController
             return new JsonResponse('message: Votre fruit/légume a été modifié', 200);
         }
     
+        /**
+     * @Route("/{id}/add", name="add_vegetable", methods={"POST"})
+     */
+    public function add(Vegetable $vegetable, Request $request,  EntityManagerInterface $entityManager,ObjectManager $manager, ValidatorInterface $validator,SerializerInterface $serializer)
+    {
+
+    }
 
 }
