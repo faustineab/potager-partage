@@ -116,11 +116,17 @@ class VacancyController extends AbstractController
      */
     public function vacancyEditGet(Vacancy $vacancy, Request $request, ObjectManager $manager)
     {
-        $data = $this->get('serializer')->serialize($vacancy, 'json', ['groups' => ['vacancy']]);
-        $response = new Response($data);
-        $response->headers->set('Content-Type', 'application/json');
+        $user = $this->get('security.token_storage')->getToken()->getUser();
 
-        return $response;
+        if ($user == $vacancy->getUser()) {
+
+            $data = $this->get('serializer')->serialize($vacancy, 'json', ['groups' => ['vacancy']]);
+            $response = new Response($data);
+            $response->headers->set('Content-Type', 'application/json');
+
+            return $response;
+        }
+        return new JsonResponse("Vous n'étes pas autorisé à modifier ce contenu", 500);
     }
 
     /**

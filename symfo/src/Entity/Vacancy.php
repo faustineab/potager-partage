@@ -54,6 +54,7 @@ class Vacancy
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Garden", inversedBy="vacancies")
+     * @Groups({"vacancy"})
      */
     private $garden;
 

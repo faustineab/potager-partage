@@ -21,12 +21,12 @@ class Garden
      * @Groups("garden_get")
      * @Groups({"garden_register"})
      * @Groups({"user"})
-     * 
+     * @Groups({"vacancy"})
      */
     private $id;
     /**
      * @ORM\Column(type="string", length=60, unique=true)
-     * @Groups({"garden_register","garden_get","garden_edit", "plot","user"})
+     * @Groups({"garden_register","garden_get","garden_edit", "plot","user", "vacancy"})
      */
     private $name;
     /**
