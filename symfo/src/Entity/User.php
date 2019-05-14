@@ -42,7 +42,8 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"event", "user"})
+     * @Groups({"event","garden_get"})
+     * @Groups({"user"})
      * @Groups({"vacancy"})
      * @Groups({"remplacement"})
      * @Groups({"admin"})
