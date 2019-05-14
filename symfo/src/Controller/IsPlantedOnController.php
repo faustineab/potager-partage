@@ -89,57 +89,66 @@ class IsPlantedOnController extends AbstractController
      */
     public function new(Plot $plot, Request $request, SerializerInterface $serializer, ValidatorInterface $validator, EntityManagerInterface $entityManager, VegetableRepository $vegetableRepository)
     {
-        $isPlantedOn = new IsPlantedOn();
+        $currentUser = $this->get('security.token_storage')->getToken()->getUser();
         
-        $data = json_decode($request->getContent(), true);
-        // dd($data);
-        
-        
-        $errors = $validator->validate($data);
-        if (count($errors) > 0)
-        {
-            foreach ($errors as $error) 
+        $plot = $isPlantedOn->getPlot();
+        $plotOwner = $plot->getUser();
+
+        if ($currentUser == $plotOwner) {
+            $isPlantedOn = new IsPlantedOn();
+            
+            $data = json_decode($request->getContent(), true);
+            // dd($data);
+            
+            
+            $errors = $validator->validate($data);
+            if (count($errors) > 0)
             {
-                return JsonResponse::fromJsonString(
-                    'message: Votre entrée comporte des erreurs : '.$error.'.', 
-                    406);
+                foreach ($errors as $error) 
+                {
+                    return JsonResponse::fromJsonString(
+                        'message: Votre entrée comporte des erreurs : '.$error.'.', 
+                        406);
+                    }
                 }
-            }
-            
-        // informations récupérées du formulaire
-        $getVegetable = $vegetableRepository->findOneBy([
-            'id' => $data['vegetable']
-        ]);
-        //dd($getVegetable);
-        
-        $seedlingDate = new DateTime($data['seedling_date']);
-        // dd($seedling_date);
-
-        // informations settées automatiquement
-            // irrigation_date  
-        $durationI = $getVegetable->getWaterIrrigationInterval(); //durée à rajouter en jours
-        $durationI = DateInterval::createFromDateString($durationI.' day'); // transforme integer duration en date interval
-        $irrigationDate = new Datetime($data['seedling_date']); 
-        $irrigationDate = $irrigationDate->add($durationI);// ajoute duration à date de seedling
-        
-        //harvestDate
-        $durationH = $getVegetable->getGrowingInterval();
-        $durationH = DateInterval::createFromDateString($durationH.' week');
-        $harvestDate = new Datetime($data['seedling_date']);
-        $harvestDate = $harvestDate->add($durationH);
-        // dd($harvestDate);
-            
-
-        $isPlantedOn->setSeedlingDate($seedlingDate)
-                   ->setIrrigationDate($irrigationDate)
-                   ->setPlot($plot)
-                   ->setHarvestDate($harvestDate)
-                   ->setVegetable($getVegetable);
-
-        $entityManager->persist($isPlantedOn);
-        $entityManager->flush();
-        
-        return JsonResponse::fromJsonString('ok', 200);
+                
+                // informations récupérées du formulaire
+                $getVegetable = $vegetableRepository->findOneBy([
+                    'id' => $data['vegetable']
+                    ]);
+                    //dd($getVegetable);
+                    
+                    $seedlingDate = new DateTime($data['seedling_date']);
+                    // dd($seedling_date);
+                    
+                    // informations settées automatiquement
+                    // irrigation_date  
+                    $durationI = $getVegetable->getWaterIrrigationInterval(); //durée à rajouter en jours
+                    $durationI = DateInterval::createFromDateString($durationI.' day'); // transforme integer duration en date interval
+                    $irrigationDate = new Datetime($data['seedling_date']); 
+                    $irrigationDate = $irrigationDate->add($durationI);// ajoute duration à date de seedling
+                    
+                    //harvestDate
+                    $durationH = $getVegetable->getGrowingInterval();
+                    $durationH = DateInterval::createFromDateString($durationH.' week');
+                    $harvestDate = new Datetime($data['seedling_date']);
+                    $harvestDate = $harvestDate->add($durationH);
+                    // dd($harvestDate);
+                    
+                    
+                    $isPlantedOn->setSeedlingDate($seedlingDate)
+                    ->setIrrigationDate($irrigationDate)
+                    ->setPlot($plot)
+                    ->setHarvestDate($harvestDate)
+                    ->setVegetable($getVegetable);
+                    
+                    $entityManager->persist($isPlantedOn);
+                    $entityManager->flush();
+                    
+                    return JsonResponse::fromJsonString('ok', 200);
+        }
+                
+        return JsonResponse::fromJsonString('nope', 400);
     }
 
     /**
@@ -162,9 +171,13 @@ class IsPlantedOnController extends AbstractController
     public function edit(IsPlantedOn $isPlantedOn, ObjectManager $manager)
     {
         $vegetable = $isPlantedOn->getVegetable();
+        $currentUser = $this->get('security.token_storage')->getToken()->getUser();
+        
+        $plot = $isPlantedOn->getPlot();
+        $plotOwner = $plot->getUser();
 
         // Si le statut arrosage = undone
-        if ($isPlantedOn->getSprayStatus() == false) {
+        if ($isPlantedOn->getSprayStatus() == false && $currentUser == $plotOwner) {
             
             // passer le statut à done
             $isPlantedOn->setSprayStatus(true);
@@ -200,7 +213,8 @@ class IsPlantedOnController extends AbstractController
         $plot = $isPlantedOn->getPlot();
         $plotOwner = $plot->getUser();
 
-        if ($currentUser == $plotOwner) {
+        if ($currentUser == $plotOwner) 
+        {
             $objectManager->remove($isPlantedOn);
             $objectManager->flush();
             
