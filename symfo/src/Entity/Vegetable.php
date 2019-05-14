@@ -63,10 +63,6 @@ class Vegetable
      */
     private $image;
 
-    public function __toString()
-    {
-        return $this->water_irrigation_interval;
-    }
 
     public function __construct()
     {
