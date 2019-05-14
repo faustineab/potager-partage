@@ -22,6 +22,7 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use Doctrine\Common\Persistence\ObjectManager;
 
 /**
  * @Route("api/garden/{gardenid}")
@@ -158,17 +159,54 @@ class IsPlantedOnController extends AbstractController
      * @Route("/plantation/{id}/edit", name="plantation_edit", methods={"PUT"})
      * @IsGranted({"ROLE_MEMBER", "ROLE_ADMIN"})
      */
-    public function edit(IsPlantedOn $isPlantedOn)
+    public function edit(IsPlantedOn $isPlantedOn, ObjectManager $manager)
     {
+        $vegetable = $isPlantedOn->getVegetable();
+
+        // Si le statut arrosage = undone
+        if ($isPlantedOn->getSprayStatus() == false) {
+            
+            // passer le statut à done
+            $isPlantedOn->setSprayStatus(true);
+
+            // modifier la prochaine date d'irrigation
+            $durationI = $vegetable->getWaterIrrigationInterval(); //durée à rajouter en jours
+            $durationI = DateInterval::createFromDateString($durationI.' day'); // transforme integer duration en date interval
+            $irrigationDate = new Datetime('now'); 
+            $irrigationDate = $irrigationDate->add($durationI);
+            $isPlantedOn->setIrrigationDate($irrigationDate);
+
+            // puis repasser en arrosage = undone
+            $isPlantedOn->setSprayStatus(false);
+
+            $manager->merge($isPlantedOn);
+            $manager->persist($isPlantedOn);
+            $manager->flush();
+
+            return JsonResponse::fromJsonString('ok', 200);
+        }
         
+        return JsonResponse::fromJsonString('nope', 400);
     }
 
     /**
      * @Route("/plantation/{id}", name="plantation_delete", methods={"DELETE"})
      * @IsGranted({"ROLE_MEMBER", "ROLE_ADMIN"})
      */
-    public function delete(IsPlantedOn $isPlantedOn)
+    public function delete(IsPlantedOn $isPlantedOn, ObjectManager $objectManager)
     {
+        $currentUser = $this->get('security.token_storage')->getToken()->getUser();
         
+        $plot = $isPlantedOn->getPlot();
+        $plotOwner = $plot->getUser();
+
+        if ($currentUser == $plotOwner) {
+            $objectManager->remove($isPlantedOn);
+            $objectManager->flush();
+            
+            return JsonResponse::fromJsonString('ok', 200);
+        }
+
+        return JsonResponse::fromJsonString('nope', 400);
     }
 }
