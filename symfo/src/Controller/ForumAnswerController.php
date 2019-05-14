@@ -5,7 +5,6 @@ namespace App\Controller;
 use App\Entity\ForumAnswer;
 use App\Entity\ForumQuestion;
 use Doctrine\ORM\EntityManagerInterface;
-use App\Repository\ForumAnswerRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\HttpFoundation\Response;

@@ -23,7 +23,7 @@ class IsPlantedOnRepository extends ServiceEntityRepository
     //  * @return IsPlantedOn[] Returns an array of IsPlantedOn objects
     //  */
     /*
-    public function findByExampleField($value)
+    public function findByPlot($value)
     {
         return $this->createQueryBuilder('i')
             ->andWhere('i.exampleField = :val')

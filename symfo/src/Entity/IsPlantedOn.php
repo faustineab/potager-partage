@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\IsPlantedOnRepository")
@@ -18,11 +19,13 @@ class IsPlantedOn
 
     /**
      * @ORM\Column(type="datetime")
+     * @Groups({"is_planted_on"})
      */
     private $seedling_date;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
+     * @Groups({"is_planted_on"})
      */
     private $irrigation_date;
 
@@ -39,22 +42,26 @@ class IsPlantedOn
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Plot", inversedBy="isPlantedOns")
      * @ORM\JoinColumn(nullable=false)
+     * @Groups({"is_planted_on"})
      */
     private $plot;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Vegetable", inversedBy="isPlantedOns")
      * @ORM\JoinColumn(nullable=false)
+     * @Groups({"is_planted_on"})
      */
     private $vegetable;
 
     /**
      * @ORM\Column(type="date", nullable=true)
+     * @Groups({"is_planted_on"})
      */
     private $harvestDate;
 
     /**
      * @ORM\Column(type="boolean")
+     * @Groups({"is_planted_on"})
      */
     private $sprayStatus;
 

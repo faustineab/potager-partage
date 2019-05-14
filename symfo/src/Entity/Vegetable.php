@@ -7,6 +7,7 @@ use App\Entity\IsPlantedOn;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\VegetableRepository")
@@ -22,18 +23,21 @@ class Vegetable
 
     /**
      * @ORM\Column(type="string", length=60)
+     * @Groups({"is_planted_on"})
      */
     private $name;
 
-    // Type integer = date interval = datetime + integer 
+    // Type integer = date interval = datetime + integer EN JOURS
     /**
      * @ORM\Column(type="integer")
+     * @Groups({"is_planted_on"})
      */
     private $water_irrigation_interval;
 
-    // Type integer = date interval = datetime + integer 
+    // Type integer = date interval = datetime + integer EN SEMAINES
     /**
      * @ORM\Column(type="integer")
+     * @Groups({"is_planted_on"})
      */
     private $growing_interval;
 
@@ -54,13 +58,9 @@ class Vegetable
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"is_planted_on"})
      */
     private $image;
-
-    public function __toString()
-    {
-        return $this->water_irrigation_interval;
-    }
 
     public function __construct()
     {
@@ -85,24 +85,24 @@ class Vegetable
         return $this;
     }
 
-    public function getWaterIrrigationInterval(): ?\DateInterval
+    public function getWaterIrrigationInterval(): ?int
     {
         return $this->water_irrigation_interval;
     }
 
-    public function setWaterIrrigationInterval(\DateInterval $water_irrigation_interval): self
+    public function setWaterIrrigationInterval(): self
     {
         $this->water_irrigation_interval = $water_irrigation_interval;
 
         return $this;
     }
 
-    public function getGrowingInterval(): ?\DateInterval
+    public function getGrowingInterval(): ?int
     {
         return $this->growing_interval;
     }
 
-    public function setGrowingInterval(\DateInterval $growing_interval): self
+    public function setGrowingInterval(): self
     {
         $this->growing_interval = $growing_interval;
 
