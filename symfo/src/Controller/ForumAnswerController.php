@@ -26,28 +26,27 @@ class ForumAnswerController extends AbstractController
     public function new(ForumQuestion $question, Request $request, SerializerInterface $serializer, EntityManagerInterface $entityManager, ValidatorInterface $validator)
     {
         $content = $request->getContent();
-        
+
         $answer = $serializer->deserialize($content, ForumAnswer::class, 'json');
-        
+
         $errors = $validator->validate($answer);
-        if (count($errors) > 0)
-            {
-                foreach ($errors as $error) 
-                {
-                    return JsonResponse::fromJsonString(
-                        'message: Votre réponse comporte des erreurs : '.$error.'.', 
-                        406);
-                }
+        if (count($errors) > 0) {
+            foreach ($errors as $error) {
+                return JsonResponse::fromJsonString(
+                    'message: Votre réponse comporte des erreurs : ' . $error . '.',
+                    406
+                );
             }
-        
+        }
+
         $user = $this->get('security.token_storage')->getToken()->getUser();
         $answer->setQuestion($question);
         $answer->setUser($user);
-        
+
         $entityManager->persist($answer);
         $entityManager->flush();
-        
-        return JsonResponse::fromJsonString('message: Vous avez répondu à la question "'.$question->getTitle().'"', 200);
+
+        return JsonResponse::fromJsonString('message: Vous avez répondu à la question "' . $question->getTitle() . '"', 200);
     }
 
     /**
@@ -61,8 +60,7 @@ class ForumAnswerController extends AbstractController
             $admin = $user;
         }
 
-        if ($user == $forumAnswer->getUser() || $admin)
-        {
+        if ($user == $forumAnswer->getUser() || $admin) {
             $content = $request->getContent();
 
             $editedAnswer = $serializer->deserialize($content, ForumAnswer::class, 'json');
@@ -70,24 +68,22 @@ class ForumAnswerController extends AbstractController
 
             $errors = $validator->validate($editedAnswer);
 
-            if (count($errors) > 0)
-            {
-                foreach ($errors as $error) 
-                {
+            if (count($errors) > 0) {
+                foreach ($errors as $error) {
                     return JsonResponse::fromJsonString(
-                        'message: Votre modification comporte des erreurs : '.$error.'.', 
-                        304);
+                        'message: Votre modification comporte des erreurs : ' . $error . '.',
+                        304
+                    );
                 }
             }
 
             $text = $editedAnswer->getText();
-            if ($text != null)
-            {
+            if ($text != null) {
                 $forumAnswer->setText($text);
             }
 
             $forumAnswer->setUpdatedAt(new \Datetime());
-            
+
             $entityManager->merge($forumAnswer);
             $entityManager->persist($forumAnswer);
             $entityManager->flush();
@@ -112,7 +108,7 @@ class ForumAnswerController extends AbstractController
         if ($user = $forumAnswer->getUser() || $admin) {
             $objectManager->remove($forumAnswer);
             $objectManager->flush();
-            
+
             return JsonResponse::fromJsonString('message: Votre réponse a été supprimée', 200);
         }
 
