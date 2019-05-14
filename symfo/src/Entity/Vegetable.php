@@ -24,21 +24,21 @@ class Vegetable
 
     /**
      * @ORM\Column(type="string", length=60)
-     * @Groups({"vegetable"})
+     * @Groups({"is_planted_on", "vegetable"})
      */
     private $name;
 
-    // Type integer = date interval = datetime + integer 
+    // Type integer = date interval = datetime + integer EN JOURS
     /**
      * @ORM\Column(type="integer")
-     * @Groups({"vegetable"})
+     * @Groups({"is_planted_on", "vegetable"})
      */
     private $water_irrigation_interval;
 
-    // Type integer = date interval = datetime + integer 
+    // Type integer = date interval = datetime + integer EN SEMAINES
     /**
      * @ORM\Column(type="integer")
-     * @Groups({"vegetable"})
+     * @Groups({"is_planted_on", "vegetable"})
      */
     private $growing_interval;
 
@@ -59,10 +59,9 @@ class Vegetable
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"vegetable"})
+     * @Groups({"is_planted_on", "vegetable"})
      */
     private $image;
-
 
     public function __construct()
     {

@@ -48,6 +48,7 @@ class User implements UserInterface
      * @Groups({"remplacement"})
      * @Groups({"admin"})
      * @Groups({"login"})
+     * @Groups({"is_planted_on"})
      */
     private $name;
 

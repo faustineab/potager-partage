@@ -134,7 +134,7 @@ class ForumTagController extends AbstractController
             $admin = $user;
         }
 
-        if ($user = $forumTag->getUser() || $admin) {
+        if ($admin) {
             $objectManager->remove($forumTag);
             $objectManager->flush();
             

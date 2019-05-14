@@ -17,6 +17,7 @@ class Plot
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      * @Groups({"user","plot"})
+     * @Groups({"is_planted_on"})
      */
     private $id;
 
