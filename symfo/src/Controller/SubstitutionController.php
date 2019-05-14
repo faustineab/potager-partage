@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Entity\Garden;
 use App\Entity\Vacancy;
 use App\Form\SubstitutionType;
 use App\Entity\VacancySubstitute;
@@ -17,57 +18,83 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class SubstitutionController extends AbstractController
 {
     /**
-     * @Route("api/absence/{id}/remplacement", name="create_substitution", methods={"POST"})
+     * @Route("api/garden/{garden}/absence/{id}/remplacement", name="create_substitution", methods={"POST"})
      */
-    public function substitution(Request $request, ObjectManager $manager, Vacancy $vacancy, ValidatorInterface $validator)
+    public function substitution(Garden $garden, Request $request, ObjectManager $manager, Vacancy $vacancy, ValidatorInterface $validator)
     {
 
-        $user = $this->get('security.token_storage')->getToken()->getUser();
+        $gardenUsers = $garden->getUsers()->getValues();
 
-        $content = $request->getContent();
-        $substitution = $this->get('serializer')->deserialize($content, VacancySubstitute::class, 'json');
+        $user = [];
+        $user[] = $this->get('security.token_storage')->getToken()->getUser();
 
-        $errors = $validator->validate($substitution);
+        $compare = function ($user, $gardenUsers) {
+            return spl_object_hash($user) <=> spl_object_hash($gardenUsers);
+        };
 
-        if (count($errors) > 0) {
-            dd($errors);
-        }
+        if (!empty(array_uintersect($user, $gardenUsers, $compare))) {
 
-        $substitution->setVacancy($vacancy);
-        $manager->persist($substitution);
+            $content = $request->getContent();
+            $substitution = $this->get('serializer')->deserialize($content, VacancySubstitute::class, 'json');
 
-        $availableDates = $vacancy->getAvailableDays();
+            $errors = $validator->validate($substitution);
 
-        $substitutionDates = $substitution->getDays();
+            if (count($errors) > 0) {
+                dd($errors);
+            }
 
-
-        if (!empty(array_diff($substitutionDates, $availableDates))) {
-            return new JsonResponse("Les dates choisies ne correspondent pas aux dates d' absences", 500);
-        }
-        if ($substitution->isBookableDate()) {
-
-            $substitution->setUser($user);
-
+            $substitution->setVacancy($vacancy);
             $manager->persist($substitution);
-            $manager->flush();
-            return new JsonResponse("Le remplacement à bien été créée", 200);
+
+            $availableDates = $vacancy->getAvailableDays();
+
+            $substitutionDates = $substitution->getDays();
+
+
+            if (!empty(array_diff($substitutionDates, $availableDates))) {
+                return new JsonResponse("Les dates choisies ne correspondent pas aux dates d' absences", 500);
+            }
+            if ($substitution->isBookableDate()) {
+
+                $substitution->setUser($user);
+
+                $manager->persist($substitution);
+                $manager->flush();
+                return new JsonResponse("Le remplacement à bien été créée", 200);
+            }
+            return new JsonResponse('les dates choisies ont déja été réservées', 500);
         }
-        return new JsonResponse('les dates choisies ont déja été réservées', 500);
+        return new JsonResponse("vous n'êtes pas membre de ce jardin ", 500);
     }
     /**
-     * @Route("api/absence/{id}/remplacements", name="show_substitutions", methods={"GET"})
+     * @Route("api/garden/{garden}/absence/{id}/remplaçants", name="show_substitutions", methods={"GET"})
      */
 
     //montre tous les remplaçants pour une absence
-    public function showSubstitutions(Vacancy $vacancy)
+    public function showSubstitutions(Garden $garden, Vacancy $vacancy)
     {
 
-        $substitutions = $this->get('serializer')->serialize($vacancy, 'json', ['groups' => ['vacancy']]);
+
+        $gardenUsers = $garden->getUsers()->getValues();
+
+        $user = [];
+        $user[] = $this->get('security.token_storage')->getToken()->getUser();
+
+        $compare = function ($user, $gardenUsers) {
+            return spl_object_hash($user) <=> spl_object_hash($gardenUsers);
+        };
+
+        if (!empty(array_uintersect($user, $gardenUsers, $compare))) {
 
 
-        $response = new Response($substitutions);
+            $substitutions = $this->get('serializer')->serialize($vacancy, 'json', ['groups' => ['vacancy']]);
 
-        return $response;
+
+            $response = new Response($substitutions);
+
+            return $response;
+        }
+        return new JsonResponse("vous n'êtes pas membre de ce jardin ", 500);
     }
 
     /**

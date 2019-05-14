@@ -25,7 +25,6 @@ class SecurityController extends AbstractController
 
         $currentUser =  $this->get('security.token_storage')->getToken()->getUser();
 
-
         $user = $userRepository->find($currentUser->getId());
 
         $data = $this->get('serializer')->serialize($user, 'json', ['groups' => ['login']]);
