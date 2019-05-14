@@ -112,12 +112,10 @@ class AdminController extends AbstractController
 
                     // dd($userToBeAuthorized);
                     $gardenUsers = $garden->getUsers()->getValues();
-                    $usersToBeAuthorized = $userRepository->findby(['statut' => 'à valider']);
 
                     $compare = function ($userToBeAuthorized, $gardenUsers) {
                         return spl_object_hash($userToBeAuthorized) <=> spl_object_hash($gardenUsers);
                     };
-
 
 
                     if (!empty(array_uintersect($userToBeAuthorized, $gardenUsers, $compare))) {
@@ -153,7 +151,8 @@ class AdminController extends AbstractController
                                 return new JsonResponse("le statut et le rôle ont bien été modifiés", 200);
                             }
                         }
-
+                        $garden->removeUser($user);
+                        $manager->persist($garden);
                         $manager->persist($user);
                         $manager->flush();
 
@@ -165,32 +164,28 @@ class AdminController extends AbstractController
                     return new JsonResponse("Vous n' êtes pas autorisé à accéder à cette page", 500);
             }
         }
-
-        /**
-         * @Route("api/admin/create/role", name="admin_role", methods={"POST"})
-         */
-        // public function create_role(ObjectManager $manager, Request $request, ValidatorInterface $validator)
-        // {
-
-        //     $content = $request->getContent();
-
-        //     $role = $this->get('serializer')->deserialize($content, Role::class, 'json');
-
-        //     $errors = $validator->validate($role);
-
-        //     if (count($errors) > 0) {
-        //         dd($errors);
-        //     }
-
-        //     $manager->persist($role);
-        //     $manager->flush();
-
-        //     return new JsonResponse('Nouveau rôle créé', 200);
-        // }
-
-
-
-
-
     }
+
+    /**
+     * @Route("api/admin/create/role", name="admin_role", methods={"POST"})
+     */
+    // public function create_role(ObjectManager $manager, Request $request, ValidatorInterface $validator)
+    // {
+
+    //     $content = $request->getContent();
+
+    //     $role = $this->get('serializer')->deserialize($content, Role::class, 'json');
+
+    //     $errors = $validator->validate($role);
+
+    //     if (count($errors) > 0) {
+    //         dd($errors);
+    //     }
+
+    //     $manager->persist($role);
+    //     $manager->flush();
+
+    //     return new JsonResponse('Nouveau rôle créé', 200);
+    // }
+
 }
