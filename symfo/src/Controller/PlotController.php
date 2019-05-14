@@ -26,15 +26,22 @@ use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
  */
 class PlotController extends AbstractController
 {
-/**
+    /**
+     * @IsGranted("ROLE_MEMBER")
      * @Route("/{gardenid}/plots", name="plots_index", methods={"GET"})
      */
     public function index ($gardenid,PlotRepository $plotRepository, SerializerInterface $serializer, GardenRepository $gardenRepository): Response
     {  
-        // $user = $this->get('security.token_storage')->getToken()->getUser();
-        // $gardenUser = $this->getUser();
+        $gardenUsers = $garden->getUsers()->getValues();
 
-        // if ($user == $gardenUser){
+        $user = [];
+        $user[] = $this->get('security.token_storage')->getToken()->getUser();
+
+        $compare = function ($user, $gardenUsers) {
+            return spl_object_hash($user) <=> spl_object_hash($gardenUsers);
+        };
+
+        if (!empty(array_uintersect($user, $gardenUsers, $compare))) {
         
         $garden=$gardenRepository->find($gardenid);
         $plots = $plotRepository->findByGarden($garden);
@@ -45,36 +52,54 @@ class PlotController extends AbstractController
 
         return JsonResponse::fromJsonString($jsonPlots);
      
-//      return new JsonResponse(["error" => "Vous n'êtes pas autorisé à modifier"], 500);
- }
+        }else {
+            return new JsonResponse(["error" => "Vous n'êtes pas autorisé à entrer dans ce jardin"], 500);
+        }
+    }
 
- /**
+     /**
+      * @IsGranted("ROLE_MEMBER")
      * @Route("/{gardenid}/plots/{id}", name="plot_show", methods={"GET"})
      */
     public function show(Plot $plot, SerializerInterface $serializer, ObjectManager $manager): Response
     {
-        // $plotId=$plot->getGarden();
-        // $gardenid= $garden->getId();
-        // //dd($plotId);
+        $gardenUsers = $garden->getUsers()->getValues();
 
-        // if($plotId == $gardenid){        
+        $user = [];
+        $user[] = $this->get('security.token_storage')->getToken()->getUser();
+
+        $compare = function ($user, $gardenUsers) {
+            return spl_object_hash($user) <=> spl_object_hash($gardenUsers);
+        };
+
+        if (!empty(array_uintersect($user, $gardenUsers, $compare))) {
         $data = $this->get('serializer')->serialize($plot, 'json', ['groups' => ['plot']]);
         $response = new Response($data);
         $response->headers->set('Content-Type', 'application/json');
         return $response;
-    //}
-    // else {
-    //                 return new JsonResponse(["error" => "Vous n'êtes pas autorisé à éditer"], 500);
-    //             }
+    }
+    else {
+                    return new JsonResponse(["error" => "Vous n'êtes pas autorisé à voir cette parcelle"], 500);
+                }
 
     }
 
- /**
+    /**
+     * @IsGranted("ROLE_MEMBER")
      * @Route("/{gardenid}/plots/{id}/edit", name="edit_garden", methods={"PUT"})
      */
     public function edit(Plot $plot, Request $request,  EntityManagerInterface $entityManager,ObjectManager $manager, ValidatorInterface $validator,SerializerInterface $serializer)
     {
-            
+        $gardenUsers = $garden->getUsers()->getValues();
+
+        $user = [];
+        $user[] = $this->get('security.token_storage')->getToken()->getUser();
+
+        $compare = function ($user, $gardenUsers) {
+            return spl_object_hash($user) <=> spl_object_hash($gardenUsers);
+        };
+
+        if (!empty(array_uintersect($user, $gardenUsers, $compare))) {
             $content = $request->getContent();
             $editedPlots = $serializer->deserialize($content, Plot::class, 'json');
             //dd($editedPlots);
@@ -98,31 +123,38 @@ class PlotController extends AbstractController
             
             
             $plot->setUpdatedAt(new \Datetime());
-            
-            
+        
             $entityManager->merge($plot);
             $entityManager->persist($plot);
             $entityManager->flush();
             return new JsonResponse('message: Votre parcelle a été modifiée', 200);
-        
-        //return new JsonResponse('message: Vous n\'êtes pas autorisé à modifier cette parcelle', 403);
+        }
+        return new JsonResponse('message: Vous n\'êtes pas autorisé à modifier cette parcelle', 403);
     }
 
-        /**
-         * @IsGranted("ROLE_ADMIN")
+    /**
+     * @IsGranted("ROLE_ADMIN")
      * @Route("/{gardenid}/plots/{id}/delete", name="plot_delete", methods={"DELETE"})
      */
     public function delete(ObjectManager $objectManager,Plot $plot): Response
     {
-//         // $user = $this->get('security.token_storage')->getToken()->getUser();
-//         // if ($user == $garden->getUser()) {
+        $gardenUsers = $garden->getUsers()->getValues();
+
+        $user = [];
+        $user[] = $this->get('security.token_storage')->getToken()->getUser();
+
+        $compare = function ($user, $gardenUsers) {
+            return spl_object_hash($user) <=> spl_object_hash($gardenUsers);
+        };
+
+        if (!empty(array_uintersect($user, $gardenUsers, $compare))) {
 
             $objectManager->remove($plot);
             $objectManager->flush();
             
             return new JsonResponse('message: Votre parcelle a été supprimée', 200);
-//     // }
-//     //     return new JsonResponse('message: Vous n\'êtes pas autorisé à supprimer cette parcelle', 406);
+    }
+        return new JsonResponse('message: Vous n\'êtes pas autorisé à supprimer cette parcelle', 406);
      }
 
  }
