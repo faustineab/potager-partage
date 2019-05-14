@@ -18,26 +18,27 @@ class Vegetable
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     * @Groups({"vegetable"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=60)
-     * @Groups({"is_planted_on"})
+     * @Groups({"is_planted_on", "vegetable"})
      */
     private $name;
 
     // Type integer = date interval = datetime + integer EN JOURS
     /**
      * @ORM\Column(type="integer")
-     * @Groups({"is_planted_on"})
+     * @Groups({"is_planted_on", "vegetable"})
      */
     private $water_irrigation_interval;
 
     // Type integer = date interval = datetime + integer EN SEMAINES
     /**
      * @ORM\Column(type="integer")
-     * @Groups({"is_planted_on"})
+     * @Groups({"is_planted_on", "vegetable"})
      */
     private $growing_interval;
 
@@ -58,7 +59,7 @@ class Vegetable
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"is_planted_on"})
+     * @Groups({"is_planted_on", "vegetable"})
      */
     private $image;
 
@@ -90,7 +91,7 @@ class Vegetable
         return $this->water_irrigation_interval;
     }
 
-    public function setWaterIrrigationInterval(): self
+    public function setWaterIrrigationInterval(int $water_irrigation_interval): self
     {
         $this->water_irrigation_interval = $water_irrigation_interval;
 
@@ -102,7 +103,7 @@ class Vegetable
         return $this->growing_interval;
     }
 
-    public function setGrowingInterval(): self
+    public function setGrowingInterval(int $growing_interval): self
     {
         $this->growing_interval = $growing_interval;
 

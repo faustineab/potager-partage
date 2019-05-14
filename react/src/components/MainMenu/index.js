@@ -14,7 +14,7 @@ const MainMenu = () => (
       </div>
 
       <div className="menudiv">
-        <Menu.Item className="menuitem" name="Forum">
+        <Menu.Item as={NavLink} to="/forum" className="menuitem" name="Forum">
           <h1>Forum</h1>
         </Menu.Item>
       </div>

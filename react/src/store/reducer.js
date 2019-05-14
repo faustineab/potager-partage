@@ -2,6 +2,8 @@
  * Initial State
  */
 
+//  test
+
 const initialState = {
   password: '',
   firstName: '',
@@ -10,8 +12,9 @@ const initialState = {
   phoneNumber: '',
   address: '',
   loading: false,
-  loginMessage: 'Message personnalisé',
+  loginMessage: '',
   loggedIn: true,
+  token: '',
   user: {},
   gardenList: [],
   gardenId: '',
@@ -41,7 +44,8 @@ const initialState = {
 export const CREATE_GARDEN = 'CREATE_GARDEN';
 export const JOIN_GARDEN = 'JOIN_GARDEN';
 export const LOG_USER = 'LOG_USER';
-const CHANGE_LOGIN_MESSAGE = 'CHANGE_LOGIN_MESSAGE';
+export const FETCH_USER_INFOS = 'FETCH_USER_INFOS';
+export const FETCH_GARDEN_INFOS = 'FETCH_GARDEN_INFOS';
 const USER_LOGGED = 'USER_LOGGED';
 const USER_LOGOUT = 'USER_LOGOUT';
 export const INPUT_CHANGE = 'INPUT_CHANGE';
@@ -72,12 +76,20 @@ const reducer = (state = initialState, action = {}) => {
       return {
         ...state,
         loading: true,
-        loginMessage: 'Logging user',
+        loginMessage: 'Vérification des credentials',
       };
-    case CHANGE_LOGIN_MESSAGE:
+    case FETCH_USER_INFOS:
       return {
         ...state,
-        loginMessage: action.text,
+        token: action.token,
+        loginMessage: 'Récupération des données utilisateur',
+      };
+    case FETCH_GARDEN_INFOS:
+      return {
+        ...state,
+        user: { ...action.user },
+        gardenId: action.gardenId,
+        loginMessage: 'Récupération des données du jardin',
       };
     case USER_LOGGED:
       return {
@@ -85,8 +97,7 @@ const reducer = (state = initialState, action = {}) => {
         loading: false,
         loginMessage: '',
         loggedIn: true,
-        user: { ...action.user },
-        repos: [...action.repos],
+
       };
     case USER_LOGOUT:
       return {
@@ -157,10 +168,15 @@ export const logUser = () => ({
   type: LOG_USER,
 });
 
+export const fetchUserInfos = token => ({
+  type: FETCH_USER_INFOS,
+  token,
+});
 
-export const changeLoginMessage = text => ({
-  type: CHANGE_LOGIN_MESSAGE,
-  text,
+export const fetchGardenInfos = (user, gardenId) => ({
+  type: FETCH_GARDEN_INFOS,
+  user,
+  gardenId,
 });
 
 export const userLogged = (user, repos) => ({

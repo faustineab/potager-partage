@@ -21,11 +21,13 @@ class Garden
      * @Groups("garden_get")
      * @Groups({"garden_register"})
      * @Groups({"user"})
+     * @Groups({"vacancy"})
+     * @Groups({"login"})
      */
     private $id;
     /**
      * @ORM\Column(type="string", length=60, unique=true)
-     * @Groups({"garden_register","garden_get","garden_edit", "plot","user"})
+     * @Groups({"garden_register","garden_get","garden_edit", "plot","user", "vacancy", "login"})
      */
     private $name;
     /**
@@ -80,7 +82,7 @@ class Garden
     private $users;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Plot", mappedBy="garden")
+     * @ORM\OneToMany(targetEntity="App\Entity\Plot", mappedBy="garden", orphanRemoval=true)
      */
     private $plots;
 
