@@ -17,6 +17,54 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class AdminController extends AbstractController
 {
+
+    /**
+     * @Route("api/garden/{garden}/admin/status/show", name="admin_show_all", methods={"GET"})
+     */
+    public function showAll(Garden $garden, UserRepository $userRepository, RoleRepository $roleRepository)
+    {
+        $gardenUsers = $garden->getUsers()->getValues();
+
+        $user = [];
+        $user[] = $this->get('security.token_storage')->getToken()->getUser();
+
+        $compare = function ($user, $gardenUsers) {
+            return spl_object_hash($user) <=> spl_object_hash($gardenUsers);
+        };
+
+        if (!empty(array_uintersect($user, $gardenUsers, $compare))) {
+
+            $currentUser = $this->get('security.token_storage')->getToken()->getUser();
+            $currentUserRoles = $currentUser->getRoles();
+
+            $role = $roleRepository->findBy(['label' => 'administrateur']);
+
+            // dump($currentUserRoles);
+
+            foreach ($role as $roleName) {
+                $userRole = $roleName->getName();
+                // dump($user);
+                if (array_search($userRole, $currentUserRoles) !== false) {
+
+                    $data = $this->get('serializer')->serialize($gardenUsers, 'json', [
+                        'groups' => ['admin']
+                    ]);
+
+                    $response = new Response($data);
+
+                    $response->headers->set('Content-Type', 'application/json');
+
+                    return $response;
+                } else {
+                    return new JsonResponse("Aucun user en attente de validation", 200);
+                }
+            }
+            return new JsonResponse("Vous n'êtes pas autorisé à accéder à ce contenu", 500);
+        }
+        return new JsonResponse("Vous n'êtes pas membre de ce jardin", 500);
+    }
+
+
     /**
      * @Route("api/garden/{garden}/admin/status/show/validation", name="admin_status_a_valider", methods={"GET"})
      */
@@ -79,7 +127,7 @@ class AdminController extends AbstractController
 
 
     /**
-     * @Route("api/garden/{garden}/admin/status/user/{id}/validation", name="admin_status_validation", methods={"POST"})
+     * @Route("api/garden/{garden}/admin/status/user/{id}/edit", name="admin_status_validation", methods={"POST"})
      */
     public function validation(Garden $garden, UserRepository $userRepository, RoleRepository $roleRepository, Request $request, ValidatorInterface $validator, ObjectManager $manager, User $user)
     {
@@ -187,5 +235,6 @@ class AdminController extends AbstractController
 
     //     return new JsonResponse('Nouveau rôle créé', 200);
     // }
+
 
 }
