@@ -82,7 +82,7 @@ class VacancyController extends AbstractController
     /**
      * @Route("api/garden/{garden}/absences", name="show_all_gardenVacancies", methods={"GET"})
      */
-    public function showAllGardenVacancies(Garden $garden, User $user, VacancyRepository $vacancyRepository, Request $request, ObjectManager $manager)
+    public function showAllGardenVacancies(Garden $garden, VacancyRepository $vacancyRepository, Request $request, ObjectManager $manager)
     {
         $gardenUsers = $garden->getUsers()->getValues();
 
@@ -95,7 +95,7 @@ class VacancyController extends AbstractController
 
         if (!empty(array_uintersect($user, $gardenUsers, $compare))) {
 
-            $vacancies = $user->getVacancies();
+            $vacancies = $garden->getVacancies();
 
             $data = $this->get('serializer')->serialize($vacancies, 'json', ['groups' => ['vacancy']]);
             $response = new Response($data);
@@ -128,7 +128,7 @@ class VacancyController extends AbstractController
             $compare
         );
 
-        if (!empty(array_uintersect($user, $gardenUsers, $compare))) {
+        if ((!empty(array_uintersect($user, $gardenUsers, $compare))) && $vacancy->getGarden($garden) == $garden) {
 
 
             $data = $this->get('serializer')->serialize($vacancy, 'json', ['groups' => ['vacancy']]);
