@@ -32,7 +32,9 @@ class SubstitutionController extends AbstractController
             return spl_object_hash($user) <=> spl_object_hash($gardenUsers);
         };
 
-        if (!empty(array_uintersect($user, $gardenUsers, $compare))) {
+        if ((!empty(array_uintersect($user, $gardenUsers, $compare))) && $vacancy->getGarden($garden) == $garden) {
+
+            $currentUser = $this->get('security.token_storage')->getToken()->getUser();
 
             $content = $request->getContent();
             $substitution = $this->get('serializer')->deserialize($content, VacancySubstitute::class, 'json');
@@ -56,7 +58,7 @@ class SubstitutionController extends AbstractController
             }
             if ($substitution->isBookableDate()) {
 
-                $substitution->setUser($user);
+                $substitution->setUser($currentUser);
 
                 $manager->persist($substitution);
                 $manager->flush();
@@ -64,7 +66,7 @@ class SubstitutionController extends AbstractController
             }
             return new JsonResponse('les dates choisies ont déja été réservées', 500);
         }
-        return new JsonResponse("vous n'êtes pas membre de ce jardin ", 500);
+        return new JsonResponse("vous n'êtes pas membre de ce jardin ou aucun remplacement ne correspond à votre demande", 500);
     }
     /**
      * @Route("api/garden/{garden}/absence/{id}/remplaçants", name="show_substitutions", methods={"GET"})
@@ -84,7 +86,7 @@ class SubstitutionController extends AbstractController
             return spl_object_hash($user) <=> spl_object_hash($gardenUsers);
         };
 
-        if (!empty(array_uintersect($user, $gardenUsers, $compare))) {
+        if ((!empty(array_uintersect($user, $gardenUsers, $compare))) && $vacancy->getGarden($garden) == $garden) {
 
 
             $substitutions = $this->get('serializer')->serialize($vacancy, 'json', ['groups' => ['vacancy']]);
