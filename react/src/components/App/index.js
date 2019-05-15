@@ -17,7 +17,7 @@ import Profil from 'src/containers/Profil';
 import ProfilModify from 'src/containers/ProfilModify';
 import Forum from 'src/components/Forum';
 import PostDetail from 'src/components/PostDetail';
-import MainMenu from 'src/components/MainMenu';
+import MainMenu from 'src/containers/MainMenu';
 import Footer from 'src/containers/Footer';
 import Potager from 'src/components/Potager';
 
@@ -46,6 +46,10 @@ const App = ({ loggedIn, loginStatus }) => (
       <Route path="/subscribe" component={Subscribe} />
       <Route path="/create-garden" component={CreateGarden} />
       <Route path="/join-garden" component={JoinGarden} />
+      <Route
+        path="/logout"
+        render={() => (<Redirect to="/" />)}
+      />
       <Route
         path="/profile"
         render={() => (loggedIn ? (<Profil />) : (<Redirect to="/" />))}
