@@ -107,9 +107,15 @@ class Garden
     private $forumTags;
 
     /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $charte;
+  
+    /**
      * @ORM\OneToMany(targetEntity="App\Entity\MarketOffer", mappedBy="garden")
      */
     private $marketOffers;
+
 
 
 
@@ -390,6 +396,16 @@ class Garden
 
         return $this;
     }
+
+
+    public function getCharte(): ?string
+    {
+        return $this->charte;
+    }
+
+    public function setCharte(?string $charte): self
+    {
+        $this->charte = $charte;
 
     /**
      * @return Collection|MarketOffer[]

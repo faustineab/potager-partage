@@ -44,4 +44,5 @@ class SecurityController extends AbstractController
     {
         return JsonResponse::fromJsonString('deconnecté', 200);
     }
+
 }

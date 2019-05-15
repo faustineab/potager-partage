@@ -25,8 +25,8 @@ class ForumQuestionController extends AbstractController
     public function index(SerializerInterface $serializer, ForumQuestionRepository $forumQuestionRepository): Response
     {
         $questions = $forumQuestionRepository->findAll();
-        $jsonQuestions = $serializer->serialize($questions, 'json',['groups' => 'forum_questions']);
- 
+        $jsonQuestions = $serializer->serialize($questions, 'json', ['groups' => 'forum_questions']);
+
         return JsonResponse::fromJsonString($jsonQuestions);
     }
 
@@ -36,26 +36,25 @@ class ForumQuestionController extends AbstractController
     public function new(Request $request, SerializerInterface $serializer, EntityManagerInterface $entityManager, ValidatorInterface $validator)
     {
         $content = $request->getContent();
-        
+
         $question = $serializer->deserialize($content, ForumQuestion::class, 'json');
-        
+
         $errors = $validator->validate($question);
-        if (count($errors) > 0)
-            {
-                foreach ($errors as $error) 
-                {
-                    return JsonResponse::fromJsonString(
-                        'message: Votre question comporte des erreurs : '.$error.'.', 
-                        406);
-                }
+        if (count($errors) > 0) {
+            foreach ($errors as $error) {
+                return JsonResponse::fromJsonString(
+                    'message: Votre question comporte des erreurs : ' . $error . '.',
+                    406
+                );
             }
-        
+        }
+
         $user = $this->get('security.token_storage')->getToken()->getUser();
         $question->setUser($user);
-        
+
         $entityManager->persist($question);
         $entityManager->flush();
-        
+
         return JsonResponse::fromJsonString('message: Votre question a été posée', 200);
     }
 
@@ -64,10 +63,12 @@ class ForumQuestionController extends AbstractController
      */
     public function show(ForumQuestion $question, SerializerInterface $serializer): Response
     {
-        $jsonQuestion = $serializer->serialize($question, 'json',
+        $jsonQuestion = $serializer->serialize(
+            $question,
+            'json',
             ['groups' => 'forum_questions']
         );
- 
+
         return JsonResponse::fromJsonString($jsonQuestion);
     }
 
@@ -77,13 +78,12 @@ class ForumQuestionController extends AbstractController
     public function edit(Request $request, ForumQuestion $forumQuestion, EntityManagerInterface $entityManager, ValidatorInterface $validator, SerializerInterface $serializer): Response
     {
         $user = $this->get('security.token_storage')->getToken()->getUser();
-        
+
         if ($user->getRoles()[0] == 'ROLE_ADMIN') {
             $admin = $user;
-        }       
+        }
 
-        if ($user == $forumQuestion->getUser() || $admin)
-        {
+        if ($user == $forumQuestion->getUser() || $admin) {
             $content = $request->getContent();
 
             $editedQuestion = $serializer->deserialize($content, ForumQuestion::class, 'json');
@@ -91,32 +91,28 @@ class ForumQuestionController extends AbstractController
 
             $errors = $validator->validate($editedQuestion);
 
-            if (count($errors) > 0)
-            {
-                foreach ($errors as $error) 
-                {
+            if (count($errors) > 0) {
+                foreach ($errors as $error) {
                     return JsonResponse::fromJsonString(
-                        'message: Votre modification comporte des erreurs : '.$error.'.', 
-                        304);
+                        'message: Votre modification comporte des erreurs : ' . $error . '.',
+                        304
+                    );
                 }
             }
 
             $title = $editedQuestion->getTitle();
-            if ($title != null)
-            {
+            if ($title != null) {
                 $forumQuestion->setTitle($title);
             }
-            
+
             $text = $editedQuestion->getText();
-            if ($text != null)
-            {
+            if ($text != null) {
                 $forumQuestion->setText($text);
             }
 
             $forumQuestion->setUpdatedAt(new \Datetime());
 
-            foreach ($editedQuestion->getTags() as $editedTag) 
-            {
+            foreach ($editedQuestion->getTags() as $editedTag) {
                 if ($editedTag = $forumQuestion->getTags()) {
                     $editedQuestion->addTag($editedTag);
                 }
@@ -124,7 +120,7 @@ class ForumQuestionController extends AbstractController
                     $editedQuestion->removeTag($editedTag);
                 }
             }
-            
+
             $entityManager->merge($forumQuestion);
             $entityManager->persist($forumQuestion);
             $entityManager->flush();
@@ -149,7 +145,7 @@ class ForumQuestionController extends AbstractController
         if ($user = $forumQuestion->getUser() || $admin) {
             $objectManager->remove($forumQuestion);
             $objectManager->flush();
-            
+
             return JsonResponse::fromJsonString('message: Votre question a été supprimée', 200);
         }
 
