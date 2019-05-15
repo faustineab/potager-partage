@@ -360,10 +360,12 @@ class AdminController extends AbstractController
     }
 
     /**
-     * @Route("api/garden/{garden}/admin/charte/edit", name="admin_edit_charte", methods={"PUT"})
+     * @Route("api/garden/{garden}/admin/charte/delete", name="admin_delete_charte", methods={"POST"})
      */
-    public function editCharte(Garden $garden, UserRepository $userRepository, RoleRepository $roleRepository, Request $request, ValidatorInterface $validator, ObjectManager $manager)
+    public function deleteCharte(Garden $garden, UserRepository $userRepository, RoleRepository $roleRepository, Request $request, ValidatorInterface $validator, ObjectManager $manager)
     {
+
+
         $gardenUsers = $garden->getUsers()->getValues();
         $userToken = [];
         $userToken[] = $this->get('security.token_storage')->getToken()->getUser();
@@ -386,27 +388,21 @@ class AdminController extends AbstractController
                 // dump($user);
                 if (array_search($userRole, $currentUserRoles) !== false) {
 
-                    $finder = new Finder();
-                    $finder->in(__DIR__ . "/../../public/uploads");
+                    $fs = new Filesystem();
+                    $fs->remove(__DIR__ . "/../../public/uploads/" . $garden->getCharte());
+                    $garden->setCharte(null);
 
-                    $finderFile = $finder->files()->name($garden->getCharte());
+                    $manager->persist($garden);
+                    $manager->flush();
 
-                    if ($garden->getCharte() !== null) {
-                        // dd($finderFile);
-                        foreach ($finderFile as $file) {
-                            // dump($finder);
-                            // dd($file);
-                            $absoluteFilePath = $file->getRealPath();
-                            // dd($absoluteFilePath);
 
-                            $response = new BinaryFileResponse($absoluteFilePath);
-                            return $response;
-                        }
-                    }
-                    return new JsonResponse("vous n'avez pas enregistrer de charte", 500);
+
+
+                    return new JsonResponse("La charte a bien été supprimée", 200);
                 }
+
+                return new JsonResponse("Vous n' êtes pas autorisé à accéder à cette page", 500);
             }
-            return new JsonResponse("Vous n' êtes pas autorisé à accéder à cette page", 500);
         }
     }
 }
