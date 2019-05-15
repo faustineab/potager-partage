@@ -8,6 +8,7 @@ use App\Entity\Garden;
 use App\Repository\RoleRepository;
 use App\Repository\UserRepository;
 use Symfony\Component\Finder\Finder;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\HttpFoundation\Response;
@@ -280,23 +281,31 @@ class AdminController extends AbstractController
 
                         $filename = $gardenId . "." . $fileExtension;
                         $path = $this->getParameter('charte_directory');
-                        // dd($path);
+
+
+
+                        if ($filename == $garden->getCharte()) {
+                            $fs = new Filesystem();
+                            $fs->remove(__DIR__ . "/../../public/uploads/" . $filename);
+                        }
 
                         $file->move(
                             $path,
                             $filename
                         );
 
-                        // dd($path);
                         $garden->setCharte($filename);
                         $manager->persist($garden);
                         $manager->flush();
 
                         return new JsonResponse("La charte a bien été ajouté à votre jardin", 200);
                     }
+
+
+                    return new JsonResponse("Votre charte a bien été éditée", 500);
                 }
-                return new JsonResponse("Vous n' êtes pas autorisé à accéder à cette page", 500);
             }
+            return new JsonResponse("Vous n' êtes pas autorisé à accéder à cette page", 500);
         }
     }
     /**
@@ -304,8 +313,57 @@ class AdminController extends AbstractController
      */
     public function showCharte(Garden $garden, UserRepository $userRepository, RoleRepository $roleRepository, Request $request, ValidatorInterface $validator, ObjectManager $manager)
     {
+        $gardenUsers = $garden->getUsers()->getValues();
+        $userToken = [];
+        $userToken[] = $this->get('security.token_storage')->getToken()->getUser();
 
+        $compare = function ($userToken, $gardenUsers) {
+            return spl_object_hash($userToken) <=> spl_object_hash($gardenUsers);
+        };
 
+        if (!empty(array_uintersect($userToken, $gardenUsers, $compare))) {
+
+            $currentUser = $this->get('security.token_storage')->getToken()->getUser();
+            $currentUserRoles = $currentUser->getRoles();
+
+            $role = $roleRepository->findBy(['label' => 'administrateur']);
+
+            // dump($currentUserRoles);
+
+            foreach ($role as $roleName) {
+                $userRole = $roleName->getName();
+                // dump($user);
+                if (array_search($userRole, $currentUserRoles) !== false) {
+
+                    $finder = new Finder();
+                    $finder->in(__DIR__ . "/../../public/uploads");
+
+                    $finderFile = $finder->files()->name($garden->getCharte());
+
+                    if ($garden->getCharte() !== null) {
+                        // dd($finderFile);
+                        foreach ($finderFile as $file) {
+                            // dump($finder);
+                            // dd($file);
+                            $absoluteFilePath = $file->getRealPath();
+                            // dd($absoluteFilePath);
+
+                            $response = new BinaryFileResponse($absoluteFilePath);
+                            return $response;
+                        }
+                    }
+                    return new JsonResponse("vous n'avez pas enregistrer de charte", 500);
+                }
+            }
+            return new JsonResponse("Vous n' êtes pas autorisé à accéder à cette page", 500);
+        }
+    }
+
+    /**
+     * @Route("api/garden/{garden}/admin/charte/edit", name="admin_edit_charte", methods={"PUT"})
+     */
+    public function editCharte(Garden $garden, UserRepository $userRepository, RoleRepository $roleRepository, Request $request, ValidatorInterface $validator, ObjectManager $manager)
+    {
         $gardenUsers = $garden->getUsers()->getValues();
         $userToken = [];
         $userToken[] = $this->get('security.token_storage')->getToken()->getUser();
