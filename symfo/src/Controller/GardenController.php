@@ -19,8 +19,7 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
-
-
+use App\Repository\PlotRepository;
 
 /**
  * @Route("/api/garden")
@@ -74,89 +73,88 @@ class GardenController extends AbstractController
 
     /**
      * @IsGranted("ROLE_ADMIN")
-     * @Route("/{id}/edit", name="edit_garden", methods={"GET"})
+     * @Route("/{id}/edit", name="edit_garden", methods={"PUT"})
      */
-    public function edit(Garden $garden, Request $request, ObjectManager $manager, ValidatorInterface $validator)
+    public function edit(Garden $garden, Request $request, ObjectManager $manager, ValidatorInterface $validator, PlotRepository $plotRepository, SerializerInterface $serializer)
     {
-        $gardenUsers = $garden->getUsers()->getValues();
+        $content = $request->getContent();
+        $editedGarden = $serializer->deserialize($content, Garden::class, 'json');
 
-        $user = [];
-        $user[] = $this->get('security.token_storage')->getToken()->getUser();
-
-        $compare = function ($user, $gardenUsers) {
-            return spl_object_hash($user) <=> spl_object_hash($gardenUsers);
-        };
-
-        if (!empty(array_uintersect($user, $gardenUsers, $compare))) {
-            $data = $this->get('serializer')->serialize($garden, 'json', ['groups' => 'garden_edit']);
-            $response = new Response($data);
-            $response->headers->set('Content-Type', 'application/json');
-            return $response;
-        }
-            return new JsonResponse(["error" => "Vous n'êtes pas autorisé à modifier"], 500);
-        
-    }
-    /**
-     * @IsGranted("ROLE_ADMIN")
-     * @Route("/{id}/edit", name="edit_garden_post", methods={"POST"})
-     */
-    public function edit_post(Garden $garden, Request $request, ObjectManager $manager, ValidatorInterface $validator, GardenRepository $gardenRepository)
-    {
-        $gardenUsers = $garden->getUsers()->getValues();
-
-        $user = [];
-        $user[] = $this->get('security.token_storage')->getToken()->getUser();
-
-        $compare = function ($user, $gardenUsers) {
-            return spl_object_hash($user) <=> spl_object_hash($gardenUsers);
-        };
-
-        if (!empty(array_uintersect($user, $gardenUsers, $compare))) {
-
-            $content = $request->getContent();
-            $currentGarden = $this->get('serializer')->deserialize($content, Garden::class, 'json');
-         
-            $errors = $validator->validate($garden);
-            if (count($errors) > 0) {
-                dd($errors);
+        $errors = $validator->validate($editedGarden);
+        if (count($errors) > 0) {
+            foreach ($errors as $error) {
+                return JsonResponse::fromJsonString('Votre entrée comporte des erreurs :'.$error.'.', 406);
             }
-             $name = $currentGarden->getName();
-             $address = $currentGarden->getAddress();
-            $zipcode = $currentGarden->getZipcode();
-            $addressSpecificities = $currentGarden->getAddressSpecificities();
-            $gardenMeters = $currentGarden->getMeters();
-            $gardenPlots_Row = $currentGarden->getNumberPlotsRow();
-            $gardenPlots_Column = $currentGarden->getNumberPlotsColumn();
-            $garden->setName($name)
-                ->setAddress($address)
-                ->setZipcode($zipcode)
-                ->setAddressSpecificities($addressSpecificities)
-                ->setMeters($gardenMeters)
-                ->setNumberPlotsRow($gardenPlots_Row)
-                ->setNumberPlotsColumn($gardenPlots_Column);
-            $plots =  $gardenPlots_Row * $gardenPlots_Column;
-       
-
-                for ($p = 0; $p < $plots; $p++) {
-                    $plot = new Plot();
-                    $manager->persist($plot);
-        
-                    $plot->setStatus('inactif');
-                    $garden->addPlot($plot);
-                }
-        
-            $manager->persist($plot);
-            //$event->setUser($user);
-            $manager->persist($garden);
-            $manager->flush();
-            return $this->redirectToRoute('garden_show', [
-                'id' => $garden->getId(),
-            ], Response::HTTP_CREATED);
-        } else {
-            return new JsonResponse(["error" => "Vous n'êtes pas autorisé à éditer"], 500);
         }
-         
+
+        $editedName = $editedGarden->getName();
+        if ($editedName != null) {
+            $garden->setName($editedName);
+        }
+        $editedAddress = $editedGarden->getAddress();
+        if ($editedAddress != null) {
+            $garden->setAddress($editedAddress);
+        }
+        $editedZipcode = $editedGarden->getZipcode();
+        if ($editedZipcode != null) {
+            $garden->setZipcode($editedZipcode);
+        }
+        $editedCity = $editedGarden->getCity();
+        if ($editedCity != null) {
+            $garden->setCity($editedCity);
+        }
+        $editedAddressSpecifities = $editedGarden->getAddressSpecificities();
+        if ($editedAddressSpecifities != null) {
+            $garden->setAddressSpecificities($editedAddressSpecifities);
+        }
+        $editedMeters = $editedGarden->getMeters();
+        if ($editedMeters != null) {
+            $garden->setMeters($editedMeters);
+        }
+        $editedNumberPlotsColumn = $editedGarden->getNumberPlotsColumn();
+        if ($editedNumberPlotsColumn != null) {
+            $garden->setNumberPlotsColumn($editedNumberPlotsColumn);
+        }
+        $editedNumberPlotsRow = $editedGarden->getNumberPlotsRow();
+        if ($editedNumberPlotsRow != null) {
+            $garden->setNumberPlotsRow($editedNumberPlotsRow);
+        }
+        $garden->setUpdatedAt(new \Datetime());
+        
+        $manager->merge($garden);
+        $manager->persist($garden);
+        $manager->flush();
+        
+        $oldPlotCount = count($garden->getPlots());
+        $newPlotCount = $garden->getNumberPlotsColumn() * $garden->getNumberPlotsRow();
+
+        if ($oldPlotCount > $newPlotCount) {
+            $plotCountToRemove = $oldPlotCount - $newPlotCount;
+            for ($i=0; $i < $plotCountToRemove; $i++) { 
+                $plotToRemove = $plotRepository->findOneBy([
+                    'garden' => $garden,
+                    'status' => 'inactif'
+                ]);
+                $garden->removePlot($plotToRemove);
+                $manager->merge($garden);
+                $manager->persist($garden);
+                $manager->flush();
+            }
+        } elseif ($oldPlotCount < $newPlotCount) {
+            $plotCountToCreate = $newPlotCount - $oldPlotCount;
+            for ($i=0; $i < $plotCountToCreate; $i++) { 
+                $newPlot = new Plot();
+                $newPlot->setStatus('inactif')
+                        ->setGarden($garden);
+                $manager->persist($newPlot);
+                $manager->flush();
+            }
+        }
+        
+        return JsonResponse::fromJsonString('ok', 200);
+
     }
+
 
         /**
          * @IsGranted("ROLE_ADMIN")
