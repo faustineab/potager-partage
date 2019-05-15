@@ -3,7 +3,9 @@
 namespace App\Controller;
 
 use App\Entity\Garden;
+use App\Entity\Vegetable;
 use App\Entity\MarketOffer;
+use App\Repository\VegetableRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\MarketOfferRepository;
 use Symfony\Component\HttpFoundation\Request;
@@ -30,15 +32,29 @@ class MarketOfferController extends AbstractController
      * @Route("/{gardenid}/marketoffer", name="market_offer_index", methods={"GET"})
      * @ParamConverter("garden", options={"id" = "gardenid"})
      */
-    public function index(MarketOfferRepository $marketOfferRepository, SerializerInterface $serializer): Response
+    public function index(MarketOfferRepository $marketOfferRepository, Garden $garden, SerializerInterface $serializer): Response
 
     {
+        $gardenUsers = $garden->getUsers()->getValues();
+ 
+        $user = [];
+        $user[] = $this->get('security.token_storage')->getToken()->getUser();
+
+        $compare = function ($user, $gardenUsers) {
+            return spl_object_hash($user) <=> spl_object_hash($gardenUsers);
+        };
+
+        if (!empty(array_uintersect($user, $gardenUsers, $compare))) {
+
         $marketOffers = $marketOfferRepository->findAll();
         $jsonMarketOffers = $serializer->serialize($marketOffers, 'json',
             ['groups' => 'marketoffer']
         );
 
         return JsonResponse::fromJsonString($jsonMarketOffers);
+    }else {
+                     return new JsonResponse(["error" => "Vous n'êtes pas autorisé à accéder à cette page."], 500);
+                 }
     }
      /**
      * @IsGranted("ROLE_MEMBER")
@@ -74,9 +90,9 @@ class MarketOfferController extends AbstractController
      * @Route("/{gardenid}/marketoffer/new", name="market_offer_new", methods={"POST"})
      * @ParamConverter("garden", options={"id" = "gardenid"})
      */
-     public function new(Request $request, SerializerInterface $serializer, EntityManagerInterface $entityManager, ValidatorInterface $validator)
+     public function new($gardenid, Request $request, Garden $garden, VegetableRepository $vegetableRepository, MarketOffer $marketOffer , SerializerInterface $serializer, EntityManagerInterface $entityManager, ValidatorInterface $validator)
      {
-         $content = $request->getContent();
+        $content = $request->getContent();
          
          $marketOffer = $serializer->deserialize($content, MarketOffer::class, 'json');
          
@@ -90,14 +106,72 @@ class MarketOfferController extends AbstractController
                          406);
                  }
              }
-         
+             $currentUser= $this->get('security.token_storage')->getToken()->getUser();
+             $currentGarden = $garden;
+             $currentVegetable = $vegetableRepository->findOneByName(['name'=> $content['vegetable']
+             ]);
+             //dd($currentVegetable);
+    
+           
+             $marketOffer->setUser($currentUser);
+             $marketOffer->setGarden($currentGarden);
+             $marketOffer->setVegetable($currentVegetable);
+             $marketOffer->setCreatedAt(new \Datetime());
+             
          $entityManager->persist($marketOffer);
          $entityManager->flush();
          
-         return $this->redirectToRoute('market_offer_show', [
-             'id' => $marketOffer->getId(),
-         ], Response::HTTP_CREATED);
+         return new JsonResponse('message: Votre offre a été créé', 200);
      }
+
+         /**
+     * @IsGranted("ROLE_MEMBER")
+     * @Route("/{gardenid}/marketoffer/{id}/edit", name="market_offer_edit", methods={"PUT"})
+     * @ParamConverter("garden", options={"id" = "gardenid"})
+     * @ParamConverter("market_offer", options={"id" = "id"})
+     */
+    public function edit(MarketOffer $marketOffer, Garden $garden,Request $request,  EntityManagerInterface $entityManager,ObjectManager $manager, ValidatorInterface $validator,SerializerInterface $serializer)
+    {
+        $marketOfferUser = $marketOffer->getUser();
+        $Currentuser = $this->get('security.token_storage')->getToken()->getUser();
+
+        if ($Currentuser == $gardenUsers) {
+
+            $content = $request->getContent();
+            $editedMarketOffer = $serializer->deserialize($content, MarketOffer::class, 'json');
+            //dd($editedMarketOffer);
+            $errors = $validator->validate($editedMarketOffer);
+            if (count($errors) > 0)
+            {
+                foreach ($errors as $error) 
+                {
+                    return new JsonResponse(
+                        'message: Votre modification comporte des erreurs : '.$error.'.', 
+                        304);
+                }
+            }
+            $currentUser= $this->get('security.token_storage')->getToken()->getUser();
+            $currentGarden = $garden;
+            //dd($currentUser);
+            $currentVegetable = $editedMarketOffer->getVegetable();
+            
+            $marketOffer->setUser($currentUser);
+            $marketOffer->setGarden($currentGarden);
+            $marketOffer->setUpdatedAt(new \Datetime());
+
+            if ($user != NULL)
+            {
+                $marketOffer->setUser($currentUser);
+            }
+          
+        
+            $entityManager->merge($marketOffer);
+            $entityManager->persist($marketOffer);
+            $entityManager->flush();
+            return new JsonResponse('message: Votre offre a été modifiée', 200);
+        }
+        return new JsonResponse('message: Vous n\'êtes pas autorisé à modifier cette page', 403);
+    }
 
 
 }

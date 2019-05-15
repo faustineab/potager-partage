@@ -27,7 +27,7 @@ class Garden
     private $id;
     /**
      * @ORM\Column(type="string", length=60, unique=true)
-     * @Groups({"garden_register","garden_get","garden_edit", "plot","user", "vacancy", "login"})
+     * @Groups({"garden_register","garden_get","garden_edit", "plot","user", "vacancy", "login", "marketoffer"})
      */
     private $name;
     /**

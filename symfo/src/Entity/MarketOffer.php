@@ -56,13 +56,13 @@ class MarketOffer
     private $updated_at;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="marketOffers")
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="marketOffers",cascade={"persist"})
      * @Groups({"marketoffer"})
      */
     private $user;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Vegetable", inversedBy="marketOffers")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Vegetable", inversedBy="marketOffers",cascade={"persist"})
      * @Groups({"marketoffer"})
      */
     private $vegetable;
@@ -73,10 +73,16 @@ class MarketOffer
     private $marketOrders;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Garden", inversedBy="marketOffers")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Garden", inversedBy="marketOffers",cascade={"persist"})
      * @ORM\JoinColumn(nullable=false)
+     * @Groups({"marketoffer"})
      */
     private $garden;
+
+    public function __toString()
+       {
+           return $this->garden;
+       }
 
     public function __construct()
     {

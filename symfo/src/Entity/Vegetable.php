@@ -23,7 +23,7 @@ class Vegetable
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=60)
+     * @ORM\Column(type="string", length=60, unique=true)
      * @Groups({"is_planted_on", "vegetable", "marketoffer"})
      */
     private $name;
