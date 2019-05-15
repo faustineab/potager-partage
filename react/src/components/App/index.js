@@ -1,8 +1,6 @@
 import React from 'react';
 
-import {
-  Switch, Route, Redirect,
-} from 'react-router-dom';
+import { Switch, Route, Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 
@@ -38,24 +36,40 @@ const App = ({ loggedIn, loginStatus }) => (
         path="/"
         render={() => (
           (loginStatus === 'loggedIn')
-          ? <Redirect to="/potager" />
-          : (loginStatus === 'chooseGarden')
-          ? <Redirect to="/choose-garden" />
-          : <Login />
+            ? <Redirect to="/potager" />
+            : (loginStatus === 'chooseGarden')
+              ? <Redirect to="/choose-garden" />
+              : <Login />
         )}
       />
       <Route path="/choose-garden" component={ChooseGarden} />
       <Route path="/subscribe" component={Subscribe} />
       <Route path="/create-garden" component={CreateGarden} />
       <Route path="/join-garden" component={JoinGarden} />
-      <Route path="/profile" component={Profil} />
-      <Route path="/modify-profile" component={ProfilModify} />
-      <Route path="/potager" component={Potager} />
-      <Route exact path="/forum" component={Forum} />
-      <Route path="/forum/post" component={PostDetail} />
       <Route
         path="/logout"
         render={() => (<Redirect to="/" />)}
+      />
+      <Route
+        path="/profile"
+        render={() => (loggedIn ? (<Profil />) : (<Redirect to="/" />))}
+      />
+      <Route
+        path="/modify-profile"
+        render={() => (loggedIn ? (<ProfilModify />) : (<Redirect to="/" />))}
+      />
+      <Route
+        path="/potager"
+        render={() => (loggedIn ? (<Potager />) : (<Redirect to="/" />))}
+      />
+      <Route
+        path="/forum"
+        exact
+        render={() => (loggedIn ? (<Forum />) : (<Redirect to="/" />))}
+      />
+      <Route
+        path="/forum/post"
+        render={() => (loggedIn ? (<PostDetail />) : (<Redirect to="/" />))}
       />
     </Switch>
     <Footer />
