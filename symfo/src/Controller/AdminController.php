@@ -319,41 +319,28 @@ class AdminController extends AbstractController
 
         if (!empty(array_uintersect($userToken, $gardenUsers, $compare))) {
 
-            $currentUser = $this->get('security.token_storage')->getToken()->getUser();
-            $currentUserRoles = $currentUser->getRoles();
+            $finder = new Finder();
+            $finder->in(__DIR__ . "/../../public/uploads");
 
-            $role = $roleRepository->findBy(['label' => 'administrateur']);
+            $finderFile = $finder->files()->name($garden->getCharte());
 
-            // dump($currentUserRoles);
+            if ($garden->getCharte() !== null) {
+                // dd($finderFile);
+                foreach ($finderFile as $file) {
+                    // dump($finder);
+                    // dd($file);
+                    $absoluteFilePath = $file->getRealPath();
+                    // dd($absoluteFilePath);
 
-            foreach ($role as $roleName) {
-                $userRole = $roleName->getName();
-                // dump($user);
-                if (array_search($userRole, $currentUserRoles) !== false) {
-
-                    $finder = new Finder();
-                    $finder->in(__DIR__ . "/../../public/uploads");
-
-                    $finderFile = $finder->files()->name($garden->getCharte());
-
-                    if ($garden->getCharte() !== null) {
-                        // dd($finderFile);
-                        foreach ($finderFile as $file) {
-                            // dump($finder);
-                            // dd($file);
-                            $absoluteFilePath = $file->getRealPath();
-                            // dd($absoluteFilePath);
-
-                            $response = new BinaryFileResponse($absoluteFilePath);
-                            return $response;
-                        }
-                    }
-                    return new JsonResponse("vous n'avez pas enregistrer de charte", 500);
+                    $response = new BinaryFileResponse($absoluteFilePath);
+                    return $response;
                 }
             }
-            return new JsonResponse("Vous n' êtes pas autorisé à accéder à cette page", 500);
+            return new JsonResponse("vous n'avez pas enregistrer de charte", 500);
         }
+        return new JsonResponse("Vous n' êtes pas autorisé à accéder à cette page", 500);
     }
+
 
     /**
      * @Route("api/garden/{garden}/admin/charte/delete", name="admin_delete_charte", methods={"POST"})
