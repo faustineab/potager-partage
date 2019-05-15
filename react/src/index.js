@@ -26,7 +26,6 @@ const rootComponent = (
       <App />
     </Router>
   </Provider>
-
 );
 
 render(rootComponent, document.getElementById('root'));

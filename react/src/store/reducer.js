@@ -13,7 +13,8 @@ const initialState = {
   address: '',
   loading: false,
   loginMessage: '',
-  loggedIn: true,
+  loggedIn: false,
+  loginStatus: 'logout',
   token: '',
   user: {},
   gardenList: [],
@@ -45,6 +46,8 @@ export const CREATE_GARDEN = 'CREATE_GARDEN';
 export const JOIN_GARDEN = 'JOIN_GARDEN';
 export const LOG_USER = 'LOG_USER';
 export const FETCH_USER_INFOS = 'FETCH_USER_INFOS';
+export const SAVE_USER_INFOS = 'SAVE_USER_INFOS';
+export const CHOOSE_GARDEN = 'CHOOSE_GARDEN';
 export const FETCH_GARDEN_INFOS = 'FETCH_GARDEN_INFOS';
 const USER_LOGGED = 'USER_LOGGED';
 const USER_LOGOUT = 'USER_LOGOUT';
@@ -84,6 +87,17 @@ const reducer = (state = initialState, action = {}) => {
         token: action.token,
         loginMessage: 'Récupération des données utilisateur',
       };
+    case SAVE_USER_INFOS:
+      return {
+        ...state,
+        user: { ...action.user },
+        loginStatus: 'chooseGarden',
+        loading: false,
+      };
+    case CHOOSE_GARDEN:
+      return {
+        ...state,
+      };
     case FETCH_GARDEN_INFOS:
       return {
         ...state,
@@ -97,7 +111,7 @@ const reducer = (state = initialState, action = {}) => {
         loading: false,
         loginMessage: '',
         loggedIn: true,
-
+        loginStatus: 'loggedIn',
       };
     case USER_LOGOUT:
       return {
@@ -172,6 +186,16 @@ export const fetchUserInfos = token => ({
   type: FETCH_USER_INFOS,
   token,
 });
+
+export const saveUserInfos = user => ({
+  type: SAVE_USER_INFOS,
+  user,
+})
+
+export const chooseGarden = () => ({
+  type: CHOOSE_GARDEN,
+
+})
 
 export const fetchGardenInfos = (user, gardenId) => ({
   type: FETCH_GARDEN_INFOS,
