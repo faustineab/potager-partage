@@ -2,26 +2,17 @@ import { connect } from 'react-redux';
 
 import App from '../components/App';
 
-import { withRouter } from 'react-router';
-
-
 
 const mapStateToProps = state => ({
-
- loggedIn: state.loggedIn,
-
+  loggedIn: state.loggedIn,
+  loginStatus: state.loginStatus,
 });
-
 
 
 const mapDispatchToProps = {};
 
 
-
-export default withRouter(connect(
-
- mapStateToProps,
-
- mapDispatchToProps,
-
-)(App));
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(App);

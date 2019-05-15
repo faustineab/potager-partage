@@ -8,8 +8,11 @@ import {
   FETCH_USER_INFOS,
   receivedGardenList,
   fetchUserInfos,
+  fetchGardenInfos,
+  FETCH_GARDEN_INFOS,
+  saveUserInfos,
+  userLogged,
 } from 'src/store/reducer';
-import { fetchGardenInfos } from './reducer';
 
 const ajaxMiddleware = store => next => (action) => {
   switch (action.type) {
@@ -97,9 +100,50 @@ const ajaxMiddleware = store => next => (action) => {
         },
       })
         .then((response) => {
+          const gardenList = response.data.gardens;
           const user = response.data;
-          const gardenId = response.data.gardens[0].id;
-          store.dispatch(fetchGardenInfos(user, gardenId));
+          console.log('response.data', response.data);
+          console.log(gardenList);
+          if (gardenList.length > 1) {
+            store.dispatch(saveUserInfos(user));
+          }
+          else {
+            const gardenId = gardenList[0].id;
+            store.dispatch(fetchGardenInfos(user, gardenId));
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+      break;
+    case FETCH_GARDEN_INFOS:
+      next(action);
+      axios.get(`http://localhost/apo/potager-partage/symfo/public/api/garden/${store.getState().gardenId}`, {
+        headers: {
+          Authorization: `Bearer ${store.getState().token}`,
+        },
+      })
+        .then((response) => {
+          console.log(response);
+          const gardenName = response.data.name;
+          const gardenAddress = response.data.address;
+          const gardenZipcode = response.data.zipcode;
+          const gardenAddressSpecificities = response.data.addressSpecificities;
+          const gardenCity = response.data.city;
+          const gardenNbPlotsRow = response.data.number_plots_row;
+          const gardenNbPlotsColumn = response.number_plots_column;
+          const gardenSize = response.data.meters;
+
+          store.dispatch(userLogged(
+            gardenName,
+            gardenAddress,
+            gardenZipcode,
+            gardenAddressSpecificities,
+            gardenCity,
+            gardenNbPlotsColumn,
+            gardenNbPlotsRow,
+            gardenSize,
+          ));
         })
         .catch((error) => {
           console.log(error);
