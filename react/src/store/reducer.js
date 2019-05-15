@@ -18,7 +18,7 @@ const initialState = {
   token: '',
   user: {},
   gardenList: [],
-  gardenId: '',
+  gardenId: '177',
   gardenName: '',
   gardenAddress: '',
   gardenZipcode: '',
@@ -47,7 +47,6 @@ export const JOIN_GARDEN = 'JOIN_GARDEN';
 export const LOG_USER = 'LOG_USER';
 export const FETCH_USER_INFOS = 'FETCH_USER_INFOS';
 export const SAVE_USER_INFOS = 'SAVE_USER_INFOS';
-export const CHOOSE_GARDEN = 'CHOOSE_GARDEN';
 export const FETCH_GARDEN_INFOS = 'FETCH_GARDEN_INFOS';
 const USER_LOGGED = 'USER_LOGGED';
 const USER_LOGOUT = 'USER_LOGOUT';
@@ -93,10 +92,6 @@ const reducer = (state = initialState, action = {}) => {
         user: { ...action.user },
         loginStatus: 'chooseGarden',
         loading: false,
-      };
-    case CHOOSE_GARDEN:
-      return {
-        ...state,
       };
     case FETCH_GARDEN_INFOS:
       return {
@@ -198,12 +193,7 @@ export const fetchUserInfos = token => ({
 export const saveUserInfos = user => ({
   type: SAVE_USER_INFOS,
   user,
-})
-
-export const chooseGarden = () => ({
-  type: CHOOSE_GARDEN,
-
-})
+});
 
 export const fetchGardenInfos = (user, gardenId) => ({
   type: FETCH_GARDEN_INFOS,

@@ -10,9 +10,6 @@ import {
   fetchUserInfos,
   fetchGardenInfos,
   FETCH_GARDEN_INFOS,
-  chooseGarden,
-  CHOOSE_GARDEN,
-  SAVE_USER_INFOS,
   saveUserInfos,
   userLogged,
 } from 'src/store/reducer';
@@ -105,6 +102,7 @@ const ajaxMiddleware = store => next => (action) => {
         .then((response) => {
           const gardenList = response.data.gardens;
           const user = response.data;
+          console.log('response.data', response.data);
           console.log(gardenList);
           if (gardenList.length > 1) {
             store.dispatch(saveUserInfos(user));
