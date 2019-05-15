@@ -29,6 +29,7 @@ const initialState = {
   gardenSize: '',
   askingQuestion: false,
   questionToAsk: '',
+  questionList: '',
   questionTags: [],
   tags: [
     { key: 'm', text: 'Fruits & Légumes', value: 'Fruits & Légumes' },
@@ -58,6 +59,8 @@ export const ADD_TAG_TO_QUESTION = 'ADD_TAG_TO_QUESTION';
 export const REMOVE_QUESTION_TAG = 'REMOVE_QUESTION_TAG';
 export const QUESTION_ASKED = 'QUESTION_ASKED';
 export const RECEIVED_GARDENLIST = 'RECEIVED_GARDENLIST';
+export const FETCH_FORUM_QUESTIONS = 'FETCH_FORUM_QUESTIONS';
+export const FORUM_QUESTIONS_FETCHED = 'FORUM_QUESTIONS_FETCHED';
 
 
 /**
@@ -158,6 +161,15 @@ const reducer = (state = initialState, action = {}) => {
         askingQuestion: false,
         questionToAsk: '',
         questionTags: [],
+      };
+    case FETCH_FORUM_QUESTIONS:
+      return {
+        ...state,
+      };
+    case FORUM_QUESTIONS_FETCHED:
+      return {
+        ...state,
+        questionList: action.questionList,
       };
     case USER_LOGOUT:
       return {
@@ -266,6 +278,14 @@ export const questionAsked = (question, tag) => ({
   tag,
 });
 
+export const fetchForumQuestions = () => ({
+  type: FETCH_FORUM_QUESTIONS,
+});
+
+export const forumQuestionsFetched = questionList => ({
+  type: FORUM_QUESTIONS_FETCHED,
+  questionList,
+});
 
 /**
  * Selectors
