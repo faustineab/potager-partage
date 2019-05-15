@@ -42,18 +42,31 @@ const App = ({ loggedIn, loginStatus }) => (
               : <Login />
         )}
       />
-      <Route
-        path="/choose-garden"
-        component={ChooseGarden}
-      />
+      <Route path="/choose-garden" component={ChooseGarden} />
       <Route path="/subscribe" component={Subscribe} />
       <Route path="/create-garden" component={CreateGarden} />
       <Route path="/join-garden" component={JoinGarden} />
-      <Route path="/profile" component={Profil} />
-      <Route path="/modify-profile" component={ProfilModify} />
-      <Route path="/potager" component={Potager} />
-      <Route exact path="/forum" component={Forum} />
-      <Route path="/forum/post" component={PostDetail} />
+      <Route
+        path="/profile"
+        render={() => (loggedIn ? (<Profil />) : (<Redirect to="/" />))}
+      />
+      <Route
+        path="/modify-profile"
+        render={() => (loggedIn ? (<ProfilModify />) : (<Redirect to="/" />))}
+      />
+      <Route
+        path="/potager"
+        render={() => (loggedIn ? (<Potager />) : (<Redirect to="/" />))}
+      />
+      <Route
+        path="/forum"
+        exact
+        render={() => (loggedIn ? (<Forum />) : (<Redirect to="/" />))}
+      />
+      <Route
+        path="/forum/post"
+        render={() => (loggedIn ? (<PostDetail />) : (<Redirect to="/" />))}
+      />
     </Switch>
     <Footer />
   </div>
