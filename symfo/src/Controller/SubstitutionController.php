@@ -171,8 +171,13 @@ class SubstitutionController extends AbstractController
             $startDate = $currentVacancySubstitute->getStartDate();
             $endDate = $currentVacancySubstitute->getEndDate();
 
-            $vacancySubstitute->setStartDate($startDate)
-                ->setEndDate($endDate);
+            if ($startDate !== null) {
+                $vacancySubstitute->setStartDate($startDate);
+            }
+
+            if ($endDate !== null) {
+                $vacancySubstitute->setEndDate($endDate);
+            }
 
             $manager->persist($vacancySubstitute);
             $manager->flush();

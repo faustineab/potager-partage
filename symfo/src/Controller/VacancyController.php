@@ -151,6 +151,8 @@ class VacancyController extends AbstractController
         if ($user == $vacancy->getUser()) {
 
             $data = $this->get('serializer')->serialize($vacancy, 'json', ['groups' => ['vacancy']]);
+
+
             $response = new Response($data);
             $response->headers->set('Content-Type', 'application/json');
 
@@ -177,10 +179,16 @@ class VacancyController extends AbstractController
             }
 
             $startDate = $currentVacancy->getStartDate();
+
+            if ($startDate !== null) {
+                $vacancy->setStartDate($startDate);
+            }
+
             $endDate = $currentVacancy->getEndDate();
 
-            $vacancy->setStartDate($startDate)
-                ->setEndDate($endDate);
+            if ($endDate !== null) {
+                $vacancy->setEndDate($startDate);
+            }
 
             $manager->persist($vacancy);
             $manager->flush();
