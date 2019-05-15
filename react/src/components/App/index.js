@@ -19,7 +19,7 @@ import Profil from 'src/containers/Profil';
 import ProfilModify from 'src/containers/ProfilModify';
 import Forum from 'src/components/Forum';
 import PostDetail from 'src/components/PostDetail';
-import MainMenu from 'src/components/MainMenu';
+import MainMenu from 'src/containers/MainMenu';
 import Footer from 'src/containers/Footer';
 import Potager from 'src/components/Potager';
 
@@ -53,6 +53,10 @@ const App = ({ loggedIn, loginStatus }) => (
       <Route path="/potager" component={Potager} />
       <Route exact path="/forum" component={Forum} />
       <Route path="/forum/post" component={PostDetail} />
+      <Route
+        path="/logout"
+        render={() => (<Redirect to="/" />)}
+      />
     </Switch>
     <Footer />
   </div>

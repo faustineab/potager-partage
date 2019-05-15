@@ -116,11 +116,6 @@ const reducer = (state = initialState, action = {}) => {
         gardenNbPlotsRow: action.gardenNbPlotsRow,
         gardenSize: action.gardenSize,
       };
-    case USER_LOGOUT:
-      return {
-        ...state,
-        loggedIn: false,
-      };
     case INPUT_CHANGE:
       return {
         ...state,
@@ -163,6 +158,10 @@ const reducer = (state = initialState, action = {}) => {
         askingQuestion: false,
         questionToAsk: '',
         questionTags: [],
+      };
+    case USER_LOGOUT:
+      return {
+        ...initialState,
       };
     default:
       return state;

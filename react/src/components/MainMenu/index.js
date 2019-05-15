@@ -1,10 +1,11 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Menu } from 'semantic-ui-react';
 import { NavLink } from 'react-router-dom';
 
 import './index.scss';
 
-const MainMenu = () => (
+const MainMenu = ({ onLogout }) => (
   <div className="menufix">
     <Menu>
       <div className="menudiv">
@@ -25,7 +26,7 @@ const MainMenu = () => (
           </Menu.Item>
         </div>
         <div className="menudiv">
-          <Menu.Item className="menuitem" name="Déconnexion">
+          <Menu.Item as={NavLink} to="/logout" className="menuitem" onClick={onLogout} name="Déconnexion">
             <h1>Déconnexion</h1>
           </Menu.Item>
         </div>
@@ -33,5 +34,9 @@ const MainMenu = () => (
     </Menu>
   </div>
 );
+
+MainMenu.propTypes = {
+  onLogout: PropTypes.func.isRequired,
+};
 
 export default MainMenu;
