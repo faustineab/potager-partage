@@ -118,7 +118,6 @@ class Garden
         $this->users = new ArrayCollection();
         $this->plots = new ArrayCollection();
         $this->created_at = new \DateTime();
-        $this->updated_at = new \DateTime();
         $this->vacancies = new ArrayCollection();
         $this->events = new ArrayCollection();
         $this->forumQuestions = new ArrayCollection();
