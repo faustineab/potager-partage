@@ -13,11 +13,12 @@ const initialState = {
   address: '',
   loading: false,
   loginMessage: '',
-  loggedIn: true,
+  loggedIn: false,
+  loginStatus: 'logout',
   token: '',
   user: {},
   gardenList: [],
-  gardenId: '',
+  gardenId: '177',
   gardenName: '',
   gardenAddress: '',
   gardenZipcode: '',
@@ -45,6 +46,7 @@ export const CREATE_GARDEN = 'CREATE_GARDEN';
 export const JOIN_GARDEN = 'JOIN_GARDEN';
 export const LOG_USER = 'LOG_USER';
 export const FETCH_USER_INFOS = 'FETCH_USER_INFOS';
+export const SAVE_USER_INFOS = 'SAVE_USER_INFOS';
 export const FETCH_GARDEN_INFOS = 'FETCH_GARDEN_INFOS';
 const USER_LOGGED = 'USER_LOGGED';
 const USER_LOGOUT = 'USER_LOGOUT';
@@ -84,6 +86,13 @@ const reducer = (state = initialState, action = {}) => {
         token: action.token,
         loginMessage: 'Récupération des données utilisateur',
       };
+    case SAVE_USER_INFOS:
+      return {
+        ...state,
+        user: { ...action.user },
+        loginStatus: 'chooseGarden',
+        loading: false,
+      };
     case FETCH_GARDEN_INFOS:
       return {
         ...state,
@@ -97,7 +106,15 @@ const reducer = (state = initialState, action = {}) => {
         loading: false,
         loginMessage: '',
         loggedIn: true,
-
+        loginStatus: 'loggedIn',
+        gardenName: action.gardenName,
+        gardenAddress: action.gardenAddress,
+        gardenAddressSpecificities: action.gardenAddressSpecificities,
+        gardenCity: action.gardenCity,
+        gardenZipcode: action.gardenZipcode,
+        gardenNbPlotsColumn: action.gardenNbPlotsColumn,
+        gardenNbPlotsRow: action.gardenNbPlotsRow,
+        gardenSize: action.gardenSize,
       };
     case USER_LOGOUT:
       return {
@@ -173,16 +190,38 @@ export const fetchUserInfos = token => ({
   token,
 });
 
+export const saveUserInfos = user => ({
+  type: SAVE_USER_INFOS,
+  user,
+});
+
 export const fetchGardenInfos = (user, gardenId) => ({
   type: FETCH_GARDEN_INFOS,
   user,
   gardenId,
 });
 
-export const userLogged = (user, repos) => ({
+export const userLogged = (
+  user,
+  gardenName,
+  gardenAddress,
+  gardenAddressSpecificities,
+  gardenCity,
+  gardenZipcode,
+  gardenNbPlotsColumn,
+  gardenNbPlotsRow,
+  gardenSize,
+) => ({
   type: USER_LOGGED,
   user,
-  repos,
+  gardenName,
+  gardenAddress,
+  gardenAddressSpecificities,
+  gardenCity,
+  gardenZipcode,
+  gardenNbPlotsColumn,
+  gardenNbPlotsRow,
+  gardenSize,
 });
 
 export const userLogout = () => ({

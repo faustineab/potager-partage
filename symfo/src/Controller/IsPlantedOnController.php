@@ -91,7 +91,7 @@ class IsPlantedOnController extends AbstractController
     {
         $currentUser = $this->get('security.token_storage')->getToken()->getUser();
         
-        $plot = $isPlantedOn->getPlot();
+        //$plot = $isPlantedOn->getPlot();
         $plotOwner = $plot->getUser();
 
         if ($currentUser == $plotOwner) {
@@ -102,15 +102,15 @@ class IsPlantedOnController extends AbstractController
             
             
             $errors = $validator->validate($data);
-            if (count($errors) > 0)
-            {
-                foreach ($errors as $error) 
-                {
+            if (count($errors) > 0) {
+                foreach ($errors as $error) {
                     return JsonResponse::fromJsonString(
-                        'message: Votre entrée comporte des erreurs : '.$error.'.', 
-                        406);
-                    }
+                        'message: Votre entrée comporte des erreurs : '.$error.'.',
+                        406
+                    );
                 }
+            }
+        
                 
                 // informations récupérées du formulaire
                 $getVegetable = $vegetableRepository->findOneBy([

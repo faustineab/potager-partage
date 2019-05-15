@@ -24,7 +24,7 @@ class Vegetable
 
     /**
      * @ORM\Column(type="string", length=60)
-     * @Groups({"is_planted_on", "vegetable"})
+     * @Groups({"is_planted_on", "vegetable", "marketoffer"})
      */
     private $name;
 
@@ -63,10 +63,16 @@ class Vegetable
      */
     private $image;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\MarketOffer", mappedBy="vegetable")
+     */
+    private $marketOffers;
+
     public function __construct()
     {
         $this->isPlantedOns = new ArrayCollection();
         $this->created_at = new \DateTime();
+        $this->marketOffers = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -173,6 +179,37 @@ class Vegetable
     public function setImage(?string $image): self
     {
         $this->image = $image;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|MarketOffer[]
+     */
+    public function getMarketOffers(): Collection
+    {
+        return $this->marketOffers;
+    }
+
+    public function addMarketOffer(MarketOffer $marketOffer): self
+    {
+        if (!$this->marketOffers->contains($marketOffer)) {
+            $this->marketOffers[] = $marketOffer;
+            $marketOffer->setVegetable($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMarketOffer(MarketOffer $marketOffer): self
+    {
+        if ($this->marketOffers->contains($marketOffer)) {
+            $this->marketOffers->removeElement($marketOffer);
+            // set the owning side to null (unless already changed)
+            if ($marketOffer->getVegetable() === $this) {
+                $marketOffer->setVegetable(null);
+            }
+        }
 
         return $this;
     }

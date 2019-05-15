@@ -110,6 +110,12 @@ class Garden
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $charte;
+  
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\MarketOffer", mappedBy="garden")
+     */
+    private $marketOffers;
+
 
 
 
@@ -118,11 +124,11 @@ class Garden
         $this->users = new ArrayCollection();
         $this->plots = new ArrayCollection();
         $this->created_at = new \DateTime();
-        $this->updated_at = new \DateTime();
         $this->vacancies = new ArrayCollection();
         $this->events = new ArrayCollection();
         $this->forumQuestions = new ArrayCollection();
         $this->forumTags = new ArrayCollection();
+        $this->marketOffers = new ArrayCollection();
     }
     public function getId(): ?int
     {
@@ -391,6 +397,7 @@ class Garden
         return $this;
     }
 
+
     public function getCharte(): ?string
     {
         return $this->charte;
@@ -399,6 +406,34 @@ class Garden
     public function setCharte(?string $charte): self
     {
         $this->charte = $charte;
+
+    /**
+     * @return Collection|MarketOffer[]
+     */
+    public function getMarketOffers(): Collection
+    {
+        return $this->marketOffers;
+    }
+
+    public function addMarketOffer(MarketOffer $marketOffer): self
+    {
+        if (!$this->marketOffers->contains($marketOffer)) {
+            $this->marketOffers[] = $marketOffer;
+            $marketOffer->setGarden($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMarketOffer(MarketOffer $marketOffer): self
+    {
+        if ($this->marketOffers->contains($marketOffer)) {
+            $this->marketOffers->removeElement($marketOffer);
+            // set the owning side to null (unless already changed)
+            if ($marketOffer->getGarden() === $this) {
+                $marketOffer->setGarden(null);
+            }
+        }
 
         return $this;
     }

@@ -42,7 +42,7 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"event","garden_get","plot"})
+     * @Groups({"event","garden_get","plot","marketoffer"})
      * @Groups({"user"})
      * @Groups({"vacancy"})
      * @Groups({"remplacement"})
@@ -135,6 +135,16 @@ class User implements UserInterface
      */
     private $roles;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\MarketOffer", mappedBy="user")
+     */
+    private $marketOffers;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\MarketOrder", mappedBy="user")
+     */
+    private $marketOrders;
+
 
     public function __construct()
     {
@@ -148,6 +158,8 @@ class User implements UserInterface
         $this->created_at = new \DateTime();
         $this->updated_at = new \DateTime();
         $this->roles = new ArrayCollection();
+        $this->marketOffers = new ArrayCollection();
+        $this->marketOrders = new ArrayCollection();
     }
 
 
@@ -200,8 +212,7 @@ class User implements UserInterface
      */
     public function eraseCredentials()
     {
-        // If you store any temporary, sensitive data on the user, clear it here
-        // $this->plainPassword = null;
+        $this->plainPassword = null;
     }
 
     public function getName(): ?string
@@ -497,6 +508,68 @@ class User implements UserInterface
             $this->roles->removeElement($role);
             $role->removeUser($this);
         }
+        return $this;
+    }
+
+    /**
+     * @return Collection|MarketOffer[]
+     */
+    public function getMarketOffers(): Collection
+    {
+        return $this->marketOffers;
+    }
+
+    public function addMarketOffer(MarketOffer $marketOffer): self
+    {
+        if (!$this->marketOffers->contains($marketOffer)) {
+            $this->marketOffers[] = $marketOffer;
+            $marketOffer->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMarketOffer(MarketOffer $marketOffer): self
+    {
+        if ($this->marketOffers->contains($marketOffer)) {
+            $this->marketOffers->removeElement($marketOffer);
+            // set the owning side to null (unless already changed)
+            if ($marketOffer->getUser() === $this) {
+                $marketOffer->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|MarketOrder[]
+     */
+    public function getMarketOrders(): Collection
+    {
+        return $this->marketOrders;
+    }
+
+    public function addMarketOrder(MarketOrder $marketOrder): self
+    {
+        if (!$this->marketOrders->contains($marketOrder)) {
+            $this->marketOrders[] = $marketOrder;
+            $marketOrder->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMarketOrder(MarketOrder $marketOrder): self
+    {
+        if ($this->marketOrders->contains($marketOrder)) {
+            $this->marketOrders->removeElement($marketOrder);
+            // set the owning side to null (unless already changed)
+            if ($marketOrder->getUser() === $this) {
+                $marketOrder->setUser(null);
+            }
+        }
+
         return $this;
     }
 }
