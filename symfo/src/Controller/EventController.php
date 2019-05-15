@@ -204,10 +204,23 @@ class EventController extends AbstractController
                     $startDate = $currentEvent->getStartDate();
                     $endDate = $currentEvent->getEndDate();
 
-                    $event->setDescription($description)
-                        ->setTitle($title)
-                        ->setStartDate($startDate)
-                        ->setEndDate($endDate);
+                    if ($description !== null) {
+
+                        $event->setDescription($description);
+                    }
+                    if ($title !== null) {
+
+                        $event->setTitle($title);
+                    }
+                    if ($startDate !== null) {
+
+                        $event->setStartDate($startDate);
+                    }
+                    if ($endDate !== null) {
+
+                        $event->setEndDate($endDate);
+                    }
+
 
                     $manager->persist($event);
 

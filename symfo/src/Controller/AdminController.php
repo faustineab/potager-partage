@@ -283,7 +283,6 @@ class AdminController extends AbstractController
                         $path = $this->getParameter('charte_directory');
 
 
-
                         if ($filename == $garden->getCharte()) {
                             $fs = new Filesystem();
                             $fs->remove(__DIR__ . "/../../public/uploads/" . $filename);
@@ -300,9 +299,6 @@ class AdminController extends AbstractController
 
                         return new JsonResponse("La charte a bien été ajouté à votre jardin", 200);
                     }
-
-
-                    return new JsonResponse("Votre charte a bien été éditée", 500);
                 }
             }
             return new JsonResponse("Vous n' êtes pas autorisé à accéder à cette page", 500);
@@ -394,9 +390,6 @@ class AdminController extends AbstractController
 
                     $manager->persist($garden);
                     $manager->flush();
-
-
-
 
                     return new JsonResponse("La charte a bien été supprimée", 200);
                 }
