@@ -236,5 +236,43 @@ class AdminController extends AbstractController
     //     return new JsonResponse('Nouveau rôle créé', 200);
     // }
 
+    /**
+     * @Route("api/garden/{garden}/admin/charte", name="admin_add_charte", methods={"POST"})
+     */
+    public function addCharte(Garden $garden, UserRepository $userRepository, RoleRepository $roleRepository, Request $request, ValidatorInterface $validator, ObjectManager $manager, User $user)
+    {
 
+
+        $gardenUsers = $garden->getUsers()->getValues();
+        $userToken = [];
+        $userToken[] = $this->get('security.token_storage')->getToken()->getUser();
+
+        $compare = function ($userToken, $gardenUsers) {
+            return spl_object_hash($userToken) <=> spl_object_hash($gardenUsers);
+        };
+
+        if (!empty(array_uintersect($userToken, $gardenUsers, $compare))) {
+
+            $currentUser = $this->get('security.token_storage')->getToken()->getUser();
+            $currentUserRoles = $currentUser->getRoles();
+
+            $role = $roleRepository->findBy(['label' => 'administrateur']);
+
+            // dump($currentUserRoles);
+
+            foreach ($role as $roleName) {
+                $userRole = $roleName->getName();
+                // dump($user);
+                if (array_search($userRole, $currentUserRoles) !== false) {
+
+                    $file = $request->files->get('upload');
+                    dd($file);
+                    if (!is_null($file)) {
+                        $filename = uniqid() . "." . $file->guessClientOriginalExtension();
+                    }
+                }
+                return new JsonResponse("Vous n' êtes pas autorisé à accéder à cette page", 500);
+            }
+        }
+    }
 }

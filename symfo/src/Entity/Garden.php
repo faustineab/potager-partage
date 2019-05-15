@@ -106,6 +106,11 @@ class Garden
      */
     private $forumTags;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $charte;
+
 
 
     public function __construct()
@@ -382,6 +387,18 @@ class Garden
                 $forumTag->setGarden(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getCharte(): ?string
+    {
+        return $this->charte;
+    }
+
+    public function setCharte(?string $charte): self
+    {
+        $this->charte = $charte;
 
         return $this;
     }

@@ -35,4 +35,10 @@ class SecurityController extends AbstractController
 
         return $response;
     }
+
+    /**
+     * @Route("/logout", name="app_logout", methods={"GET","POST"})
+     */
+    public function logout(AuthenticationUtils $utils)
+    { }
 }
