@@ -283,21 +283,27 @@ class AdminController extends AbstractController
                         $path = $this->getParameter('charte_directory');
 
 
-                        if ($filename == $garden->getCharte()) {
-                            $fs = new Filesystem();
-                            $fs->remove(__DIR__ . "/../../public/uploads/" . $filename);
+                        if ($filename !== $garden->getCharte()) {
+                            $file->move(
+                                $path,
+                                $filename
+                            );
+                            // dd($filename);
+                            $garden->setCharte($filename);
+                            $manager->persist($garden);
+                            $manager->flush();
+
+                            return new JsonResponse("La charte a bien été ajoutéé pour votre jardin", 200);
                         }
 
+                        $fs = new Filesystem();
+                        $fs->remove(__DIR__ . "/../../public/uploads/" . $filename);
                         $file->move(
                             $path,
                             $filename
                         );
 
-                        $garden->setCharte($filename);
-                        $manager->persist($garden);
-                        $manager->flush();
-
-                        return new JsonResponse("La charte a bien été ajouté à votre jardin", 200);
+                        return new JsonResponse("La charte a bien été modifiéé pour votre jardin", 200);
                     }
                 }
             }
@@ -336,7 +342,7 @@ class AdminController extends AbstractController
                     return $response;
                 }
             }
-            return new JsonResponse("vous n'avez pas enregistrer de charte", 500);
+            return new JsonResponse("vous n'avez pas enregistré de charte", 500);
         }
         return new JsonResponse("Vous n' êtes pas autorisé à accéder à cette page", 500);
     }

@@ -110,7 +110,7 @@ class Garden
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $charte;
-  
+
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\MarketOffer", mappedBy="garden")
      */
@@ -403,9 +403,10 @@ class Garden
         return $this->charte;
     }
 
-    public function setCharte(?string $charte): self
+    public function setCharte(?string $charte)
     {
         $this->charte = $charte;
+    }
 
     /**
      * @return Collection|MarketOffer[]
