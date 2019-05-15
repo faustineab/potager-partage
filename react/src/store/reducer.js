@@ -112,6 +112,14 @@ const reducer = (state = initialState, action = {}) => {
         loginMessage: '',
         loggedIn: true,
         loginStatus: 'loggedIn',
+        gardenName: action.gardenName,
+        gardenAddress: action.gardenAddress,
+        gardenAddressSpecificities: action.gardenAddressSpecificities,
+        gardenCity: action.gardenCity,
+        gardenZipcode: action.gardenZipcode,
+        gardenNbPlotsColumn: action.gardenNbPlotsColumn,
+        gardenNbPlotsRow: action.gardenNbPlotsRow,
+        gardenSize: action.gardenSize,
       };
     case USER_LOGOUT:
       return {
@@ -203,10 +211,27 @@ export const fetchGardenInfos = (user, gardenId) => ({
   gardenId,
 });
 
-export const userLogged = (user, repos) => ({
+export const userLogged = (
+  user,
+  gardenName,
+  gardenAddress,
+  gardenAddressSpecificities,
+  gardenCity,
+  gardenZipcode,
+  gardenNbPlotsColumn,
+  gardenNbPlotsRow,
+  gardenSize,
+) => ({
   type: USER_LOGGED,
   user,
-  repos,
+  gardenName,
+  gardenAddress,
+  gardenAddressSpecificities,
+  gardenCity,
+  gardenZipcode,
+  gardenNbPlotsColumn,
+  gardenNbPlotsRow,
+  gardenSize,
 });
 
 export const userLogout = () => ({

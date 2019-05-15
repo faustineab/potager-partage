@@ -13,7 +13,8 @@ import {
   chooseGarden,
   CHOOSE_GARDEN,
   SAVE_USER_INFOS,
-  saveUserInfos
+  saveUserInfos,
+  userLogged,
 } from 'src/store/reducer';
 
 const ajaxMiddleware = store => next => (action) => {
@@ -135,7 +136,16 @@ const ajaxMiddleware = store => next => (action) => {
           const gardenNbPlotsColumn = response.number_plots_column;
           const gardenSize = response.data.meters;
 
-          store.dispatch();
+          store.dispatch(userLogged(
+            gardenName,
+            gardenAddress,
+            gardenZipcode,
+            gardenAddressSpecificities,
+            gardenCity,
+            gardenNbPlotsColumn,
+            gardenNbPlotsRow,
+            gardenSize,
+          ));
         })
         .catch((error) => {
           console.log(error);
