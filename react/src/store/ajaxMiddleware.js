@@ -12,6 +12,7 @@ import {
   FETCH_GARDEN_INFOS,
   saveUserInfos,
   userLogged,
+  MODIFY_USER_INFOS,
 } from 'src/store/reducer';
 
 const ajaxMiddleware = store => next => (action) => {
@@ -151,6 +152,26 @@ const ajaxMiddleware = store => next => (action) => {
       break;
     default:
       next(action);
+      break;
+    case MODIFY_USER_INFOS:
+      next(action);
+      console.log(store.getState().user.id);
+      axios.put(`http://localhost/apo/potager-partage/symfo/api/user/${store.getState().user.id}/edit`, {
+        headers: {
+          Authorization: `Bearer ${store.getState().token}`,
+        },
+        name: `${store.getState().firstName} ${store.getState().lastName}`,
+        email: store.getState().email,
+        phone: store.getState().phoneNumber,
+        address: store.getState().address,
+        gardenZipCode: store.getState().gardenZipcode,
+      })
+        .then((response) => {
+          console.log(response);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
       break;
   }
 };

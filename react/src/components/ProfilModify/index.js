@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 import './index.scss';
 
 const ProfileModify = ({
-  firstName, lastName, password, email, phoneNumber, address1, address2, zipcode, inputChange, ModifyUserInfos,
+  firstName, lastName, email, phoneNumber, gardenAddress, gardenAddressSpecificities, gardenZipcode, inputChange, ModifyUserInfos,
 }) => {
   const handleInputChange = (evt) => {
     const { name } = evt.target;
@@ -35,24 +35,20 @@ const ProfileModify = ({
           <input placeholder="e-mail" value={email} name="email" onChange={handleInputChange} />
         </Form.Field>
         <Form.Field>
-          <label>Mot de passe</label>
-          <input placeholder="Mot de passe" value={password} name="password" onChange={handleInputChange} />
-        </Form.Field>
-        <Form.Field>
           <label>téléphone</label>
           <input placeholder="téléphone" value={phoneNumber} name="phoneNumber" onChange={handleInputChange} />
         </Form.Field>
         <Form.Field>
           <label>adresse 1</label>
-          <input placeholder="numéro et nom de la voie" value={address1} name="address1" onChange={handleInputChange} />
+          <input placeholder="numéro et nom de la voie" value={gardenAddress} name="gardenAddress" onChange={handleInputChange} />
         </Form.Field>
         <Form.Field>
           <label>adresse 2</label>
-          <input placeholder="informations complémentaires" value={address2} name="address2" onChange={handleInputChange} />
+          <input placeholder="informations complémentaires" value={gardenAddressSpecificities} name="gardenAddressSpecificities" onChange={handleInputChange} />
         </Form.Field>
         <Form.Field>
           <label>code postal</label>
-          <input placeholder="code postal" value={zipcode} name="zipcode" onChange={handleInputChange} />
+          <input placeholder="code postal" value={gardenZipcode} name="gardenZipcode" onChange={handleInputChange} />
         </Form.Field>
         <Form.Group id="buttons">
           <Button className="submit_button" as={Link} to="/profile">Annuler</Button>
@@ -63,28 +59,21 @@ const ProfileModify = ({
   );
 };
 
-ProfileModify.propTypes = {
+ProfileModify.propTypes = { 
   firstName: PropTypes.string,
   lastName: PropTypes.string,
   email: PropTypes.string,
-  password: PropTypes.string,
   phoneNumber: PropTypes.string,
-  address1: PropTypes.string,
-  address2: PropTypes.string,
-  zipcode: PropTypes.string,
   inputChange: PropTypes.func.isRequired,
   ModifyUserInfos: PropTypes.func.isRequired,
+  gardenAddress: PropTypes.string.isRequired,
 };
 
 ProfileModify.defaultProps = {
   firstName: PropTypes.string,
   lastName: PropTypes.string,
   email: PropTypes.string,
-  password: PropTypes.string,
   phoneNumber: PropTypes.string,
-  address1: PropTypes.string,
-  address2: PropTypes.string,
-  zipcode: PropTypes.string,
 };
 
 export default ProfileModify;

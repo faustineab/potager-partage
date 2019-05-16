@@ -5,13 +5,12 @@ import {} from '../store/reducer';
 const mapStateToProps = state => ({
   firstName: state.firstName,
   lastName: state.lastName,
-  address1: state.address1,
+  address1: state.gardenAddress,
   email: state.email,
   phoneNumber: state.phoneNumber,
 });
 
-const mapDispatchToProps = dispatch => ({
-});
+const mapDispatchToProps = {};
 
 export default connect(
   mapStateToProps,

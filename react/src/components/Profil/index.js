@@ -6,12 +6,12 @@ import { Link } from 'react-router-dom';
 
 import './index.scss';
 
-const Profil = ({ firstName, lastName, address1, email, phoneNumber }) => (
+const Profil = ({ firstName, lastName, gardenAddress, email, phoneNumber }) => (
   <div className="background">
     <div className="user-block">
-      <Image className="avatar" src="https://www.natura-dis.com/wp-content/uploads/sites/10/2014/07/devenir-jardinier-botanique-1.jpg" size="medium" circular />
+      <Image className="avatar" src="https://www.shareicon.net/data/512x512/2016/09/01/822718_user_512x512.png" size="medium" circular />
       <h1>{firstName} {lastName}</h1>
-      <h2>{address1}</h2>
+      <h2>{gardenAddress}</h2>
       <h2>{email}</h2>
       <h2>{phoneNumber}</h2>
       <Button as={Link} to="/modify-profile" className="modify_button">Modifier</Button>
