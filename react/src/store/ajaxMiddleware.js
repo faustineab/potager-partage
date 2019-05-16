@@ -160,9 +160,17 @@ const ajaxMiddleware = store => next => (action) => {
         },
       })
         .then((response) => {
-          console.log(response);
+          console.log(response.data);
           const questionList = response.data;
-          store.dispatch(forumQuestionsFetched(questionList));
+          const formattedQuestionList = questionList.map(list => ({
+            id: list.id,
+            text: list.text,
+            title: list.title,
+            user: list.user,
+            creationDate: list.createdAt.substring(0, 10),
+          }));
+          console.log(formattedQuestionList);
+          store.dispatch(forumQuestionsFetched(formattedQuestionList));
         })
         .catch((error) => {
           console.log(error);

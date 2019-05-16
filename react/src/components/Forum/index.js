@@ -26,12 +26,12 @@ class Forum extends Component {
         <h2>Le coin des jardiniers</h2>
         <AskQuestion />
         {console.log(questionList)}
-        {questionList.map(({ id, title, createdAt, index }) => (
+        {questionList.map(({ id, title, creationDate, index }) => (
           <Card fluid className="forumCard" key={index} id={id}>
             <Card.Header className="cardHeader" content={title} />
             <Card.Content>
               <span className="postAuthor">Wassim Alkayar</span>
-              <span className="postDate">- publié le {createdAt}</span>
+              <span className="postDate">- publié le {creationDate}</span>
             </Card.Content>
             <Card.Meta>
               <span className="tag">Fruits & Légumes</span>
