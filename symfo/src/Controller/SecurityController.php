@@ -21,19 +21,24 @@ class SecurityController extends AbstractController
     /**
      * @Route("api/login", name="app_login_GET", methods={"GET"})
      */
-    public function api_login(AuthenticationUtils $utils, UserRepository $userRepository)
+    public function api_login(UserRepository $userRepository)
     {
 
         $currentUser =  $this->get('security.token_storage')->getToken()->getUser();
 
         $user = $userRepository->find($currentUser->getId());
-
-        $data = $this->get('serializer')->serialize($user, 'json', ['groups' => ['login']]);
+        // dump($user);
+        $data = $this->get('serializer')->serialize($user, 'json', [
+            'groups' => ['login'],
+            'circular_reference_handler' => function ($user) {
+                return $user->getId();
+            },
+        ]);
 
         $response = new Response($data);
 
         $response->headers->set('Content-Type', 'application/json');
-
+        // dd($response);
         return $response;
     }
 

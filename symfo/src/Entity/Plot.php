@@ -16,13 +16,13 @@ class Plot
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     * @Groups({"garden_get","is_planted_on", "plot", "user"})
+     * @Groups({"garden_get","is_planted_on", "plot", "user", "login"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"garden_get","plot", "user"})
+     * @Groups({"garden_get","plot", "user", "login"})
      */
     private $status;
 
@@ -47,12 +47,13 @@ class Plot
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="plots" , cascade={"persist"})
-     * @Groups({"plot", "user"})
+     * @Groups({"plot", "user","login"})
      */
     private $user;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\IsPlantedOn", mappedBy="plot")
+     * @Groups({"login"})
      */
     private $isPlantedOns;
 

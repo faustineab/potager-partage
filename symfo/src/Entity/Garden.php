@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\Collection;
 use Symfony\Component\Serializer\Serializer;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Annotation\MaxDepth;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\GardenRepository")
@@ -74,6 +75,7 @@ class Garden
     /**
      * @ORM\ManyToMany(targetEntity="App\Entity\User", inversedBy="gardens")
      * @Groups("garden_get")
+     * 
      */
     private $users;
 
@@ -91,17 +93,19 @@ class Garden
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Event", mappedBy="garden")
-     * @Groups("login")
+     * @Groups({"login"})
      */
     private $events;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\ForumQuestion", mappedBy="garden")
+     * @Groups({"login"})
      */
     private $forumQuestions;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\ForumTag", mappedBy="garden")
+     * @Groups({"login"})
      */
     private $forumTags;
 
