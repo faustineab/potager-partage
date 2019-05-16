@@ -77,7 +77,17 @@ class GardenController extends AbstractController
      */
     public function edit(Garden $garden, Request $request, ObjectManager $manager, ValidatorInterface $validator, PlotRepository $plotRepository, SerializerInterface $serializer)
     {
-        $content = $request->getContent();
+        $gardenUsers = $garden->getUsers()->getValues();
+
+        $user = [];
+        $user[] = $this->get('security.token_storage')->getToken()->getUser();
+
+        $compare = function ($user, $gardenUsers) {
+            return spl_object_hash($user) <=> spl_object_hash($gardenUsers);
+        };
+
+        if (!empty(array_uintersect($user, $gardenUsers, $compare))) {
+            $content = $request->getContent();
         $editedGarden = $serializer->deserialize($content, Garden::class, 'json');
 
         $errors = $validator->validate($editedGarden);
@@ -152,8 +162,11 @@ class GardenController extends AbstractController
         }
         
         return JsonResponse::fromJsonString('ok', 200);
-
     }
+    return new JsonResponse(["error" => "Vous n'êtes pas autorisé à éditer dans ce jardin"], 500);
+    
+
+}
 
 
         /**

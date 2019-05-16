@@ -107,10 +107,18 @@ class VegetableController extends AbstractController
             $growing_interval=$editedVegetable->getGrowingInterval();
             $image = $editedVegetable->getImage();
             
+            if ($name != Null){
             $vegetable->setName($name);
+            }
+            if($water_irrigation_interval!= Null){
             $vegetable->setWaterIrrigationInterval($water_irrigation_interval);
+            }
+            if($growing_interval!= Null){
             $vegetable->setGrowingInterval($growing_interval);
+            }
+            if($image!=Null){
             $vegetable->setImage($image);
+            }
             $vegetable->setUpdatedAt(new \Datetime());
         
             $entityManager->merge($vegetable);
@@ -118,13 +126,6 @@ class VegetableController extends AbstractController
             $entityManager->flush();
             return new JsonResponse('message: Votre fruit/légume a été modifié', 200);
         }
-    
-        /**
-     * @Route("/{id}/add", name="add_vegetable", methods={"POST"})
-     */
-    public function add(Vegetable $vegetable, Request $request,  EntityManagerInterface $entityManager,ObjectManager $manager, ValidatorInterface $validator,SerializerInterface $serializer)
-    {
 
-    }
 
 }
