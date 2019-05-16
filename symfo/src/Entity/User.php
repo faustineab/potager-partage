@@ -28,24 +28,19 @@ class User implements UserInterface
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     * @Groups({"event"})
-     * @Groups({"login"})
-     * @Groups("garden_get")
+     * @Groups({"admin", "event", "forum_questions", "garden_get","login", "plot", "user"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
-     * @Groups({"login"})
-     * @Groups("garden_get")
+     * @Groups({"admin", "forum_questions", "login", "user", "garden_get"})
      */
     private $email;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"event"})
-     * @Groups({"login"})
-     * @Groups("garden_get")
+     * @Groups({"admin", "event", "forum_questions", "garden_get", "is_planted_on", "login", "marketoffer", "plot", "remplacement", "user", "vacancy"})
      */
     private $name;
 
@@ -92,12 +87,12 @@ class User implements UserInterface
     private $plots;
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\ForumAnswer", mappedBy="user")
-     * @Groups({"login"})
+     * @Groups({"forum_questions", "login"})
      */
     private $forumAnswers;
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\ForumQuestion", mappedBy="user")
-     * @Groups({"login"})
+     * @Groups({"forum_questions", "login"})
      */
     private $forumQuestions;
 
@@ -140,7 +135,6 @@ class User implements UserInterface
         $this->forumQuestions = new ArrayCollection();
         $this->events = new ArrayCollection();
         $this->created_at = new \DateTime();
-        $this->updated_at = new \DateTime();
         $this->roles = new ArrayCollection();
     }
 

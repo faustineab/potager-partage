@@ -16,61 +16,50 @@ class ForumQuestion
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     * @Groups({"forum_questions"})
-     * @Groups({"forum_tags"})
-     * @Groups({"user"})
-     * 
+     * @Groups({"forum_questions", "forum_tags", "user"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="text")
-     * @Groups({"forum_questions"})
-     * @Groups({"forum_tags"})
-     * @Groups({"user"})
+     * @Groups({"forum_questions", "forum_tags", "user"})
      */
     private $title;
 
     /**
      * @ORM\Column(type="text")
-     * @Groups({"forum_questions"})
-     * @Groups({"forum_tags"})
-     * @Groups({"user"})
+     * @Groups({"forum_questions", "forum_tags", "user"})
      */
     private $text;
 
     /**
      * @ORM\Column(type="datetime")
-     * @Groups({"forum_questions"})
-     * @Groups({"forum_tags"})
-     * @Groups({"user"})
+     * @Groups({"forum_questions", "forum_tags", "user"})
      */
     private $createdAt;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
-     * @Groups({"forum_questions"})
-     * @Groups({"forum_tags"})
-     * @Groups({"user"})
+     * @Groups({"forum_questions", "forum_tags", "user"})
      */
     private $updatedAt;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\ForumAnswer", mappedBy="question", orphanRemoval=true)
+     * @Groups({"forum_questions"})
      */
     private $answers;
 
     /**
      * @ORM\ManyToMany(targetEntity="App\Entity\ForumTag", mappedBy="questions")
+     * @Groups({"forum_questions"})
      */
     private $tags;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="forumQuestions")
      * @ORM\JoinColumn(nullable=false)
-     * @Groups({"forum_questions"})
-     * @Groups({"forum_tags"})
-     * @Groups({"user"})
+     * @Groups({"forum_questions", "forum_tags", "user"})
      */
     private $user;
 

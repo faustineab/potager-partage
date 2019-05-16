@@ -16,28 +16,25 @@ class Plot
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     * @Groups({"user","plot"})
-     * @Groups({"is_planted_on"})
-     * @Groups({"login"})
+     * @Groups({"garden_get","is_planted_on", "plot", "user", "login"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"user","plot"})
-     * @Groups({"login"})
+     * @Groups({"garden_get","plot", "user", "login"})
      */
     private $status;
 
     /**
      * @ORM\Column(type="datetime")
-     * @Groups({"user","plot"})
+     * @Groups({"plot", "user"})
      */
     private $created_at;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
-     * @Groups({"user","plot"})
+     * @Groups({"plot", "user"})
      */
     private $updated_at;
 
@@ -50,8 +47,7 @@ class Plot
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="plots" , cascade={"persist"})
-     * @Groups({"user","plot"})
-     * @Groups({"login"})
+     * @Groups({"plot", "user","login"})
      */
     private $user;
 
@@ -64,7 +60,6 @@ class Plot
     public function __construct()
     {
         $this->created_at = new \DateTime();
-        $this->updated_at = new \DateTime();
         $this->isPlantedOns = new ArrayCollection();
     }
 

@@ -19,51 +19,47 @@ class Garden
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     * @Groups("garden_get")
-     * @Groups({"garden_register"})
-     * @Groups({"user"})
-     * @Groups({"vacancy"})
-     * @Groups({"login"})
+     * @Groups({"forum_questions", "garden_get", "garden_register", "login", "user", "vacancy"})
      */
     private $id;
     /**
      * @ORM\Column(type="string", length=60, unique=true)
-     * @Groups({"garden_register","garden_get","garden_edit", "plot","user", "vacancy", "login"})
+     * @Groups({"forum_questions", "garden_register", "garden_edit", "garden_get", "login", "plot", "user", "vacancy"})
      */
     private $name;
     /**
      * @ORM\Column(type="text")
-     * @Groups({"garden_get","garden_edit","user", "login"})
+     * @Groups({"garden_edit", "garden_get", "login", "user"})
      */
     private $address;
     /**
      * @ORM\Column(type="string", length=5)
-     * @Groups({"garden_get","garden_edit","user", "login"})
+     * @Groups({"garden_edit", "garden_get", "login", "user"})
      */
     private $zipcode;
     /**
      * @ORM\Column(type="string", length=60)
-     * @Groups({"garden_get","garden_edit","user", "login"})
+     * @Groups({"garden_edit", "garden_get", "login", "user"})
      */
     private $city;
     /**
      * @ORM\Column(type="text", nullable=true)
-     * @Groups({"garden_get","garden_edit","user", "login"})
+     * @Groups({"garden_edit", "garden_get", "login", "user"})
      */
     private $address_specificities;
     /**
      * @ORM\Column(type="integer")
-     * @Groups({"garden_get","garden_edit", "login"})
+     * @Groups({"garden_edit", "garden_get", "login"})
      */
     private $meters;
     /**
      * @ORM\Column(type="integer")
-     * @Groups({"garden_get","garden_edit", "login"})
+     * @Groups({"garden_edit", "garden_get", "login"})
      */
     private $number_plots_row;
     /**
      * @ORM\Column(type="integer")
-     * @Groups({"garden_get","garden_edit", "login"})
+     * @Groups({"garden_edit", "garden_get", "login"})
      */
     private $number_plots_column;
     /**
@@ -85,13 +81,13 @@ class Garden
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Plot", mappedBy="garden", orphanRemoval=true)
-     * @Groups({"login"})
+     * @Groups({"login","garden_get"})
      */
     private $plots;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Vacancy", mappedBy="garden")
-     * @Groups({"login"})
+     * @Groups("login")
      */
     private $vacancies;
 
@@ -122,9 +118,6 @@ class Garden
      * @ORM\OneToMany(targetEntity="App\Entity\MarketOffer", mappedBy="garden")
      */
     private $marketOffers;
-
-
-
 
     public function __construct()
     {

@@ -16,44 +16,37 @@ class ForumTag
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     * @Groups({"forum_questions"})
-     * @Groups({"forum_tags"})
-     * @Groups({"user"})
+     * @Groups({"forum_questions", "forum_tags", "user"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=100)
-     * @Groups({"forum_questions"})
-     * @Groups({"forum_tags"})    
-     * @Groups({"user"})
+     * @Groups({"forum_questions", "forum_tags", "user"})
      */
     private $name;
 
     /**
      * @ORM\Column(type="datetime")
-     * @Groups({"forum_questions"})
-     * @Groups({"forum_tags"})
-     * @Groups({"user"})
+     * @Groups({"forum_questions", "forum_tags", "user"})
      */
     private $createdAt;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
-     * @Groups({"forum_questions"})
-     * @Groups({"forum_tags"})
-     * @Groups({"user"})
+     * @Groups({"forum_questions", "forum_tags", "user"})
      */
     private $updatedAt;
 
     /**
      * @ORM\ManyToMany(targetEntity="App\Entity\ForumQuestion", inversedBy="tags")
-     * @Groups({"forum_tags"})
+     * @Groups({"forum_questions", "forum_tags"})
      */
     private $questions;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Garden", inversedBy="forumTags")
+     * @Groups({"forum_questions"})
      */
     private $garden;
 
@@ -61,7 +54,6 @@ class ForumTag
     {
         $this->questions = new ArrayCollection();
         $this->createdAt = new \DateTime();
-        $this->updatedAt = new \Datetime();
     }
 
     public function getId(): ?int
@@ -129,11 +121,6 @@ class ForumTag
         }
 
         return $this;
-    }
-
-    public function __toString()
-    {
-        $this->questions;
     }
 
     public function getGarden(): ?Garden
