@@ -22,14 +22,12 @@ class Vacancy
     private $id;
     /**
      * @ORM\Column(type="datetime")
-     * @Groups({"user","vacancy"})
-     * @Groups({"login"})
+     * @Groups({"login", "user", "vacancy"})
      */
     private $startDate;
     /**
      * @ORM\Column(type="datetime")
-     * @Groups({"user","vacancy"})
-     * @Groups({"login"})
+     * @Groups({"login", "user", "vacancy"})
      */
     private $endDate;
     /**
@@ -45,9 +43,7 @@ class Vacancy
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="vacancies")
      * @ORM\JoinColumn(nullable=false, unique=false)
-     * @Groups({"vacancy"})
-     * @Groups({"remplacement"})
-     * @Groups({"login"})
+     * @Groups({"login", "remplacement", "vacancy"})
      */
     private $user;
     /**
@@ -66,7 +62,6 @@ class Vacancy
     {
         $this->vacancySubstitutes = new ArrayCollection();
         $this->createdAt = new \DateTime();
-        $this->updatedAt = new \DateTime();
     }
     /**
      * @return array 

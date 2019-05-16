@@ -20,17 +20,13 @@ class VacancySubstitute
 
     /**
      * @ORM\Column(type="datetime")
-     * @Groups({"vacancy"})
-     * @Groups({"remplacement"})
-     * @Groups({"user"})
+     * @Groups({"remplacement", "user", "vacancy"})
      */
     private $startDate;
 
     /**
      * @ORM\Column(type="datetime")
-     * @Groups({"vacancy"})
-     * @Groups({"remplacement"})
-     * @Groups({"user"})
+     * @Groups({"remplacement", "user", "vacancy"})
      */
     private $endDate;
 
@@ -64,7 +60,6 @@ class VacancySubstitute
     public function __construct()
     {
         $this->createdAt = new \DateTime();
-        $this->updatedAt = new \DateTime();
     }
 
     public function isBookableDate()

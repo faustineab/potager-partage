@@ -14,41 +14,31 @@ class Event
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     * @Groups({"event"})
-     * @Groups({"user"})
-     * @Groups({"login"})
+     * @Groups({"event", "login", "user"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="datetime")
-     * @Groups({"event"})
-     * @Groups({"user"})
-     * @Groups({"login"})
+     * @Groups({"event", "login", "user"})
      */
     private $startDate;
 
     /**
      * @ORM\Column(type="datetime")
-     * @Groups({"event"})
-     * @Groups({"user"})
-     * @Groups({"login"})
+     * @Groups({"event", "login", "user"})
      */
     private $endDate;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"event"})
-     * @Groups({"user"})
-     * @Groups({"login"})
+     * @Groups({"event", "login", "user"})
      */
     private $title;
 
     /**
      * @ORM\Column(type="text", nullable=true)
-     * @Groups({"event"})
-     * @Groups({"user"})
-     * @Groups({"login"})
+     * @Groups({"event", "login", "user"})
      */
     private $description;
 
@@ -67,22 +57,18 @@ class Event
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="events")
      * @ORM\JoinColumn(nullable=false, unique = false)
-     * @Groups({"event"})
-     * @Groups({"user"})
-     * @Groups({"login"})
+     * @Groups({"event", "login", "user"})
      */
     private $user;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Garden", inversedBy="events")
-     * 
      */
     private $garden;
 
     public function __construct()
     {
         $this->createdAt = new \DateTime();
-        $this->updatedAt = new \DateTime();
     }
 
     public function getId(): ?int
