@@ -68,7 +68,7 @@ const App = ({ loggedIn, loginStatus }) => (
         render={() => (loggedIn ? (<Forum />) : (<Redirect to="/" />))}
       />
       <Route
-        path="/forum/post"
+        path="/forum/post/:id"
         render={() => (loggedIn ? (<PostDetail />) : (<Redirect to="/" />))}
       />
     </Switch>

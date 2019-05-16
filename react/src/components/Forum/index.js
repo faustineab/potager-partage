@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Card, Image, Button, Icon } from 'semantic-ui-react';
+import { Card, Button, Icon } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 
 import AskQuestion from 'src/containers/AskQuestion';
@@ -12,9 +12,9 @@ const Forum = ({ questionList }) => (
     <AskQuestion />
     {/* {console.log(questionList)} */}
 
-    {questionList.map(({ id, text, title, createdAt, index }) => (
+    {questionList.map(({ id, title, createdAt, index }) => (
       <Card fluid className="forumCard" key={index} id={id}>
-        <Card.Header className="cardHeader"><Link to="/forum/post">{title}</Link></Card.Header>
+        <Card.Header className="cardHeader" content={title} />
         <Card.Content>
           <span className="postAuthor">Wassim Alkayar</span>
           <span className="postDate">- publié le {createdAt}</span>
@@ -23,7 +23,7 @@ const Forum = ({ questionList }) => (
           <span className="tag">Fruits & Légumes</span>
         </Card.Meta>
         <div className="cardButtons">
-          <Button className="cardButton">Voir Plus...</Button>
+          <Button className="cardButton" as={Link} to={`/forum/post/${id}`}>Voir Plus...</Button>
           <Icon name="ban" size="large" className="cardDelete" />
         </div>
       </Card>
