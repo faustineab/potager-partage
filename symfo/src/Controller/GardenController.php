@@ -113,36 +113,69 @@ class GardenController extends AbstractController
         if ($editedMeters != null) {
             $garden->setMeters($editedMeters);
         }
-        $editedNumberPlotsColumn = $editedGarden->getNumberPlotsColumn();
-        if ($editedNumberPlotsColumn != null) {
-            $garden->setNumberPlotsColumn($editedNumberPlotsColumn);
-        }
-        $editedNumberPlotsRow = $editedGarden->getNumberPlotsRow();
-        if ($editedNumberPlotsRow != null) {
-            $garden->setNumberPlotsRow($editedNumberPlotsRow);
-        }
+
         $garden->setUpdatedAt(new \Datetime());
 
         $manager->merge($garden);
         $manager->persist($garden);
         $manager->flush();
 
-        $oldPlotCount = count($garden->getPlots());
-        $newPlotCount = $garden->getNumberPlotsColumn() * $garden->getNumberPlotsRow();
 
+        $oldPlotCount = count($garden->getPlots());
+        // dump($oldPlotCount);
+        $newPlotCount = $editedGarden->getNumberPlotsColumn() * $editedGarden->getNumberPlotsRow();
+        // dd($newPlotCount);
         if ($oldPlotCount > $newPlotCount) {
             $plotCountToRemove = $oldPlotCount - $newPlotCount;
+
+            $inactivePlots = $plotRepository->findBy([
+                'garden' => $garden,
+                'status' => 'inactif'
+            ]);
+
+            if ($plotCountToRemove > count($inactivePlots) || empty($inactivePlots)) {
+                return new JsonResponse("Vous n'avez pas assez de parcelles inactives pour modifier");
+            }
+
+
+            $editedNumberPlotsColumn = $editedGarden->getNumberPlotsColumn();
+            if ($editedNumberPlotsColumn != null) {
+                $garden->setNumberPlotsColumn($editedNumberPlotsColumn);
+            }
+            $editedNumberPlotsRow = $editedGarden->getNumberPlotsRow();
+            if ($editedNumberPlotsRow != null) {
+                $garden->setNumberPlotsRow($editedNumberPlotsRow);
+            }
+
+            $manager->merge($garden);
+            $manager->persist($garden);
+            $manager->flush();
+
+
             for ($i = 0; $i < $plotCountToRemove; $i++) {
                 $plotToRemove = $plotRepository->findOneBy([
                     'garden' => $garden,
                     'status' => 'inactif'
                 ]);
+
                 $garden->removePlot($plotToRemove);
                 $manager->merge($garden);
                 $manager->persist($garden);
                 $manager->flush();
             }
         } elseif ($oldPlotCount < $newPlotCount) {
+            $editedNumberPlotsColumn = $editedGarden->getNumberPlotsColumn();
+            if ($editedNumberPlotsColumn != null) {
+                $garden->setNumberPlotsColumn($editedNumberPlotsColumn);
+            }
+            $editedNumberPlotsRow = $editedGarden->getNumberPlotsRow();
+            if ($editedNumberPlotsRow != null) {
+                $garden->setNumberPlotsRow($editedNumberPlotsRow);
+            }
+            $manager->merge($garden);
+            $manager->persist($garden);
+            $manager->flush();
+
             $plotCountToCreate = $newPlotCount - $oldPlotCount;
             for ($i = 0; $i < $plotCountToCreate; $i++) {
                 $newPlot = new Plot();
