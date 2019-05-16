@@ -30,6 +30,7 @@ const initialState = {
   askingQuestion: false,
   questionToAsk: '',
   questionList: '',
+  questionToDelete: '',
   questionTags: [],
   tags: [
     { key: 'm', text: 'Fruits & Légumes', value: 'Fruits & Légumes' },
@@ -61,6 +62,7 @@ export const QUESTION_ASKED = 'QUESTION_ASKED';
 export const RECEIVED_GARDENLIST = 'RECEIVED_GARDENLIST';
 export const FETCH_FORUM_QUESTIONS = 'FETCH_FORUM_QUESTIONS';
 export const FORUM_QUESTIONS_FETCHED = 'FORUM_QUESTIONS_FETCHED';
+export const DELETE_CARD = 'DELETE_CARD';
 
 
 /**
@@ -170,6 +172,11 @@ const reducer = (state = initialState, action = {}) => {
       return {
         ...state,
         questionList: [...action.questionList],
+      };
+    case DELETE_CARD:
+      return {
+        ...state,
+        questionToDelete: action.cardId,
       };
     case USER_LOGOUT:
       return {
@@ -285,6 +292,11 @@ export const fetchForumQuestions = () => ({
 export const forumQuestionsFetched = questionList => ({
   type: FORUM_QUESTIONS_FETCHED,
   questionList,
+});
+
+export const deleteCard = cardId => ({
+  type: DELETE_CARD,
+  cardId,
 });
 
 /**

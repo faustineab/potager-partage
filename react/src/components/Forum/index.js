@@ -6,34 +6,41 @@ import { Link } from 'react-router-dom';
 import AskQuestion from 'src/containers/AskQuestion';
 import './index.scss';
 
-const Forum = ({ questionList }) => (
-  <div id="forum">
-    <h2>Le coin des jardiniers</h2>
-    <AskQuestion />
-    {/* {console.log(questionList)} */}
+const Forum = ({ questionList, deleteCard }) => {
+  const handleDeleteCard = (evt) => {
+    const cardId = evt.currentTarget.id;
+    console.log(cardId);
+    deleteCard(cardId);
+  };
 
-    {questionList.map(({ id, title, createdAt, index }) => (
-      <Card fluid className="forumCard" key={index} id={id}>
-        <Card.Header className="cardHeader" content={title} />
-        <Card.Content>
-          <span className="postAuthor">Wassim Alkayar</span>
-          <span className="postDate">- publié le {createdAt}</span>
-        </Card.Content>
-        <Card.Meta>
-          <span className="tag">Fruits & Légumes</span>
-        </Card.Meta>
-        <div className="cardButtons">
-          <Button className="cardButton" as={Link} to={`/forum/post/${id}`}>Voir Plus...</Button>
-          <Icon name="ban" size="large" className="cardDelete" />
-        </div>
-      </Card>
-    ))}
-
-  </div>
-);
+  return (
+    <div id="forum">
+      <h2>Le coin des jardiniers</h2>
+      <AskQuestion />
+      {/* {console.log(questionList)} */}
+      {questionList.map(({ id, title, createdAt, index }) => (
+        <Card fluid className="forumCard" key={index} id={id}>
+          <Card.Header className="cardHeader" content={title} />
+          <Card.Content>
+            <span className="postAuthor">Wassim Alkayar</span>
+            <span className="postDate">- publié le {createdAt}</span>
+          </Card.Content>
+          <Card.Meta>
+            <span className="tag">Fruits & Légumes</span>
+          </Card.Meta>
+          <div className="cardButtons">
+            <Button className="cardButton" as={Link} to={`/forum/post/${id}`}>Voir Plus...</Button>
+            <Icon name="ban" size="large" className="cardDelete" id={id} onClick={handleDeleteCard} />
+          </div>
+        </Card>
+      ))}
+    </div>
+  );
+};
 
 Forum.propTypes = {
   questionList: PropTypes.arrayOf(PropTypes.objectOf).isRequired,
+  deleteCard: PropTypes.func.isRequired,
 };
 
 export default Forum;
