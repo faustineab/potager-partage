@@ -20,6 +20,7 @@ class IsPlantedOn
     /**
      * @ORM\Column(type="datetime")
      * @Groups({"is_planted_on"})
+     * 
      */
     private $seedling_date;
 
