@@ -5,12 +5,11 @@ import { inputChange, ModifyUserInfos } from '../store/reducer';
 const mapStateToProps = state => ({
   firstName: state.firstName,
   lastName: state.lastName,
-  password: state.password,
   email: state.email,
   phoneNumber: state.phoneNumber,
-  address1: state.address1,
-  address2: state.address2,
-  zipcode: state.zipcode,
+  gardenAddress: state.gardenAddress,
+  gardenAddressSpecificities: state.gardenAddressSpecificities,
+  gardenZipcode: state.gardenZipcode,
 });
 
 const mapDispatchToProps = dispatch => ({
