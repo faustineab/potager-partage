@@ -2,22 +2,20 @@
 
 namespace App\Controller;
 
-use PetstoreIO\Tag;
 use App\Entity\Garden;
-use App\Entity\ForumTag;
 use App\Entity\ForumQuestion;
+use App\Entity\ForumTag;
 use App\Repository\ForumTagRepository;
-use Doctrine\ORM\EntityManagerInterface;
-use App\Repository\ForumQuestionRepository;
-use Symfony\Component\HttpFoundation\Request;
 use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\ORM\EntityManagerInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
 /**
  * @Route("/api/garden/{gardenid}/forum/question")
@@ -51,7 +49,7 @@ class ForumQuestionController extends AbstractController
     /**
      * @Route("/new", name="forum_question_new", methods={"POST"})
      */
-    public function new(Garden $garden, Request $request, ForumTagRepository $tagRepository, SerializerInterface $serializer, EntityManagerInterface $entityManager, ValidatorInterface $validator)
+    public function new(Garden $garden, Request $request, ForumTagRepository $tagRepository, EntityManagerInterface $entityManager, ValidatorInterface $validator)
     {
         $currentUser = $this->get('security.token_storage')->getToken()->getUser();
         $gardenMembers = $garden->getUsers();
