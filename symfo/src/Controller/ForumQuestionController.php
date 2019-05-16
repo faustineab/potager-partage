@@ -38,11 +38,11 @@ class ForumQuestionController extends AbstractController
                     'circular_reference_handler' => function ($questions) {
                         return $questions->getId();
                     },
-            ]);
+                ]);
                     
-                    return JsonResponse::fromJsonString($jsonQuestions);
+                return JsonResponse::fromJsonString($jsonQuestions);
             }
-                return JsonResponse::fromJsonString('Vous ne faites pas partie de ce potager', 400);
+            return JsonResponse::fromJsonString('Vous ne faites pas partie de ce potager', 400);
         }
     }
 
