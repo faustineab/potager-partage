@@ -28,7 +28,7 @@ class User implements UserInterface
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     * @Groups({"admin", "event", "forum_questions", "login", "plot", "user"})
+     * @Groups({"admin", "event", "forum_questions", "garden_get","login", "plot", "user"})
      */
     private $id;
 

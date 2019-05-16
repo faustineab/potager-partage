@@ -79,7 +79,7 @@ class Garden
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Plot", mappedBy="garden", orphanRemoval=true)
-     * @Groups("login")
+     * @Groups({"login","garden_get"})
      */
     private $plots;
 
