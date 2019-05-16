@@ -28,27 +28,19 @@ class User implements UserInterface
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     * @Groups({"admin", "user","plot"})
-     * @Groups({"login"})
+     * @Groups({"admin", "login", "plot", "user"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
-     * @Groups({"admin", "user"})
-     * @Groups({"login"})
+     * @Groups({"admin", "login", "user"})
      */
     private $email;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"event","garden_get","plot","marketoffer"})
-     * @Groups({"user"})
-     * @Groups({"vacancy"})
-     * @Groups({"remplacement"})
-     * @Groups({"admin"})
-     * @Groups({"login"})
-     * @Groups({"is_planted_on"})
+     * @Groups({"admin", "event", "garden_get", "is_planted_on", "login", "marketoffer", "plot", "remplacement", "user", "vacancy"})
      */
     private $name;
 
@@ -156,7 +148,6 @@ class User implements UserInterface
         $this->events = new ArrayCollection();
         $this->vacancies = new ArrayCollection();
         $this->created_at = new \DateTime();
-        $this->updated_at = new \DateTime();
         $this->roles = new ArrayCollection();
         $this->marketOffers = new ArrayCollection();
         $this->marketOrders = new ArrayCollection();
