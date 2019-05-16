@@ -52,17 +52,17 @@ class Garden
     private $address_specificities;
     /**
      * @ORM\Column(type="integer")
-     * @Groups({"garden_get","garden_edit"}, "login")
+     * @Groups({"garden_get","garden_edit", "login"})
      */
     private $meters;
     /**
      * @ORM\Column(type="integer")
-     * @Groups({"garden_get","garden_edit"}, "login")
+     * @Groups({"garden_get","garden_edit", "login"})
      */
     private $number_plots_row;
     /**
      * @ORM\Column(type="integer")
-     * @Groups({"garden_get","garden_edit"}, "login")
+     * @Groups({"garden_get","garden_edit", "login"})
      */
     private $number_plots_column;
     /**
@@ -83,11 +83,13 @@ class Garden
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Plot", mappedBy="garden", orphanRemoval=true)
+     * @Groups("login")
      */
     private $plots;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Vacancy", mappedBy="garden")
+     * @Groups({"login"})
      */
     private $vacancies;
 
