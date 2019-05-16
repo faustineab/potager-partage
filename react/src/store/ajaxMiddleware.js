@@ -12,8 +12,10 @@ import {
   FETCH_GARDEN_INFOS,
   saveUserInfos,
   userLogged,
+  FETCH_FORUM_QUESTIONS,
+  forumQuestionsFetched,
 } from 'src/store/reducer';
-import { FETCH_FORUM_QUESTIONS, forumQuestionsFetched } from './reducer';
+
 
 const ajaxMiddleware = store => next => (action) => {
   switch (action.type) {

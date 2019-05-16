@@ -169,7 +169,7 @@ const reducer = (state = initialState, action = {}) => {
     case FORUM_QUESTIONS_FETCHED:
       return {
         ...state,
-        questionList: action.questionList,
+        questionList: [...action.questionList],
       };
     case USER_LOGOUT:
       return {
