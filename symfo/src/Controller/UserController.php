@@ -95,7 +95,6 @@ class UserController extends AbstractController
             $response = new Response();
             $response->headers->set('Access-Control-Allow-Method', 'PUT');
             $response->headers->set('Access-Control-Allow-Headers', 'application/json');
-            dd($request);
 
             return new JsonResponse($response, 200);
         }
