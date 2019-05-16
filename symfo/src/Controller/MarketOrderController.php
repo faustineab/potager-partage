@@ -51,9 +51,9 @@ class MarketOrderController extends AbstractController
             }
         }
 
-        $user = $this->get('security.token_storage')->getToken()->getUser();
+        $currentUser = $this->get('security.token_storage')->getToken()->getUser();
         $marketOrder->setMarketOffer($marketOffer);
-        $marketOrder->setUser($user);
+        $marketOrder->setUser($currentUser);
 
         $entityManager->persist($marketOrder);
         $entityManager->flush();
