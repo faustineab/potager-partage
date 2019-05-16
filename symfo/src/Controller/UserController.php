@@ -93,10 +93,10 @@ class UserController extends AbstractController
             $entityManager->flush();
 
             $response = new Response();
-            $response->headers->set('Content-Type', 'application/json');
-            $response->headers->set('Access-Control-Request-Method', 'PUT');
-            $response->headers->set('Access-Control-Request-Headers', 'application/json');
+            $response->headers->set('Access-Control-Allow-Method', 'PUT');
+            $response->headers->set('Access-Control-Allow-Headers', 'application/json');
             dd($request);
+
             return new JsonResponse($response, 200);
         }
 
