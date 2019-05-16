@@ -23,6 +23,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Doctrine\Common\Persistence\ObjectManager;
+use App\Repository\PlotRepository;
 
 /**
  * @Route("api/garden/{gardenid}")
@@ -34,7 +35,7 @@ class IsPlantedOnController extends AbstractController
      * @Route("/plantation", name="plantation_by_garden", methods={"GET"})
      * @IsGranted({"ROLE_MEMBER", "ROLE_ADMIN"})
      */
-    public function indexByGarden(Garden $garden, SerializerInterface $serializer)
+    public function indexByGarden(Garden $garden, SerializerInterface $serializer, IsPlantedOnRepository $isPlantedOnRepository, PlotRepository $plotRepository, GardenRepository $gardenrepository)
     {
         $gardenUsers = $garden->getUsers()->getValues();
 
@@ -46,16 +47,14 @@ class IsPlantedOnController extends AbstractController
         };
 
         if (!empty(array_uintersect($user, $gardenUsers, $compare))) {
-            $plotsInGarden = $garden->getPlots();
         
-        $plotsInGardenJson = $serializer->serialize($plotsInGarden, 'json', [
-            'circular_reference_handler' => function ($garden) {
-                return $garden->getId();
-            },
-            'groups' => 'is_planted_on_plots']
-        );
+            $plots = $isPlantedOnRepository->findAll();
+            
+            $jsonPlots = $serializer->serialize($plots, 'json',
+                ['groups' => 'is_planted_on', ]
+            );
 
-        return JsonResponse::fromJsonString($plotsInGardenJson);
+            return JsonResponse::fromJsonString($jsonPlots);
     }
     return new JsonResponse(["error" => "Vous n'êtes pas autorisé à aller sur cette page."], 500);
     }
@@ -65,7 +64,7 @@ class IsPlantedOnController extends AbstractController
      * @ParamConverter("plot", options={"id" = "id"})
      * @IsGranted({"ROLE_MEMBER", "ROLE_ADMIN"})
      */
-    public function indexByPlot(Plot $plot, SerializerInterface $serializer)
+    public function indexByPlot($id,Garden $garden,Plot $plot, IsPlantedOnRepository $isPlantedOnRepository, PlotRepository $plotRepository, SerializerInterface $serializer)
     {        
         $gardenUsers = $garden->getUsers()->getValues();
 
@@ -77,24 +76,24 @@ class IsPlantedOnController extends AbstractController
         };
 
         if (!empty(array_uintersect($user, $gardenUsers, $compare))) {
-            $plot = $serializer->serialize($plot, 'json', [
-            'circular_reference_handler' => function ($plot) {
-                return $plot->getId();
-            },
-            'groups' => 'is_planted_on']
-        );
+            $plots= $plotRepository->find($id);
+            $plantations = $isPlantedOnRepository->findByPlot($plots);
+            
+            $jsonPlantations = $serializer->serialize($plantations, 'json',
+                ['groups' => 'is_planted_on', ]
+            );
 
-        return JsonResponse::fromJsonString($plot);
+            return JsonResponse::fromJsonString($jsonPlantations);
     }
     return new JsonResponse(["error" => "Vous n'êtes pas autorisé à aller sur cette page."], 500);
     }
 
     /**
-     * @Route("/user/{user-id}/plantation", name="plantation_by_user", methods={"GET"})
-     * @ParamConverter("user", options={"id" = "user-id"})
+     * @Route("/user/{userid}/plantation", name="plantation_by_user", methods={"GET"})
+     * @ParamConverter("user", options={"id" = "userid"})
      * @IsGranted({"ROLE_MEMBER", "ROLE_ADMIN"})
      */
-    public function indexByUser(User $user, SerializerInterface $serializer)
+    public function indexByUser($userid,User $user, SerializerInterface $serializer,Garden $garden, IsPlantedOnRepository $isPlantedOnRepository, PlotRepository $plotRepository, GardenRepository $gardenrepository)
     {
         $gardenUsers = $garden->getUsers()->getValues();
 
@@ -106,14 +105,15 @@ class IsPlantedOnController extends AbstractController
         };
 
         if (!empty(array_uintersect($user, $gardenUsers, $compare))) {
-            $user = $serializer->serialize($user, 'json', [
-            'circular_reference_handler' => function ($user) {
-                return $user->getId();
-            },
-            'groups' => 'is_planted_on']
-        );
+            $users= $plotRepository->findByUser($userid);
+            $plots = $isPlantedOnRepository->findByPlot($users);
+            
+            $jsonPlots = $serializer->serialize($plots, 'json',
+                ['groups' => 'is_planted_on', ]
+            );
 
-        return JsonResponse::fromJsonString($user);
+            return JsonResponse::fromJsonString($jsonPlots);
+    
     }
     return new JsonResponse(["error" => "Vous n'êtes pas autorisé à aller sur cette page."], 500);
     }
@@ -191,7 +191,7 @@ class IsPlantedOnController extends AbstractController
      * @Route("/plantation/{id}", name="plantation_show", methods={"GET"})
      * @IsGranted({"ROLE_MEMBER", "ROLE_ADMIN"})
      */
-    public function show(IsPlantedOn $isPlantedOn, SerializerInterface $serializer)
+    public function show(IsPlantedOn $isPlantedOn, Garden $garden,SerializerInterface $serializer)
     {
         $gardenUsers = $garden->getUsers()->getValues();
 
