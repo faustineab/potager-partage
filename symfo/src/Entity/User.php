@@ -30,12 +30,14 @@ class User implements UserInterface
      * @ORM\Column(type="integer")
      * @Groups({"event"})
      * @Groups({"login"})
+     * @Groups("garden_get")
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
      * @Groups({"login"})
+     * @Groups("garden_get")
      */
     private $email;
 
@@ -43,6 +45,7 @@ class User implements UserInterface
      * @ORM\Column(type="string", length=255)
      * @Groups({"event"})
      * @Groups({"login"})
+     * @Groups("garden_get")
      */
     private $name;
 

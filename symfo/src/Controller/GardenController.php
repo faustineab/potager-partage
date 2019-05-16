@@ -33,7 +33,9 @@ class GardenController extends AbstractController
 
     {
         $gardens = $gardenRepository->findAll();
-        $jsonGardens = $serializer->serialize($gardens, 'json',
+        $jsonGardens = $serializer->serialize(
+            $gardens,
+            'json',
             ['groups' => 'garden_get']
         );
 
@@ -45,7 +47,7 @@ class GardenController extends AbstractController
      * @IsGranted("ROLE_MEMBER")
      * @Route("/{id}", name="garden_show", methods={"GET"})
      */
-    public function show($id,GardenRepository $gardenRepository, SerializerInterface $serializer, Garden $garden): Response
+    public function show($id, GardenRepository $gardenRepository, SerializerInterface $serializer, Garden $garden): Response
     {
         $gardenUsers = $garden->getUsers()->getValues();
 
@@ -57,19 +59,19 @@ class GardenController extends AbstractController
         };
 
         if (!empty(array_uintersect($user, $gardenUsers, $compare))) {
-        $gardenRep = $gardenRepository->find($id);
+            $gardenRep = $gardenRepository->find($id);
 
             $jsonGarden = $serializer->serialize(
-            $gardenRep,
-            'json',
-            ['groups' => 'garden_get']
-        );
-    
-        return JsonResponse::fromJsonString($jsonGarden);
+                $gardenRep,
+                'json',
+                ['groups' => 'garden_get']
+            );
+
+            return JsonResponse::fromJsonString($jsonGarden);
+        }
+        return new JsonResponse(["error" => "Vous n'êtes pas autorisé à rentrer dans ce jardin"], 500);
     }
-    return new JsonResponse(["error" => "Vous n'êtes pas autorisé à rentrer dans ce jardin"], 500);
-    }
-    
+
 
     /**
      * @IsGranted("ROLE_ADMIN")
@@ -83,7 +85,7 @@ class GardenController extends AbstractController
         $errors = $validator->validate($editedGarden);
         if (count($errors) > 0) {
             foreach ($errors as $error) {
-                return JsonResponse::fromJsonString('Votre entrée comporte des erreurs :'.$error.'.', 406);
+                return JsonResponse::fromJsonString('Votre entrée comporte des erreurs :' . $error . '.', 406);
             }
         }
 
@@ -120,17 +122,17 @@ class GardenController extends AbstractController
             $garden->setNumberPlotsRow($editedNumberPlotsRow);
         }
         $garden->setUpdatedAt(new \Datetime());
-        
+
         $manager->merge($garden);
         $manager->persist($garden);
         $manager->flush();
-        
+
         $oldPlotCount = count($garden->getPlots());
         $newPlotCount = $garden->getNumberPlotsColumn() * $garden->getNumberPlotsRow();
 
         if ($oldPlotCount > $newPlotCount) {
             $plotCountToRemove = $oldPlotCount - $newPlotCount;
-            for ($i=0; $i < $plotCountToRemove; $i++) { 
+            for ($i = 0; $i < $plotCountToRemove; $i++) {
                 $plotToRemove = $plotRepository->findOneBy([
                     'garden' => $garden,
                     'status' => 'inactif'
@@ -142,22 +144,21 @@ class GardenController extends AbstractController
             }
         } elseif ($oldPlotCount < $newPlotCount) {
             $plotCountToCreate = $newPlotCount - $oldPlotCount;
-            for ($i=0; $i < $plotCountToCreate; $i++) { 
+            for ($i = 0; $i < $plotCountToCreate; $i++) {
                 $newPlot = new Plot();
                 $newPlot->setStatus('inactif')
-                        ->setGarden($garden);
+                    ->setGarden($garden);
                 $manager->persist($newPlot);
                 $manager->flush();
             }
         }
-        
-        return JsonResponse::fromJsonString('ok', 200);
 
+        return JsonResponse::fromJsonString('ok', 200);
     }
 
 
-        /**
-         * @IsGranted("ROLE_ADMIN")
+    /**
+     * @IsGranted("ROLE_ADMIN")
      * @Route("/{id}/delete", name="garden_delete", methods={"DELETE"})
      */
     public function delete(ObjectManager $objectManager, Garden $garden): Response
@@ -173,12 +174,18 @@ class GardenController extends AbstractController
 
         if (!empty(array_uintersect($user, $gardenUsers, $compare))) {
 
+            foreach ($garden->getUsers() as $gardenUser) {
+
+                $garden->removeUser($gardenUser);
+                $objectManager->persist($garden);
+            }
+
+            $objectManager->flush();
             $objectManager->remove($garden);
             $objectManager->flush();
-            
+
             return new JsonResponse('message: Votre jardin a été supprimée', 200);
-    }
+        }
         return new JsonResponse('message: Vous n\'êtes pas autorisé à supprimer ce jardin', 406);
     }
-
 }
