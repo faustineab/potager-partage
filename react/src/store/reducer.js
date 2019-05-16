@@ -29,7 +29,7 @@ const initialState = {
   gardenSize: '',
   askingQuestion: false,
   questionToAsk: '',
-  questionList: '',
+  questionList: [],
   questionToDelete: '',
   questionTags: [],
   tags: [

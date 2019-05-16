@@ -5,7 +5,7 @@ import { NavLink } from 'react-router-dom';
 
 import './index.scss';
 
-const MainMenu = ({ onLogout, openForum }) => (
+const MainMenu = ({ onLogout }) => (
   <div className="menufix">
     <Menu>
       <div className="menudiv">
@@ -15,7 +15,7 @@ const MainMenu = ({ onLogout, openForum }) => (
       </div>
 
       <div className="menudiv">
-        <Menu.Item as={NavLink} to="/forum" className="menuitem" onClick={openForum} name="Forum">
+        <Menu.Item as={NavLink} to="/forum" className="menuitem" name="Forum">
           <h1>Forum</h1>
         </Menu.Item>
       </div>
@@ -37,7 +37,6 @@ const MainMenu = ({ onLogout, openForum }) => (
 
 MainMenu.propTypes = {
   onLogout: PropTypes.func.isRequired,
-  openForum: PropTypes.func.isRequired,
 };
 
 export default MainMenu;

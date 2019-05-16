@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 
 import Forum from 'src/components/Forum';
-import { deleteCard } from '../store/reducer';
+import { deleteCard, fetchForumQuestions } from '../store/reducer';
 
 
 const mapStateToProps = state => ({
@@ -11,6 +11,9 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   deleteCard: (cardId) => {
     dispatch(deleteCard(cardId));
+  },
+  openForum: () => {
+    dispatch(fetchForumQuestions());
   },
 });
 
