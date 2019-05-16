@@ -40,12 +40,13 @@ class ForumTag
 
     /**
      * @ORM\ManyToMany(targetEntity="App\Entity\ForumQuestion", inversedBy="tags")
-     * @Groups({"forum_tags"})
+     * @Groups({"forum_questions", "forum_tags"})
      */
     private $questions;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Garden", inversedBy="forumTags")
+     * @Groups({"forum_questions"})
      */
     private $garden;
 
@@ -120,11 +121,6 @@ class ForumTag
         }
 
         return $this;
-    }
-
-    public function __toString()
-    {
-        $this->questions;
     }
 
     public function getGarden(): ?Garden

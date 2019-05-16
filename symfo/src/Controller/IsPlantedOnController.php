@@ -87,7 +87,7 @@ class IsPlantedOnController extends AbstractController
      * @ParamConverter("plot", options={"id" = "plotid"})
      * @IsGranted({"ROLE_MEMBER", "ROLE_ADMIN"})
      */
-    public function new(Plot $plot, Request $request, SerializerInterface $serializer, ValidatorInterface $validator, EntityManagerInterface $entityManager, VegetableRepository $vegetableRepository)
+    public function new(Plot $plot, Request $request, ValidatorInterface $validator, EntityManagerInterface $entityManager, VegetableRepository $vegetableRepository)
     {
         $currentUser = $this->get('security.token_storage')->getToken()->getUser();
         

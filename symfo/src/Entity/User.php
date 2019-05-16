@@ -28,19 +28,19 @@ class User implements UserInterface
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     * @Groups({"admin", "event", "login", "plot", "user"})
+     * @Groups({"admin", "event", "forum_questions", "login", "plot", "user"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
-     * @Groups({"admin", "login", "user"})
+     * @Groups({"admin", "forum_questions", "login", "user"})
      */
     private $email;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"admin", "event", "garden_get", "is_planted_on", "login", "marketoffer", "plot", "remplacement", "user", "vacancy"})
+     * @Groups({"admin", "event", "forum_questions", "garden_get", "is_planted_on", "login", "marketoffer", "plot", "remplacement", "user", "vacancy"})
      */
     private $name;
 
@@ -86,10 +86,12 @@ class User implements UserInterface
     private $plots;
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\ForumAnswer", mappedBy="user")
+     * @Groups({"forum_questions"})
      */
     private $forumAnswers;
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\ForumQuestion", mappedBy="user")
+     * @Groups({"forum_questions"})
      */
     private $forumQuestions;
 
@@ -443,7 +445,7 @@ class User implements UserInterface
     {
 
         $roles = $this->roles->map(function ($role) {
-            return $role->getTitle();
+            return $role->getName();
         })->toArray();
         $roles[] = 'ROLE_USER';
         return $roles;

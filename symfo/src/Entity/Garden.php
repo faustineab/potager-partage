@@ -18,12 +18,12 @@ class Garden
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     * @Groups("garden_get", "garden_register", "login", "user", "vacancy")
+     * @Groups({"forum_questions", "garden_get", "garden_register", "login", "user", "vacancy"})
      */
     private $id;
     /**
      * @ORM\Column(type="string", length=60, unique=true)
-     * @Groups({"garden_register", "garden_edit", "garden_get", "login", "plot", "user", "vacancy"})
+     * @Groups({"forum_questions", "garden_register", "garden_edit", "garden_get", "login", "plot", "user", "vacancy"})
      */
     private $name;
     /**
