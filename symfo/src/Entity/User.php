@@ -28,33 +28,19 @@ class User implements UserInterface
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-<<<<<<< HEAD
-     * @Groups({"admin", "login", "plot", "user"})
-=======
-     * @Groups({"event"})
-     * @Groups({"login"})
->>>>>>> 3a8bd107986d37258626b7f3ba3577826b2b9e1f
+     * @Groups({"admin", "event", "login", "plot", "user"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
-<<<<<<< HEAD
      * @Groups({"admin", "login", "user"})
-=======
-     * @Groups({"login"})
->>>>>>> 3a8bd107986d37258626b7f3ba3577826b2b9e1f
      */
     private $email;
 
     /**
      * @ORM\Column(type="string", length=255)
-<<<<<<< HEAD
      * @Groups({"admin", "event", "garden_get", "is_planted_on", "login", "marketoffer", "plot", "remplacement", "user", "vacancy"})
-=======
-     * @Groups({"event"})
-     * @Groups({"login"})
->>>>>>> 3a8bd107986d37258626b7f3ba3577826b2b9e1f
      */
     private $name;
 
