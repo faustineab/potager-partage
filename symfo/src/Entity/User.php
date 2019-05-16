@@ -28,122 +28,97 @@ class User implements UserInterface
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     * @Groups({"admin", "user","plot"})
+     * @Groups({"event"})
      * @Groups({"login"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
-     * @Groups({"admin", "user"})
      * @Groups({"login"})
      */
     private $email;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"event","garden_get","plot","marketoffer"})
-     * @Groups({"user"})
-     * @Groups({"vacancy"})
-     * @Groups({"remplacement"})
-     * @Groups({"admin"})
+     * @Groups({"event"})
      * @Groups({"login"})
-     * @Groups({"is_planted_on"})
      */
     private $name;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"user"})
+     * @Groups({"login"})
      */
     private $password;
 
 
     /**
      * @ORM\Column(type="integer")
-     * @Groups({"admin", "user"})
+     * @Groups({"login"})
      */
     private $phone;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"admin", "user"})
+     * @Groups({"login"})
      */
     private $address;
 
     /**
      * @ORM\Column(type="datetime")
-     * @Groups({"user"})
+     * 
      */
     private $created_at;
 
     /**
      * @ORM\Column(type="datetime")
-     * @Groups({"user"})
      */
     private $updated_at;
 
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Garden", mappedBy="users")
-     * @Groups({"login", "user"})
+     * @ORM\ManyToMany(targetEntity="App\Entity\Garden", mappedBy="user")
+     * @Groups({"login"})
      */
     private $gardens;
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Plot", mappedBy="user")
-     * @Groups({"user"})
      */
     private $plots;
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\ForumAnswer", mappedBy="user")
-     * @Groups({"user"})
      */
     private $forumAnswers;
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\ForumQuestion", mappedBy="user")
-     * @Groups({"user"})
      */
     private $forumQuestions;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"admin", "user"})
      */
     private $statut;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Vacancy", mappedBy="user", orphanRemoval=true)
-     * @Groups({"user"})
+     * @ORM\OneToOne(targetEntity="App\Entity\Vacancy", mappedBy="user", cascade={"persist", "remove"})
      */
-    private $vacancies;
+    private $vacancy;
 
     /**
      * @ORM\OneToOne(targetEntity="App\Entity\VacancySubstitute", mappedBy="user", cascade={"persist", "remove"})
-     * @Groups({"user"})
      */
     private $vacancySubstitute;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Event", mappedBy="user", orphanRemoval=true)
-     * @Groups({"user"})
      */
     private $events;
 
     /**
      * @ORM\ManyToMany(targetEntity="App\Entity\Role", mappedBy="users", cascade={"persist"})
-     * @Groups({"user"})
      */
     private $roles;
-
-    /**
-     * @ORM\OneToMany(targetEntity="App\Entity\MarketOffer", mappedBy="user")
-     */
-    private $marketOffers;
-
-    /**
-     * @ORM\OneToMany(targetEntity="App\Entity\MarketOrder", mappedBy="user")
-     */
-    private $marketOrders;
 
 
     public function __construct()
@@ -154,12 +129,9 @@ class User implements UserInterface
         $this->forumAnswers = new ArrayCollection();
         $this->forumQuestions = new ArrayCollection();
         $this->events = new ArrayCollection();
-        $this->vacancies = new ArrayCollection();
         $this->created_at = new \DateTime();
         $this->updated_at = new \DateTime();
         $this->roles = new ArrayCollection();
-        $this->marketOffers = new ArrayCollection();
-        $this->marketOrders = new ArrayCollection();
     }
 
 
@@ -212,7 +184,8 @@ class User implements UserInterface
      */
     public function eraseCredentials()
     {
-        $this->plainPassword = null;
+        // If you store any temporary, sensitive data on the user, clear it here
+        // $this->plainPassword = null;
     }
 
     public function getName(): ?string
@@ -297,7 +270,6 @@ class User implements UserInterface
         }
         return $this;
     }
-
 
 
     public function removeGarden(Garden $garden): self
@@ -405,32 +377,18 @@ class User implements UserInterface
         return $this;
     }
 
-    /**
-     * @return Collection|Vacancy[]
-     */
-    public function getVacancies(): Collection
+    public function getVacancy(): ?Vacancy
     {
-        return $this->vacancies;
+        return $this->vacancy;
     }
 
-    public function addVacancy(Vacancy $vacancy): self
+    public function setVacancy(Vacancy $vacancy): self
     {
-        if (!$this->vacancies->contains($vacancy)) {
-            $this->vacancys[] = $vacancy;
+        $this->vacancy = $vacancy;
+
+        // set the owning side of the relation if necessary
+        if ($this !== $vacancy->getUser()) {
             $vacancy->setUser($this);
-        }
-
-        return $this;
-    }
-
-    public function removeVacancy(Vacancy $vacancy): self
-    {
-        if ($this->vacancies->contains($vacancy)) {
-            $this->events->removeElement($vacancy);
-            // set the owning side to null (unless already changed)
-            if ($vacancy->getUser() === $this) {
-                $vacancy->setUser(null);
-            }
         }
 
         return $this;
@@ -488,7 +446,7 @@ class User implements UserInterface
     {
 
         $roles = $this->roles->map(function ($role) {
-            return $role->getName();
+            return $role->getTitle();
         })->toArray();
         $roles[] = 'ROLE_USER';
         return $roles;
@@ -508,68 +466,6 @@ class User implements UserInterface
             $this->roles->removeElement($role);
             $role->removeUser($this);
         }
-        return $this;
-    }
-
-    /**
-     * @return Collection|MarketOffer[]
-     */
-    public function getMarketOffers(): Collection
-    {
-        return $this->marketOffers;
-    }
-
-    public function addMarketOffer(MarketOffer $marketOffer): self
-    {
-        if (!$this->marketOffers->contains($marketOffer)) {
-            $this->marketOffers[] = $marketOffer;
-            $marketOffer->setUser($this);
-        }
-
-        return $this;
-    }
-
-    public function removeMarketOffer(MarketOffer $marketOffer): self
-    {
-        if ($this->marketOffers->contains($marketOffer)) {
-            $this->marketOffers->removeElement($marketOffer);
-            // set the owning side to null (unless already changed)
-            if ($marketOffer->getUser() === $this) {
-                $marketOffer->setUser(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|MarketOrder[]
-     */
-    public function getMarketOrders(): Collection
-    {
-        return $this->marketOrders;
-    }
-
-    public function addMarketOrder(MarketOrder $marketOrder): self
-    {
-        if (!$this->marketOrders->contains($marketOrder)) {
-            $this->marketOrders[] = $marketOrder;
-            $marketOrder->setUser($this);
-        }
-
-        return $this;
-    }
-
-    public function removeMarketOrder(MarketOrder $marketOrder): self
-    {
-        if ($this->marketOrders->contains($marketOrder)) {
-            $this->marketOrders->removeElement($marketOrder);
-            // set the owning side to null (unless already changed)
-            if ($marketOrder->getUser() === $this) {
-                $marketOrder->setUser(null);
-            }
-        }
-
         return $this;
     }
 }

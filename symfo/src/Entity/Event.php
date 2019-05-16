@@ -16,7 +16,7 @@ class Event
      * @ORM\Column(type="integer")
      * @Groups({"event"})
      * @Groups({"user"})
-     * 
+     * @Groups({"login"})
      */
     private $id;
 
@@ -24,6 +24,7 @@ class Event
      * @ORM\Column(type="datetime")
      * @Groups({"event"})
      * @Groups({"user"})
+     * @Groups({"login"})
      */
     private $startDate;
 
@@ -31,6 +32,7 @@ class Event
      * @ORM\Column(type="datetime")
      * @Groups({"event"})
      * @Groups({"user"})
+     * @Groups({"login"})
      */
     private $endDate;
 
@@ -38,6 +40,7 @@ class Event
      * @ORM\Column(type="string", length=255)
      * @Groups({"event"})
      * @Groups({"user"})
+     * @Groups({"login"})
      */
     private $title;
 
@@ -45,6 +48,7 @@ class Event
      * @ORM\Column(type="text", nullable=true)
      * @Groups({"event"})
      * @Groups({"user"})
+     * @Groups({"login"})
      */
     private $description;
 
@@ -65,6 +69,7 @@ class Event
      * @ORM\JoinColumn(nullable=false, unique = false)
      * @Groups({"event"})
      * @Groups({"user"})
+     * @Groups({"login"})
      */
     private $user;
 

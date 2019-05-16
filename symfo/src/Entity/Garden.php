@@ -32,37 +32,37 @@ class Garden
     private $name;
     /**
      * @ORM\Column(type="text")
-     * @Groups({"garden_get","garden_edit","user"})
+     * @Groups({"garden_get","garden_edit","user", "login"})
      */
     private $address;
     /**
      * @ORM\Column(type="string", length=5)
-     * @Groups({"garden_get","garden_edit","user"})
+     * @Groups({"garden_get","garden_edit","user", "login"})
      */
     private $zipcode;
     /**
      * @ORM\Column(type="string", length=60)
-     * @Groups({"garden_get","garden_edit","user"})
+     * @Groups({"garden_get","garden_edit","user", "login"})
      */
     private $city;
     /**
      * @ORM\Column(type="text", nullable=true)
-     * @Groups({"garden_get","garden_edit","user"})
+     * @Groups({"garden_get","garden_edit","user", "login"})
      */
     private $address_specificities;
     /**
      * @ORM\Column(type="integer")
-     * @Groups({"garden_get","garden_edit"})
+     * @Groups({"garden_get","garden_edit"}, "login")
      */
     private $meters;
     /**
      * @ORM\Column(type="integer")
-     * @Groups({"garden_get","garden_edit"})
+     * @Groups({"garden_get","garden_edit"}, "login")
      */
     private $number_plots_row;
     /**
      * @ORM\Column(type="integer")
-     * @Groups({"garden_get","garden_edit"})
+     * @Groups({"garden_get","garden_edit"}, "login")
      */
     private $number_plots_column;
     /**
@@ -93,6 +93,7 @@ class Garden
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Event", mappedBy="garden")
+     * @Groups("login")
      */
     private $events;
 
