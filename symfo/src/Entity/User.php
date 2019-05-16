@@ -28,7 +28,7 @@ class User implements UserInterface
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     * @Groups({"event"})
+     * @Groups({"event","garden_get"})
      * @Groups({"login"})
      */
     private $id;
@@ -41,7 +41,7 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"event"})
+     * @Groups({"event","garden_get"})
      * @Groups({"login"})
      */
     private $name;

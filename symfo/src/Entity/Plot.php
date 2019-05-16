@@ -16,14 +16,14 @@ class Plot
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     * @Groups({"user","plot"})
+     * @Groups({"user","plot","garden_get"})
      * @Groups({"is_planted_on"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"user","plot"})
+     * @Groups({"user","plot","garden_get"})
      */
     private $status;
 
