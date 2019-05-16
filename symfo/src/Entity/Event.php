@@ -54,13 +54,13 @@ class Event
 
     /**
      * @ORM\Column(type="datetime")
-     * @Groups({"user"})
+     *
      */
     private $createdAt;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
-     * @Groups({"user"})
+     * 
      */
     private $updatedAt;
 
@@ -68,7 +68,6 @@ class Event
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="events")
      * @ORM\JoinColumn(nullable=false, unique = false)
      * @Groups({"event"})
-     * @Groups({"user"})
      * @Groups({"login"})
      */
     private $user;

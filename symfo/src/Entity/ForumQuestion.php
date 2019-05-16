@@ -19,6 +19,7 @@ class ForumQuestion
      * @Groups({"forum_questions"})
      * @Groups({"forum_tags"})
      * @Groups({"user"})
+     * 
      */
     private $id;
 

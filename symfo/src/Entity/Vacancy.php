@@ -53,6 +53,7 @@ class Vacancy
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\VacancySubstitute", mappedBy="vacancy", orphanRemoval=true)
      * @Groups({"vacancy"})
+     * @Groups({"login"})
      */
     private $vacancySubstitutes;
 

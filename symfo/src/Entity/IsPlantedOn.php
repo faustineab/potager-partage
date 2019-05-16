@@ -14,18 +14,21 @@ class IsPlantedOn
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     * @Groups({"login"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="datetime")
      * @Groups({"is_planted_on"})
+     * @Groups({"login"})
      */
     private $seedling_date;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
      * @Groups({"is_planted_on"})
+     * @Groups({"login"})
      */
     private $irrigation_date;
 

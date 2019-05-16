@@ -18,12 +18,14 @@ class Plot
      * @ORM\Column(type="integer")
      * @Groups({"user","plot"})
      * @Groups({"is_planted_on"})
+     * @Groups({"login"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Groups({"user","plot"})
+     * @Groups({"login"})
      */
     private $status;
 
@@ -49,11 +51,13 @@ class Plot
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="plots" , cascade={"persist"})
      * @Groups({"user","plot"})
+     * @Groups({"login"})
      */
     private $user;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\IsPlantedOn", mappedBy="plot")
+     * @Groups({"login"})
      */
     private $isPlantedOns;
 

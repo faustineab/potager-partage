@@ -78,40 +78,47 @@ class User implements UserInterface
 
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Garden", mappedBy="user")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Garden", mappedBy="users")
      * @Groups({"login"})
      */
     private $gardens;
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Plot", mappedBy="user")
+     * @Groups({"login"})
      */
     private $plots;
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\ForumAnswer", mappedBy="user")
+     * @Groups({"login"})
      */
     private $forumAnswers;
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\ForumQuestion", mappedBy="user")
+     * @Groups({"login"})
      */
     private $forumQuestions;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"login"})
      */
     private $statut;
 
     /**
      * @ORM\OneToOne(targetEntity="App\Entity\Vacancy", mappedBy="user", cascade={"persist", "remove"})
+     * @Groups({"login"})
      */
     private $vacancy;
 
     /**
      * @ORM\OneToOne(targetEntity="App\Entity\VacancySubstitute", mappedBy="user", cascade={"persist", "remove"})
+     * @Groups({"login"})
      */
     private $vacancySubstitute;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Event", mappedBy="user", orphanRemoval=true)
+     * @Groups({"login"})
      */
     private $events;
 

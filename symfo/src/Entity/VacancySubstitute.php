@@ -15,6 +15,7 @@ class VacancySubstitute
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      * @Groups({"user"})
+     * @Groups({"login"})
      */
     private $id;
 
@@ -23,6 +24,7 @@ class VacancySubstitute
      * @Groups({"vacancy"})
      * @Groups({"remplacement"})
      * @Groups({"user"})
+     * @Groups({"login"})
      */
     private $startDate;
 
@@ -31,6 +33,7 @@ class VacancySubstitute
      * @Groups({"vacancy"})
      * @Groups({"remplacement"})
      * @Groups({"user"})
+     * @Groups({"login"})
      */
     private $endDate;
 
@@ -57,6 +60,7 @@ class VacancySubstitute
      * @ORM\OneToOne(targetEntity="App\Entity\User", inversedBy="vacancySubstitute")
      * @ORM\JoinColumn(nullable=false)
      * @Groups({"vacancy"})
+     * @Groups({"login"})
      * 
      */
     private $user;

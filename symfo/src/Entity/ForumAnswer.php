@@ -17,6 +17,7 @@ class ForumAnswer
      * @ORM\Column(type="integer")
      * @Groups({"forum_questions"})
      * @Groups({"user"})
+     *
      */
     private $id;
 
