@@ -32,37 +32,65 @@ class Garden
     private $name;
     /**
      * @ORM\Column(type="text")
+<<<<<<< HEAD
      * @Groups({"garden_edit", "garden_get", "user"})
+=======
+     * @Groups({"garden_get","garden_edit","user", "login"})
+>>>>>>> 3a8bd107986d37258626b7f3ba3577826b2b9e1f
      */
     private $address;
     /**
      * @ORM\Column(type="string", length=5)
+<<<<<<< HEAD
      * @Groups({"garden_edit", "garden_get", "user"})
+=======
+     * @Groups({"garden_get","garden_edit","user", "login"})
+>>>>>>> 3a8bd107986d37258626b7f3ba3577826b2b9e1f
      */
     private $zipcode;
     /**
      * @ORM\Column(type="string", length=60)
+<<<<<<< HEAD
      * @Groups({"garden_edit", "garden_get", "user"})
+=======
+     * @Groups({"garden_get","garden_edit","user", "login"})
+>>>>>>> 3a8bd107986d37258626b7f3ba3577826b2b9e1f
      */
     private $city;
     /**
      * @ORM\Column(type="text", nullable=true)
+<<<<<<< HEAD
      * @Groups({"garden_edit", "garden_get", "user"})
+=======
+     * @Groups({"garden_get","garden_edit","user", "login"})
+>>>>>>> 3a8bd107986d37258626b7f3ba3577826b2b9e1f
      */
     private $address_specificities;
     /**
      * @ORM\Column(type="integer")
+<<<<<<< HEAD
      * @Groups({"garden_edit", "garden_get"})
+=======
+     * @Groups({"garden_get","garden_edit"}, "login")
+>>>>>>> 3a8bd107986d37258626b7f3ba3577826b2b9e1f
      */
     private $meters;
     /**
      * @ORM\Column(type="integer")
+<<<<<<< HEAD
      * @Groups({"garden_edit", "garden_get"})
+=======
+     * @Groups({"garden_get","garden_edit"}, "login")
+>>>>>>> 3a8bd107986d37258626b7f3ba3577826b2b9e1f
      */
     private $number_plots_row;
     /**
      * @ORM\Column(type="integer")
+<<<<<<< HEAD
      * @Groups({"garden_edit", "garden_get"})
+=======
+     * @Groups({"garden_get","garden_edit"}, "login")
+>>>>>>> 3a8bd107986d37258626b7f3ba3577826b2b9e1f
      */
     private $number_plots_column;
     /**
@@ -93,6 +121,7 @@ class Garden
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Event", mappedBy="garden")
+     * @Groups("login")
      */
     private $events;
 

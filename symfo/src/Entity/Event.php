@@ -14,31 +14,61 @@ class Event
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+<<<<<<< HEAD
      * @Groups({"event", "user"})
+=======
+     * @Groups({"event"})
+     * @Groups({"user"})
+     * @Groups({"login"})
+>>>>>>> 3a8bd107986d37258626b7f3ba3577826b2b9e1f
      */
     private $id;
 
     /**
      * @ORM\Column(type="datetime")
+<<<<<<< HEAD
      * @Groups({"event", "user"})
+=======
+     * @Groups({"event"})
+     * @Groups({"user"})
+     * @Groups({"login"})
+>>>>>>> 3a8bd107986d37258626b7f3ba3577826b2b9e1f
      */
     private $startDate;
 
     /**
      * @ORM\Column(type="datetime")
+<<<<<<< HEAD
      * @Groups({"event", "user"})
+=======
+     * @Groups({"event"})
+     * @Groups({"user"})
+     * @Groups({"login"})
+>>>>>>> 3a8bd107986d37258626b7f3ba3577826b2b9e1f
      */
     private $endDate;
 
     /**
      * @ORM\Column(type="string", length=255)
+<<<<<<< HEAD
      * @Groups({"event", "user"})
+=======
+     * @Groups({"event"})
+     * @Groups({"user"})
+     * @Groups({"login"})
+>>>>>>> 3a8bd107986d37258626b7f3ba3577826b2b9e1f
      */
     private $title;
 
     /**
      * @ORM\Column(type="text", nullable=true)
+<<<<<<< HEAD
      * @Groups({"event", "user"})
+=======
+     * @Groups({"event"})
+     * @Groups({"user"})
+     * @Groups({"login"})
+>>>>>>> 3a8bd107986d37258626b7f3ba3577826b2b9e1f
      */
     private $description;
 
@@ -57,7 +87,13 @@ class Event
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="events")
      * @ORM\JoinColumn(nullable=false, unique = false)
+<<<<<<< HEAD
      * @Groups({"event", "user"})
+=======
+     * @Groups({"event"})
+     * @Groups({"user"})
+     * @Groups({"login"})
+>>>>>>> 3a8bd107986d37258626b7f3ba3577826b2b9e1f
      */
     private $user;
 

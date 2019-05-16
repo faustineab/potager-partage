@@ -17,16 +17,17 @@ class Vacancy
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      * @Groups({"user"})
+     * @Groups({"login"})
      */
     private $id;
     /**
      * @ORM\Column(type="datetime")
-     * @Groups({"user", "vacancy"})
+     * @Groups({"login", "user", "vacancy"})
      */
     private $startDate;
     /**
      * @ORM\Column(type="datetime")
-     * @Groups({"user", "vacancy"})
+     * @Groups({"login", "user", "vacancy"})
      */
     private $endDate;
     /**
@@ -42,7 +43,7 @@ class Vacancy
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="vacancies")
      * @ORM\JoinColumn(nullable=false, unique=false)
-     * @Groups({"vacancy", "remplacement"})
+     * @Groups({"login", "remplacement", "vacancy"})
      */
     private $user;
     /**
@@ -119,34 +120,34 @@ class Vacancy
     {
         return $this->id;
     }
-    
+
     public function getStartDate(): ?\DateTimeInterface
     {
         return $this->startDate;
     }
-    
+
     public function setStartDate(\DateTimeInterface $startDate): self
     {
         $this->startDate = $startDate;
         return $this;
     }
-    
+
     public function getEndDate(): ?\DateTimeInterface
     {
         return $this->endDate;
     }
-    
+
     public function setEndDate(\DateTimeInterface $endDate): self
     {
         $this->endDate = $endDate;
         return $this;
     }
-    
+
     public function getCreatedAt(): ?\DateTimeInterface
     {
         return $this->createdAt;
     }
-    
+
     public function setCreatedAt(\DateTimeInterface $createdAt): self
     {
         $this->createdAt = $createdAt;
