@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20190514190750 extends AbstractMigration
+final class Version20190516125814 extends AbstractMigration
 {
     public function getDescription() : string
     {
@@ -22,10 +22,8 @@ final class Version20190514190750 extends AbstractMigration
         // this up() migration is auto-generated, please modify it to your needs
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
-        $this->addSql('CREATE UNIQUE INDEX UNIQ_3C0918EA5E237E06 ON garden (name)');
-        $this->addSql('ALTER TABLE market_offer ADD garden_id INT NOT NULL');
-        $this->addSql('ALTER TABLE market_offer ADD CONSTRAINT FK_E2F8384B39F3B087 FOREIGN KEY (garden_id) REFERENCES garden (id)');
-        $this->addSql('CREATE INDEX IDX_E2F8384B39F3B087 ON market_offer (garden_id)');
+        $this->addSql('DROP INDEX name ON vegetable');
+        $this->addSql('DROP INDEX name ON garden');
     }
 
     public function down(Schema $schema) : void
@@ -33,9 +31,7 @@ final class Version20190514190750 extends AbstractMigration
         // this down() migration is auto-generated, please modify it to your needs
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
-        $this->addSql('DROP INDEX UNIQ_3C0918EA5E237E06 ON garden');
-        $this->addSql('ALTER TABLE market_offer DROP FOREIGN KEY FK_E2F8384B39F3B087');
-        $this->addSql('DROP INDEX IDX_E2F8384B39F3B087 ON market_offer');
-        $this->addSql('ALTER TABLE market_offer DROP garden_id');
+        $this->addSql('CREATE UNIQUE INDEX name ON garden (name)');
+        $this->addSql('CREATE UNIQUE INDEX name ON vegetable (name)');
     }
 }
