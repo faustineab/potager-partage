@@ -26,11 +26,11 @@ class Forum extends Component {
         <h2>Le coin des jardiniers</h2>
         <AskQuestion />
         {console.log(questionList)}
-        {questionList.map(({ id, title, creationDate, index }) => (
+        {questionList.map(({ id, title, creationDate, index, user }) => (
           <Card fluid className="forumCard" key={index} id={id}>
             <Card.Header className="cardHeader" content={title} />
             <Card.Content>
-              <span className="postAuthor">Wassim Alkayar</span>
+              <span className="postAuthor">{user.name}</span>
               <span className="postDate">- publié le {creationDate}</span>
             </Card.Content>
             <Card.Meta>
@@ -52,6 +52,7 @@ Forum.propTypes = {
   questionList: PropTypes.arrayOf(PropTypes.objectOf).isRequired,
   deleteCard: PropTypes.func.isRequired,
   openForum: PropTypes.func.isRequired,
+
 };
 
 export default Forum;

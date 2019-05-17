@@ -13,8 +13,13 @@ import {
   saveUserInfos,
   userLogged,
   FETCH_FORUM_QUESTIONS,
+  fetchForumTags,
+  FETCH_FORUM_TAGS,
   forumQuestionsFetched,
   MODIFY_USER_INFOS,
+  SUBMIT_QUESTION,
+  questionAsked,
+  userLogout,
 } from 'src/store/reducer';
 
 
@@ -34,6 +39,7 @@ const ajaxMiddleware = store => next => (action) => {
         })
         .catch((error) => {
           console.log(error);
+          store.dispatch()
         });
       break;
 
@@ -82,6 +88,7 @@ const ajaxMiddleware = store => next => (action) => {
           window.location.href = '/subscribe';
         });
       break;
+
     case LOG_USER:
       next(action);
       axios.post('http://localhost/apo/potager-partage/symfo/public/login', {
@@ -94,8 +101,10 @@ const ajaxMiddleware = store => next => (action) => {
         })
         .catch((error) => {
           console.log(error);
+          store.dispatch(userLogout());
         });
       break;
+
     case FETCH_USER_INFOS:
       next(action);
       axios.get('http://localhost/apo/potager-partage/symfo/public/api/login', {
@@ -118,8 +127,10 @@ const ajaxMiddleware = store => next => (action) => {
         })
         .catch((error) => {
           console.log(error);
+          store.dispatch(userLogout());
         });
       break;
+
     case FETCH_GARDEN_INFOS:
       next(action);
       axios.get(`http://localhost/apo/potager-partage/symfo/public/api/garden/${store.getState().gardenId}`, {
@@ -151,11 +162,13 @@ const ajaxMiddleware = store => next => (action) => {
         })
         .catch((error) => {
           console.log(error);
+          store.dispatch(userLogout());
         });
       break;
+
     case FETCH_FORUM_QUESTIONS:
       next(action);
-      axios.get('http://localhost/apo/potager-partage/symfo/public/api/forum/question', {
+      axios.get(`http://localhost/apo/potager-partage/symfo/public/api/garden/${store.getState().gardenId}/forum/question`, {
         headers: {
           Authorization: `Bearer ${store.getState().token}`,
         },
@@ -171,7 +184,7 @@ const ajaxMiddleware = store => next => (action) => {
             creationDate: list.createdAt.substring(0, 10),
           }));
           console.log(formattedQuestionList);
-          store.dispatch(forumQuestionsFetched(formattedQuestionList));
+          store.dispatch(fetchForumTags(formattedQuestionList));
         })
         .catch((error) => {
           console.log(error);
@@ -180,6 +193,40 @@ const ajaxMiddleware = store => next => (action) => {
     default:
       next(action);
       break;
+
+    case FETCH_FORUM_TAGS:
+      next(action);
+      axios.get(`http://localhost/apo/potager-partage/symfo/public/api/garden/${store.getState().gardenId}/forum/tag`, {
+        headers: {
+          Authorization: `Bearer ${store.getState().token}`,
+        },
+      })
+        .then((response) => {
+          console.log(response);
+          const tagList = response.data;
+          store.dispatch(forumQuestionsFetched(tagList));
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+      break;
+
+    case SUBMIT_QUESTION:
+      next(action);
+      axios.post(`http://localhost/apo/potager-partage/symfo/api/garden/${store.getState().gardenId}/forum/question/new`, {
+        title: store.getState().questionTitle,
+        text: store.getState().questionToAsk,
+        tags: store.getState().qusetionTags,
+      })
+        .then((response) => {
+          console.log(response.data);
+          store.dispatch(questionAsked());
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+      break;
+
     case MODIFY_USER_INFOS:
       next(action);
       console.log(store.getState().user.id);

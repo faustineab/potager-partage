@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Form, Popup, Button, Icon } from 'semantic-ui-react';
+import { Form, Popup, Button, Icon, Message } from 'semantic-ui-react';
 
 import './index.scss';
 
@@ -49,7 +49,6 @@ class AskQuestion extends Component {
 
   render() {
     const { tags, question, askingQuestion, questionTags, questionTitle } = this.props;
-    console.log(questionTags.length);
 
     return (
       <div id="newQuestion">
@@ -60,7 +59,6 @@ class AskQuestion extends Component {
         />
         <Form id={askingQuestion ? 'showQuestionForm' : 'hideQuestionForm'} onSubmit={this.handleSubmit}>
           <Form.Field>
-            <label>Nom du jardin</label>
             <input placeholder="titre" value={questionTitle} name="questionTitle" onChange={this.handleChange} />
           </Form.Field>
           <Form.TextArea

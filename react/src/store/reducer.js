@@ -60,10 +60,10 @@ export const USER_ASKING_QUESTION = 'USER_ASKING_QUESTION';
 export const ADD_TAG_TO_QUESTION = 'ADD_TAG_TO_QUESTION';
 export const REMOVE_QUESTION_TAG = 'REMOVE_QUESTION_TAG';
 export const SUBMIT_QUESTION = 'SUBMIT_QUESTION';
-export const QUESTION_ERROR = 'QUESTION_ERROR';
 export const QUESTION_ASKED = 'QUESTION_ASKED';
 export const RECEIVED_GARDENLIST = 'RECEIVED_GARDENLIST';
 export const FETCH_FORUM_QUESTIONS = 'FETCH_FORUM_QUESTIONS';
+export const FETCH_FORUM_TAGS = 'FETCH_FORUM_TAGS';
 export const FORUM_QUESTIONS_FETCHED = 'FORUM_QUESTIONS_FETCHED';
 export const DELETE_CARD = 'DELETE_CARD';
 
@@ -150,6 +150,9 @@ const reducer = (state = initialState, action = {}) => {
       return {
         ...state,
         askingQuestion: !state.askingQuestion,
+        questionTitle: '',
+        questionToAsk: '',
+        questionTags: [],
       };
     case ADD_TAG_TO_QUESTION:
       return {
@@ -168,11 +171,6 @@ const reducer = (state = initialState, action = {}) => {
         questionToAsk: action.question,
         questionTags: [...action.tagList],
       };
-    case QUESTION_ERROR:
-      return {
-        ...state,
-        errorMessage: action.errorMessage,
-      };
     case QUESTION_ASKED:
       return {
         ...state,
@@ -186,10 +184,15 @@ const reducer = (state = initialState, action = {}) => {
       return {
         ...state,
       };
-    case FORUM_QUESTIONS_FETCHED:
+    case FETCH_FORUM_TAGS:
       return {
         ...state,
         questionList: [...action.questionList],
+      };
+    case FORUM_QUESTIONS_FETCHED:
+      return {
+        ...state,
+        tags: [...action.tagList],
       };
     case DELETE_CARD:
       return {
@@ -304,11 +307,6 @@ export const submitQuestion = (title, question, tagList) => ({
   tagList,
 });
 
-export const questionError = errorMessage => ({
-  type: QUESTION_ERROR,
-  errorMessage,
-});
-
 export const questionAsked = () => ({
   type: QUESTION_ASKED,
 });
@@ -317,9 +315,14 @@ export const fetchForumQuestions = () => ({
   type: FETCH_FORUM_QUESTIONS,
 });
 
-export const forumQuestionsFetched = questionList => ({
-  type: FORUM_QUESTIONS_FETCHED,
+export const fetchForumTags = questionList => ({
+  type: FETCH_FORUM_TAGS,
   questionList,
+});
+
+export const forumQuestionsFetched = tagList => ({
+  type: FORUM_QUESTIONS_FETCHED,
+  tagList,
 });
 
 export const deleteCard = cardId => ({
