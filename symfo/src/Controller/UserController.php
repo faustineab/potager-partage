@@ -48,6 +48,7 @@ class UserController extends AbstractController
      */
     public function edit(Request $request, User $user, EntityManagerInterface $entityManager, ValidatorInterface $validator, SerializerInterface $serializer, UserPasswordEncoderInterface $encoder)
     {
+
         if ($user == $this->get('security.token_storage')->getToken()->getUser()) {
             $content = $request->getContent();
 
@@ -93,14 +94,15 @@ class UserController extends AbstractController
             $entityManager->flush();
 
             $response = new Response();
+            dd($response);
+            $response->headers->set('Access-Control-Allow-Origin', '*');
             $response->headers->set('Access-Control-Allow-Methods', 'PUT');
             $response->headers->set('Access-Control-Allow-Headers', 'application/json');
-            $response->headers->set('Access-Control-Allow-Origin', 'application/json');
 
             return new JsonResponse($response, 200);
         }
 
-        return JsonResponse::fromJsonString('message: Vous n\'êtes pas autorisé à accéder à cette page', 403);
+        return JsonResponse::fromJsonString(' message: Vous n \'êtes pas autorisé à accéder à cette page', 403);
     }
 
     /**
