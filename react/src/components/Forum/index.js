@@ -25,7 +25,6 @@ class Forum extends Component {
       <div id="forum">
         <h2>Le coin des jardiniers</h2>
         <AskQuestion />
-        {console.log(questionList)}
         {questionList.map(({ id, title, creationDate, index, user }) => (
           <Card fluid className="forumCard" key={index} id={id}>
             <Card.Header className="cardHeader" content={title} />

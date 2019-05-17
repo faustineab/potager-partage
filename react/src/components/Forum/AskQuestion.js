@@ -8,7 +8,7 @@ class AskQuestion extends Component {
   handleSubmit = (evt) => {
     evt.preventDefault();
     const { onQuestionSubmit } = this.props;
-    console.log(evt.currentTarget);
+    console.log('check', evt.currentTarget);
 
     onQuestionSubmit();
   }
@@ -80,7 +80,7 @@ class AskQuestion extends Component {
               {(questionTags.length > 0) && questionTags.map((tag, index) => <div key={index} className="tag">{tag} <Icon id={tag} onClick={this.handleTags} name="delete" /></div>)}
             </div>
           </Form.Group>
-          <Form.Button content="Poser" floated="right" />
+          <Form.Button type="submit" content="Poser" floated="right" />
         </Form>
       </div>
     );

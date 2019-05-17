@@ -167,9 +167,6 @@ const reducer = (state = initialState, action = {}) => {
     case SUBMIT_QUESTION:
       return {
         ...state,
-        questionTitle: action.title,
-        questionToAsk: action.question,
-        questionTags: [...action.tagList],
       };
     case QUESTION_ASKED:
       return {
@@ -300,11 +297,8 @@ export const removeQuestionTag = tagList => ({
   tagList,
 });
 
-export const submitQuestion = (title, question, tagList) => ({
+export const submitQuestion = () => ({
   type: SUBMIT_QUESTION,
-  title,
-  question,
-  tagList,
 });
 
 export const questionAsked = () => ({

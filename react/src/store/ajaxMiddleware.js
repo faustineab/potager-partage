@@ -20,6 +20,7 @@ import {
   SUBMIT_QUESTION,
   questionAsked,
   userLogout,
+  DELETE_CARD,
 } from 'src/store/reducer';
 
 
@@ -202,9 +203,15 @@ const ajaxMiddleware = store => next => (action) => {
         },
       })
         .then((response) => {
-          console.log(response);
+          console.log('tags', response.data);
           const tagList = response.data;
-          store.dispatch(forumQuestionsFetched(tagList));
+          const formattedTagList = tagList.map(tag => ({
+            key: tag.id,
+            text: tag.name,
+            value: tag.name,
+          }));
+          console.log(formattedTagList);
+          store.dispatch(forumQuestionsFetched(formattedTagList));
         })
         .catch((error) => {
           console.log(error);
@@ -213,10 +220,15 @@ const ajaxMiddleware = store => next => (action) => {
 
     case SUBMIT_QUESTION:
       next(action);
-      axios.post(`http://localhost/apo/potager-partage/symfo/api/garden/${store.getState().gardenId}/forum/question/new`, {
+      axios.post(`http://localhost/apo/potager-partage/symfo/public/api/garden/${store.getState().gardenId}/forum/question/new`, {
         title: store.getState().questionTitle,
         text: store.getState().questionToAsk,
-        tags: store.getState().qusetionTags,
+        tag: store.getState().questionTags,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${store.getState().token}`,
+        },
       })
         .then((response) => {
           console.log(response.data);
@@ -226,11 +238,15 @@ const ajaxMiddleware = store => next => (action) => {
           console.log(error);
         });
       break;
-
+    // case DELETE_CARD:
+    //   next(action);
+    //   axios.delete(``)
+    //   break;
     case MODIFY_USER_INFOS:
       next(action);
+
       console.log(store.getState().user.id);
-      axios.put(`http://localhost/apo/potager-partage/symfo/api/user/${store.getState().user.id}/edit`, {
+      axios.put(`http://localhost/apo/potager-partage/symfo/public/api/user/${store.getState().user.id}/edit`, {
         headers: {
           Authorization: `Bearer ${store.getState().token}`,
         },
