@@ -15,29 +15,25 @@ class ForumAnswer
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     * @Groups({"forum_questions"})
-     * @Groups({"user"})
+     * @Groups({"forum_questions", "user"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="text")
-     * @Groups({"forum_questions"})
-     * @Groups({"user"})
+     * @Groups({"forum_questions", "user"})
      */
     private $text;
 
     /**
      * @ORM\Column(type="datetime")
-     * @Groups({"forum_questions"})
-     * @Groups({"user"})
+     * @Groups({"forum_questions", "user"})
      */
     private $createdAt;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
-     * @Groups({"forum_questions"})
-     * @Groups({"user"})
+     * @Groups({"forum_questions", "user"})
      */
     private $updatedAt;
 
