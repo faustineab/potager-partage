@@ -72,7 +72,7 @@ class UserController extends AbstractController
 
             $password = $editedUser->getPassword();
             $encodedPassword = $encoder->encodePassword($user, $password);
-            if ($password = !null) {
+            if ($password != null) {
                 $user->setPassword($encodedPassword);
             }
 
@@ -88,14 +88,18 @@ class UserController extends AbstractController
 
             $user->setUpdatedAt(new \Datetime());
 
+            $response = new Response();
+            dump($response);
+            $response->headers->set('Access-Control-Allow-Method', ['GET', 'OPTIONS', 'POST', 'PUT', 'PATCH', 'DELETE']);
+            $response->headers->set('Access-Control-Allow-Headers',  'Content-Type', 'Authorization');
+            $response->headers->set('Access-Control-Allow-Origin', 'https?: //localhost(:[0-9]+)?');
+            // dd($response);
+
             $entityManager->merge($user);
             $entityManager->persist($user);
             $entityManager->flush();
 
-            $response = new Response();
-            $response->headers->set('Access-Control-Allow-Method', 'PUT');
-            $response->headers->set('Access-Control-Allow-Headers', 'application/json');
-            $response->headers->set('Access-Control-Allow-Origin', 'application/json');
+
 
             return new JsonResponse($response, 200);
         }
