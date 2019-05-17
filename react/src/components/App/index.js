@@ -15,7 +15,7 @@ import Login from 'src/containers/Login';
 import ChooseGarden from 'src/containers/ChooseGarden';
 import Profil from 'src/containers/Profil';
 import ProfilModify from 'src/containers/ProfilModify';
-import Forum from 'src/components/Forum';
+import Forum from 'src/containers/Forum';
 import PostDetail from 'src/components/PostDetail';
 import MainMenu from 'src/containers/MainMenu';
 import Footer from 'src/containers/Footer';
@@ -68,7 +68,7 @@ const App = ({ loggedIn, loginStatus }) => (
         render={() => (loggedIn ? (<Forum />) : (<Redirect to="/" />))}
       />
       <Route
-        path="/forum/post"
+        path="/forum/post/:id"
         render={() => (loggedIn ? (<PostDetail />) : (<Redirect to="/" />))}
       />
     </Switch>

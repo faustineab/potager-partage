@@ -48,7 +48,7 @@ class AskQuestion extends Component {
 
 
   render() {
-    const { tags, question, askingQuestion, questionTags } = this.props;
+    const { tags, question, askingQuestion, questionTags, questionTitle } = this.props;
     console.log(questionTags.length);
 
     return (
@@ -59,6 +59,10 @@ class AskQuestion extends Component {
           trigger={<Button id="addQuestion" icon={askingQuestion ? 'minus' : 'add'} onClick={this.handleClick} />}
         />
         <Form id={askingQuestion ? 'showQuestionForm' : 'hideQuestionForm'} onSubmit={this.handleSubmit}>
+          <Form.Field>
+            <label>Nom du jardin</label>
+            <input placeholder="titre" value={questionTitle} name="questionTitle" onChange={this.handleChange} />
+          </Form.Field>
           <Form.TextArea
             id="questionText"
             name="questionToAsk"
@@ -87,6 +91,7 @@ class AskQuestion extends Component {
 
 AskQuestion.propTypes = {
   question: PropTypes.string,
+  questionTitle: PropTypes.string,
   questionTags: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
   tags: PropTypes.arrayOf(PropTypes.object.isRequired).isRequired,
   askingQuestion: PropTypes.bool.isRequired,
@@ -99,6 +104,7 @@ AskQuestion.propTypes = {
 
 AskQuestion.defaultProps = {
   question: '',
+  questionTitle: '',
 };
 
 export default AskQuestion;

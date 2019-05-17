@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 
 import AskQuestion from 'src/components/Forum/AskQuestion';
 
-import { inputChange, userAskingQuestion, questionAsked, addTagToQuestion, removeQuestionTag } from '../store/reducer';
+import { inputChange, userAskingQuestion, submitQuestion, addTagToQuestion, removeQuestionTag } from '../store/reducer';
 
 
 const mapStateToProps = state => ({
@@ -11,6 +11,7 @@ const mapStateToProps = state => ({
   tags: state.tags,
   askingQuestion: state.askingQuestion,
   questionTags: state.questionTags,
+  questionTitle: state.questionTitle,
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -26,8 +27,8 @@ const mapDispatchToProps = dispatch => ({
   userAskingQuestion: () => {
     dispatch(userAskingQuestion());
   },
-  onQuestionSubmit: (question, tag) => {
-    dispatch(questionAsked(question, tag));
+  onQuestionSubmit: (title, question, tag) => {
+    dispatch(submitQuestion(title, question, tag));
   },
 });
 
@@ -36,3 +37,4 @@ export default connect(
   mapStateToProps,
   mapDispatchToProps,
 )(AskQuestion);
+

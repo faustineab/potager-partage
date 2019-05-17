@@ -28,7 +28,10 @@ const initialState = {
   gardenNbPlotsColumn: 1,
   gardenSize: '',
   askingQuestion: false,
+  questionTitle: '',
   questionToAsk: '',
+  questionList: [],
+  questionToDelete: '',
   questionTags: [],
   tags: [
     { key: 'm', text: 'Fruits & Légumes', value: 'Fruits & Légumes' },
@@ -56,8 +59,13 @@ export const FETCH_GARDENLIST = 'FETCH_GARDENLIST';
 export const USER_ASKING_QUESTION = 'USER_ASKING_QUESTION';
 export const ADD_TAG_TO_QUESTION = 'ADD_TAG_TO_QUESTION';
 export const REMOVE_QUESTION_TAG = 'REMOVE_QUESTION_TAG';
+export const SUBMIT_QUESTION = 'SUBMIT_QUESTION';
+export const QUESTION_ERROR = 'QUESTION_ERROR';
 export const QUESTION_ASKED = 'QUESTION_ASKED';
 export const RECEIVED_GARDENLIST = 'RECEIVED_GARDENLIST';
+export const FETCH_FORUM_QUESTIONS = 'FETCH_FORUM_QUESTIONS';
+export const FORUM_QUESTIONS_FETCHED = 'FORUM_QUESTIONS_FETCHED';
+export const DELETE_CARD = 'DELETE_CARD';
 
 
 /**
@@ -105,6 +113,7 @@ const reducer = (state = initialState, action = {}) => {
         ...state,
         loading: false,
         loginMessage: '',
+        errorMessage: '',
         loggedIn: true,
         loginStatus: 'loggedIn',
         gardenName: action.gardenName,
@@ -152,12 +161,40 @@ const reducer = (state = initialState, action = {}) => {
         ...state,
         questionTags: [...action.tagList],
       };
+    case SUBMIT_QUESTION:
+      return {
+        ...state,
+        questionTitle: action.title,
+        questionToAsk: action.question,
+        questionTags: [...action.tagList],
+      };
+    case QUESTION_ERROR:
+      return {
+        ...state,
+        errorMessage: action.errorMessage,
+      };
     case QUESTION_ASKED:
       return {
         ...state,
         askingQuestion: false,
+        questionTitle: '',
         questionToAsk: '',
         questionTags: [],
+        errorMessage: '',
+      };
+    case FETCH_FORUM_QUESTIONS:
+      return {
+        ...state,
+      };
+    case FORUM_QUESTIONS_FETCHED:
+      return {
+        ...state,
+        questionList: [...action.questionList],
+      };
+    case DELETE_CARD:
+      return {
+        ...state,
+        questionToDelete: action.cardId,
       };
     case USER_LOGOUT:
       return {
@@ -260,12 +297,35 @@ export const removeQuestionTag = tagList => ({
   tagList,
 });
 
-export const questionAsked = (question, tag) => ({
-  type: QUESTION_ASKED,
+export const submitQuestion = (title, question, tagList) => ({
+  type: SUBMIT_QUESTION,
+  title,
   question,
-  tag,
+  tagList,
 });
 
+export const questionError = errorMessage => ({
+  type: QUESTION_ERROR,
+  errorMessage,
+});
+
+export const questionAsked = () => ({
+  type: QUESTION_ASKED,
+});
+
+export const fetchForumQuestions = () => ({
+  type: FETCH_FORUM_QUESTIONS,
+});
+
+export const forumQuestionsFetched = questionList => ({
+  type: FORUM_QUESTIONS_FETCHED,
+  questionList,
+});
+
+export const deleteCard = cardId => ({
+  type: DELETE_CARD,
+  cardId,
+});
 
 /**
  * Selectors

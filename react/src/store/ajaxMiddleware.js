@@ -12,8 +12,11 @@ import {
   FETCH_GARDEN_INFOS,
   saveUserInfos,
   userLogged,
+  FETCH_FORUM_QUESTIONS,
+  forumQuestionsFetched,
   MODIFY_USER_INFOS,
 } from 'src/store/reducer';
+
 
 const ajaxMiddleware = store => next => (action) => {
   switch (action.type) {
@@ -145,6 +148,30 @@ const ajaxMiddleware = store => next => (action) => {
             gardenNbPlotsRow,
             gardenSize,
           ));
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+      break;
+    case FETCH_FORUM_QUESTIONS:
+      next(action);
+      axios.get('http://localhost/apo/potager-partage/symfo/public/api/forum/question', {
+        headers: {
+          Authorization: `Bearer ${store.getState().token}`,
+        },
+      })
+        .then((response) => {
+          console.log(response.data);
+          const questionList = response.data;
+          const formattedQuestionList = questionList.map(list => ({
+            id: list.id,
+            text: list.text,
+            title: list.title,
+            user: list.user,
+            creationDate: list.createdAt.substring(0, 10),
+          }));
+          console.log(formattedQuestionList);
+          store.dispatch(forumQuestionsFetched(formattedQuestionList));
         })
         .catch((error) => {
           console.log(error);
