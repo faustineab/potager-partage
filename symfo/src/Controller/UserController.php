@@ -72,7 +72,7 @@ class UserController extends AbstractController
 
             $password = $editedUser->getPassword();
             $encodedPassword = $encoder->encodePassword($user, $password);
-            if ($password = !null) {
+            if ($password != null) {
                 $user->setPassword($encodedPassword);
             }
 
@@ -93,7 +93,7 @@ class UserController extends AbstractController
             $entityManager->flush();
 
             $response = new Response();
-            $response->headers->set('Access-Control-Allow-Method', 'PUT');
+            $response->headers->set('Access-Control-Allow-Methods', 'PUT');
             $response->headers->set('Access-Control-Allow-Headers', 'application/json');
             $response->headers->set('Access-Control-Allow-Origin', 'application/json');
 
