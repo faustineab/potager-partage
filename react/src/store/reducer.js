@@ -27,6 +27,7 @@ const initialState = {
   gardenNbPlotsRow: 1,
   gardenNbPlotsColumn: 1,
   gardenSize: '',
+  gardenPlots: [],
   askingQuestion: false,
   questionTitle: '',
   questionToAsk: '',
@@ -124,6 +125,7 @@ const reducer = (state = initialState, action = {}) => {
         gardenNbPlotsColumn: action.gardenNbPlotsColumn,
         gardenNbPlotsRow: action.gardenNbPlotsRow,
         gardenSize: action.gardenSize,
+        gardenPlots: [...action.gardenPlots],
       };
     case INPUT_CHANGE:
       return {
@@ -238,26 +240,26 @@ export const fetchGardenInfos = (user, gardenId) => ({
 });
 
 export const userLogged = (
-  user,
   gardenName,
   gardenAddress,
+  gardenZipcode,
   gardenAddressSpecificities,
   gardenCity,
-  gardenZipcode,
   gardenNbPlotsColumn,
   gardenNbPlotsRow,
   gardenSize,
+  gardenPlots,
 ) => ({
   type: USER_LOGGED,
-  user,
   gardenName,
   gardenAddress,
+  gardenZipcode,
   gardenAddressSpecificities,
   gardenCity,
-  gardenZipcode,
   gardenNbPlotsColumn,
   gardenNbPlotsRow,
   gardenSize,
+  gardenPlots,
 });
 
 export const userLogout = () => ({

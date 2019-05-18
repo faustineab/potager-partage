@@ -25,7 +25,7 @@ import {
   DELETE_CARD,
 } from 'src/store/reducer';
 
-const baseURL = 'http://217.70.191.127';
+const baseURL = 'http://localhost/apo/potager-partage/symfo/public';
 // http://localhost/apo/potager-partage/symfo/public
 // http://217.70.191.127
 
@@ -90,7 +90,7 @@ const ajaxMiddleware = store => next => (action) => {
         })
         .catch((error) => {
           console.log(error);
-          window.location.href = '/subscribe';
+        //   window.location.href = '/subscribe';
         });
       break;
 
@@ -120,7 +120,7 @@ const ajaxMiddleware = store => next => (action) => {
         .then((response) => {
           const gardenList = response.data.gardens;
           const user = response.data;
-          console.log('response.data', response.data);
+          console.log('response.data.user', response.data);
           console.log(gardenList);
           if (gardenList.length > 1) {
             store.dispatch(saveUserInfos(user));
@@ -144,15 +144,16 @@ const ajaxMiddleware = store => next => (action) => {
         },
       })
         .then((response) => {
-          console.log(response);
+          console.log('response.data.garden', response.data);
           const gardenName = response.data.name;
           const gardenAddress = response.data.address;
           const gardenZipcode = response.data.zipcode;
           const gardenAddressSpecificities = response.data.addressSpecificities;
           const gardenCity = response.data.city;
           const gardenNbPlotsRow = response.data.number_plots_row;
-          const gardenNbPlotsColumn = response.number_plots_column;
+          const gardenNbPlotsColumn = response.data.number_plots_column;
           const gardenSize = response.data.meters;
+          const gardenPlots = response.data.plots;
 
           store.dispatch(userLogged(
             gardenName,
@@ -163,6 +164,7 @@ const ajaxMiddleware = store => next => (action) => {
             gardenNbPlotsColumn,
             gardenNbPlotsRow,
             gardenSize,
+            gardenPlots,
           ));
         })
         .catch((error) => {
@@ -179,7 +181,7 @@ const ajaxMiddleware = store => next => (action) => {
         },
       })
         .then((response) => {
-          console.log(response.data);
+          console.log('forum questions', response.data);
           const questionList = response.data;
           const formattedQuestionList = questionList.map(list => ({
             id: list.id,
@@ -192,7 +194,7 @@ const ajaxMiddleware = store => next => (action) => {
           store.dispatch(fetchForumTags(formattedQuestionList));
         })
         .catch((error) => {
-          console.log(error);
+          console.log('forum question error', error);
         });
       break;
     default:
