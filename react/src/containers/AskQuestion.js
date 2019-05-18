@@ -27,8 +27,8 @@ const mapDispatchToProps = dispatch => ({
   userAskingQuestion: () => {
     dispatch(userAskingQuestion());
   },
-  onQuestionSubmit: (title, question, tag) => {
-    dispatch(submitQuestion(title, question, tag));
+  onQuestionSubmit: () => {
+    dispatch(submitQuestion());
   },
 });
 
