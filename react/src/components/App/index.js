@@ -19,7 +19,7 @@ import Forum from 'src/containers/Forum';
 import PostDetail from 'src/components/PostDetail';
 import MainMenu from 'src/containers/MainMenu';
 import Footer from 'src/containers/Footer';
-import Potager from 'src/components/Potager';
+import Potager from 'src/containers/Potager';
 
 // Styles et assets
 
