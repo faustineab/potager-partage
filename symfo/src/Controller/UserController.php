@@ -94,12 +94,13 @@ class UserController extends AbstractController
             $entityManager->flush();
 
             $response = new Response();
-            dd($response);
-            $response->headers->set('Access-Control-Allow-Origin', '*');
-            $response->headers->set('Access-Control-Allow-Methods', 'PUT');
-            $response->headers->set('Access-Control-Allow-Headers', 'application/json');
+            dump($response->headers);
+            // $response->headers->set('Content-Type', 'application/json');
+            // $response->headers->set('Allow-Origin', '*');
+            // $response->headers->set('Access-Control-Allow-Methods', 'PUT');
+            // $response->headers->set('Access-Control-Allow-Headers', 'Content-Type');
 
-            return new JsonResponse($response, 200);
+            return new Response($response, 200);
         }
 
         return JsonResponse::fromJsonString(' message: Vous n \'êtes pas autorisé à accéder à cette page', 403);
