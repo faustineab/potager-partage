@@ -52,7 +52,7 @@ class User implements UserInterface
 
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="string", length=10)
      * @Groups({"login"})
      */
     private $phone;
@@ -211,12 +211,12 @@ class User implements UserInterface
         return $this;
     }
 
-    public function getPhone(): ?int
+    public function getPhone(): ?string
     {
         return $this->phone;
     }
 
-    public function setPhone(int $phone): self
+    public function setPhone(string $phone): self
     {
         $this->phone = $phone;
 
