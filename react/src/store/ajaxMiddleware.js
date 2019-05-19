@@ -23,7 +23,10 @@ import {
   QUESTION_ASKED,
   userLogout,
   DELETE_CARD,
+  OPEN_PLOT,
+  plotDataFetched,
 } from 'src/store/reducer';
+
 
 const baseURL = 'http://217.70.191.127';
 // http://localhost/apo/potager-partage/symfo/public
@@ -243,7 +246,7 @@ const ajaxMiddleware = store => next => (action) => {
       break;
     case QUESTION_ASKED:
       next(action);
-      store.dispatch(fetchForumQuestions);
+      store.dispatch(fetchForumQuestions());
       break;
     case DELETE_CARD:
       next(action);
@@ -262,10 +265,26 @@ const ajaxMiddleware = store => next => (action) => {
           console.log(error);
         });
       break;
+
+    case OPEN_PLOT:
+      next(action);
+      axios.get(`${baseURL}/api/garden/${store.getState().gardenId}/plots/${store.getState().openPlotId}`, {
+        headers: {
+          Authorization: `Bearer ${store.getState().token}`,
+        },
+      })
+        .then((response) => {
+          console.log(response.data);
+
+          store.dispatch(plotDataFetched(response.data));
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+      break;
+
     case MODIFY_USER_INFOS:
       next(action);
-
-      console.log(store.getState().user.id);
       axios.put(`${baseURL}/api/user/${store.getState().user.id}/edit`, {
         name: `${store.getState().firstName} ${store.getState().lastName}`,
         email: store.getState().email,

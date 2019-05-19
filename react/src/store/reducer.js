@@ -40,6 +40,7 @@ const initialState = {
     { key: 'o', text: 'Trucs & Astuces', value: 'Trucs & Astuces' },
   ],
   openPlotId: '',
+  plotData: {},
 };
 
 
@@ -69,7 +70,7 @@ export const FETCH_FORUM_TAGS = 'FETCH_FORUM_TAGS';
 export const FORUM_QUESTIONS_FETCHED = 'FORUM_QUESTIONS_FETCHED';
 export const DELETE_CARD = 'DELETE_CARD';
 export const OPEN_PLOT = 'OPEN_PLOT';
-
+export const PLOT_DATA_FETCHED = 'PLOT_DATA_FETCHED';
 
 /**
  * Reducer
@@ -205,6 +206,11 @@ const reducer = (state = initialState, action = {}) => {
         ...state,
         openPlotId: action.id,
       };
+    case PLOT_DATA_FETCHED:
+      return {
+        ...state,
+        plotData: { ...action.plotData },
+      };
     case USER_LOGOUT:
       return {
         ...initialState,
@@ -336,6 +342,11 @@ export const deleteCard = cardId => ({
 export const openPlot = id => ({
   type: OPEN_PLOT,
   id,
+});
+
+export const plotDataFetched = plotData => ({
+  type: PLOT_DATA_FETCHED,
+  plotData,
 });
 /**
  * Selectors

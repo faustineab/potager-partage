@@ -50,13 +50,9 @@ class Potager extends Component {
           <div className="table-container">
             {this.createTable()}
           </div>
-          <div className="todo">
+          <aside className="todo">
             <h1>Todo list ici</h1>
-          </div>
-        </div>
-        <div className="utils">
-          <Button className="button">Absence</Button>
-          <Button className="button">Événement</Button>
+          </aside>
         </div>
       </div>
     );

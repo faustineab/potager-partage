@@ -5,7 +5,7 @@
 .table-container{
   font-family: 'Fresca', sans-serif;
   width: 65%;
-  margin: 100px 60px 10px 60px;
+  margin: 100px 60px 100px 60px;
   box-shadow: 4px 4px 8px 4px rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     transition: all 400ms;
     &:hover{
@@ -23,7 +23,7 @@
   flex-grow: 1; 
   border: solid 5px white;
   height: 120px;
-  min-width: 150px;
+  // min-width: 150px;
   font-size: 25px;
   text-align: center;
   vertical-align: middle;
@@ -31,6 +31,7 @@
   &:hover{
     background-color: #7cad16;
     color: white;
+    transform: scale(1.015);
   }
 }
 
@@ -44,13 +45,10 @@
     grid-column-gap: 4px;
     box-shadow: 4px 4px 8px 4px rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     transition: all 400ms;
-    &:hover{
-      transform: scale(1.015);
-    }
   }
 .todo {
   width: 35%;
-  margin: 100px 60px 10px 60px;
+  margin: 100px 60px 100px 60px;
   border-left: 2px #d0d0e2 solid;
   font-size: 1.5em;
   font-family: 'Fresca', sans-serif;
@@ -58,21 +56,21 @@
   padding-top: 20px;
 }
 
-.utils {
-  .button{
-    margin: 50px 0 50px 60px;
-    width: 180px;
-    height: 60px;
-    font-size: 1.5em;
-    font-family: 'Fresca', sans-serif;
-    background-color: white;
-    border: solid 2px #93ca1a;
-    color: #93ca1a;
-    transition: all 400ms;
-    &:hover{
-        background-color: #93ca1a;
-        color: white;
-        transform: scale(1.1);
-    }
-  }
-}
+// .utils {
+//   .button{
+//     margin: 50px 0 50px 60px;
+//     width: 180px;
+//     height: 60px;
+//     font-size: 1.5em;
+//     font-family: 'Fresca', sans-serif;
+//     background-color: white;
+//     border: solid 2px #93ca1a;
+//     color: #93ca1a;
+//     transition: all 400ms;
+//     &:hover{
+//         background-color: #93ca1a;
+//         color: white;
+//         transform: scale(1.1);
+//     }
+//   }
+// }
