@@ -5,16 +5,32 @@ import { Link } from 'react-router-dom';
 import './index.scss';
 
 class Potager extends React.Component {
+
   createTable = () => {
+    // Je récupère mes props
+    // Puis je crée un variable table, qui est un tableau vide
+    const { length, width, plots } = this.props;
     const table = [];
 
-    for (let i = 0; i < 4; i++) {
+    // Pour afficher le jardin, je crée une boucle for,
+    // La boucle commence à i=0 et se termine quand i<width
+    for (let i = 0; i < width; i++) {
+      // Puis je crée un variable children, qui est un tableau vide
       const children = [];
-      for (let j = 0; j < 4; j++) {
-        children.push(<td key={`row${j}column${i}`} className="table-cell">{`Column ${j + 1}`}</td>);
-      }
-      table.push(<tbody><tr key={i}>{children}</tr></tbody>);
+      // Puis je crée une const rowPLots qui contient les Plots dont j'ai besoin
+      // Pour i=0, je ramène les plots d'index 0 à 3
+      // Pour i=1, je ramène les plots d'index 4 à 7
+      // Pour i=2, je ramène les plots d'index 8 à 11
+      // la borne basse sera égale à (i * length), la borne haute à (length * (i + 1))
+      const rowPlots = plots.filter((plot, index) => index >= (length * i) && index < (length * (i + 1)));
+      console.log(rowPlots);
+      // Je map sur mon nouveau tableau, pour créer une div pour chaque plot
+      const row = rowPlots.map((plot, index) => <div key={`row${i}plot${index}`} className={`table-cell ${plot.status}`} id={plot.id} />);
+      // Je push ma variable row dans children
+      children.push(row);
+      table.push(<div key={i} className="gardenRow">{children}</div>);
     }
+
     return table;
   }
 
@@ -23,9 +39,9 @@ class Potager extends React.Component {
     return (
       <div>
         <div className="body">
-          <table className="table-container">
+          <div className="table-container">
             {this.createTable()}
-          </table>
+          </div>
           <div className="todo">
             <h1>Todo list ici</h1>
           </div>
@@ -39,32 +55,3 @@ class Potager extends React.Component {
   }
 }
 export default Potager;
-
-/* <div>
-<div className="body">
-  <div className="grid-container">
-    <div className="grid-item"><h1>Tomate</h1></div>
-    <div className="grid-item"><h1>Abricot</h1></div>
-    <div className="grid-item" />
-    <div className="grid-item" />
-    <div className="grid-item" />
-    <div className="grid-item"><h1>Persil</h1></div>
-    <div className="grid-item"><h1>Tomate</h1></div>
-    <div className="grid-item" />
-    <div className="grid-item" />
-    <div className="grid-item"><h1>Pomme</h1></div>
-    <div className="grid-item" />
-    <div className="grid-item"><h1>Carotte</h1></div>
-    <div className="grid-item" />
-    <div className="grid-item"><h1>Poire</h1></div>
-    <div className="grid-item" />
-  </div>
-  <div className="todo">
-    <h1>Todo list ici</h1>
-  </div>
-</div>
-<div className="utils">
-  <Button className="button">Absence</Button>
-  <Button className="button">Événement</Button>
-</div>
-</div> */
