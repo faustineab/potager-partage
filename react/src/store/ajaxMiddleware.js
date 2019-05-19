@@ -25,7 +25,7 @@ import {
   DELETE_CARD,
 } from 'src/store/reducer';
 
-const baseURL = 'http://localhost/apo/potager-partage/symfo/public';
+const baseURL = 'http://217.70.191.127';
 // http://localhost/apo/potager-partage/symfo/public
 // http://217.70.191.127
 
@@ -197,9 +197,6 @@ const ajaxMiddleware = store => next => (action) => {
           console.log('forum question error', error);
         });
       break;
-    default:
-      next(action);
-      break;
 
     case FETCH_FORUM_TAGS:
       next(action);
@@ -286,6 +283,9 @@ const ajaxMiddleware = store => next => (action) => {
         .catch((error) => {
           console.log(error);
         });
+      break;
+    default:
+      next(action);
       break;
   }
 };
