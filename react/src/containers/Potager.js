@@ -1,6 +1,7 @@
 import { connect } from 'react-redux';
 import Potager from '../components/Potager';
 
+import { openPlot } from '../store/reducer';
 
 const mapStateToProps = state => ({
   plots: state.gardenPlots,
@@ -8,7 +9,11 @@ const mapStateToProps = state => ({
   width: state.gardenNbPlotsColumn,
 });
 
-const mapDispatchToProps = {};
+const mapDispatchToProps = dispatch => ({
+  openPlot: (id) => {
+    dispatch(openPlot(id));
+  },
+});
 
 export default connect(
   mapStateToProps,

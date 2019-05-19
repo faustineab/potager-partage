@@ -39,6 +39,7 @@ const initialState = {
     { key: 'n', text: 'Autour du jardin', value: 'Autour du jardin' },
     { key: 'o', text: 'Trucs & Astuces', value: 'Trucs & Astuces' },
   ],
+  openPlotId: '',
 };
 
 
@@ -67,6 +68,7 @@ export const FETCH_FORUM_QUESTIONS = 'FETCH_FORUM_QUESTIONS';
 export const FETCH_FORUM_TAGS = 'FETCH_FORUM_TAGS';
 export const FORUM_QUESTIONS_FETCHED = 'FORUM_QUESTIONS_FETCHED';
 export const DELETE_CARD = 'DELETE_CARD';
+export const OPEN_PLOT = 'OPEN_PLOT';
 
 
 /**
@@ -198,6 +200,11 @@ const reducer = (state = initialState, action = {}) => {
         ...state,
         questionToDelete: action.cardId,
       };
+    case OPEN_PLOT:
+      return {
+        ...state,
+        openPlotId: action.id,
+      };
     case USER_LOGOUT:
       return {
         ...initialState,
@@ -326,6 +333,10 @@ export const deleteCard = cardId => ({
   cardId,
 });
 
+export const openPlot = id => ({
+  type: OPEN_PLOT,
+  id,
+});
 /**
  * Selectors
  */
