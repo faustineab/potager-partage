@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Button } from 'semantic-ui-react';
 
+import PlotDetail from 'src/containers/PlotDetail';
+
 
 import './index.scss';
 
@@ -51,7 +53,7 @@ class Potager extends Component {
             {this.createTable()}
           </div>
           <aside className="todo">
-            <h1>Todo list ici</h1>
+            <PlotDetail />
           </aside>
         </div>
       </div>

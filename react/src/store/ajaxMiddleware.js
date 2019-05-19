@@ -25,6 +25,8 @@ import {
   DELETE_CARD,
   OPEN_PLOT,
   plotDataFetched,
+  BOOK_PLOT,
+  plotBooked,
 } from 'src/store/reducer';
 
 
@@ -282,7 +284,23 @@ const ajaxMiddleware = store => next => (action) => {
           console.log(error);
         });
       break;
-
+    case BOOK_PLOT:
+      next(action);
+      axios.put(`${baseURL}/api/garden/${store.getState().gardenId}/plots/${store.getState().openPlotId}/edit`, {
+        id: store.getState().openPlotId,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${store.getState().token}`,
+        },
+      })
+        .then((response) => {
+          console.log(response);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+      break;
     case MODIFY_USER_INFOS:
       next(action);
       axios.put(`${baseURL}/api/user/${store.getState().user.id}/edit`, {

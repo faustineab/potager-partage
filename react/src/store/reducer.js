@@ -41,6 +41,7 @@ const initialState = {
   ],
   openPlotId: '',
   plotData: {},
+  isUserPlot: false,
 };
 
 
@@ -71,6 +72,8 @@ export const FORUM_QUESTIONS_FETCHED = 'FORUM_QUESTIONS_FETCHED';
 export const DELETE_CARD = 'DELETE_CARD';
 export const OPEN_PLOT = 'OPEN_PLOT';
 export const PLOT_DATA_FETCHED = 'PLOT_DATA_FETCHED';
+export const BOOK_PLOT = 'BOOK_PLOT';
+export const PLOT_BOOKED = 'PLOT_BOOKED';
 
 /**
  * Reducer
@@ -211,6 +214,15 @@ const reducer = (state = initialState, action = {}) => {
         ...state,
         plotData: { ...action.plotData },
       };
+    case BOOK_PLOT:
+      return {
+        ...state,
+      };
+    case PLOT_BOOKED:
+      return {
+        ...state,
+        isUserPlot: true,
+      };
     case USER_LOGOUT:
       return {
         ...initialState,
@@ -348,6 +360,15 @@ export const plotDataFetched = plotData => ({
   type: PLOT_DATA_FETCHED,
   plotData,
 });
+
+export const bookPlot = () => ({
+  type: BOOK_PLOT,
+});
+
+export const plotBooked = () => ({
+  type: PLOT_BOOKED,
+});
+
 /**
  * Selectors
  */
