@@ -4,6 +4,7 @@
 
 .table-container{
   font-family: 'Fresca', sans-serif;
+  width: 65%;
   margin: 100px 60px 10px 60px;
   box-shadow: 4px 4px 8px 4px rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     transition: all 400ms;
@@ -12,14 +13,17 @@
     }
   .gardenRow{
     display: flex;
+    align-content: stretch;
   }
 }
 
 .table-cell {
   background-color: #93ca1a;
+  display: flex;
+  flex-grow: 1; 
   border: solid 5px white;
   height: 120px;
-  width: 150px;
+  min-width: 150px;
   font-size: 25px;
   text-align: center;
   vertical-align: middle;
@@ -32,7 +36,6 @@
 
 .grid-container {
   margin: 100px 60px 10px 60px;
-  width: 45%;
     display: grid;
     grid-template-columns: auto auto auto;
     font-family: 'Fresca', sans-serif;
@@ -46,7 +49,7 @@
     }
   }
 .todo {
-  width: 45%;
+  width: 35%;
   margin: 100px 60px 10px 60px;
   border-left: 2px #d0d0e2 solid;
   font-size: 1.5em;
