@@ -39,6 +39,9 @@ const initialState = {
     { key: 'n', text: 'Autour du jardin', value: 'Autour du jardin' },
     { key: 'o', text: 'Trucs & Astuces', value: 'Trucs & Astuces' },
   ],
+  openPlotId: '',
+  plotData: {},
+  isUserPlot: false,
 };
 
 
@@ -67,7 +70,10 @@ export const FETCH_FORUM_QUESTIONS = 'FETCH_FORUM_QUESTIONS';
 export const FETCH_FORUM_TAGS = 'FETCH_FORUM_TAGS';
 export const FORUM_QUESTIONS_FETCHED = 'FORUM_QUESTIONS_FETCHED';
 export const DELETE_CARD = 'DELETE_CARD';
-
+export const OPEN_PLOT = 'OPEN_PLOT';
+export const PLOT_DATA_FETCHED = 'PLOT_DATA_FETCHED';
+export const BOOK_PLOT = 'BOOK_PLOT';
+export const PLOT_BOOKED = 'PLOT_BOOKED';
 
 /**
  * Reducer
@@ -198,6 +204,25 @@ const reducer = (state = initialState, action = {}) => {
         ...state,
         questionToDelete: action.cardId,
       };
+    case OPEN_PLOT:
+      return {
+        ...state,
+        openPlotId: action.id,
+      };
+    case PLOT_DATA_FETCHED:
+      return {
+        ...state,
+        plotData: { ...action.plotData },
+      };
+    case BOOK_PLOT:
+      return {
+        ...state,
+      };
+    case PLOT_BOOKED:
+      return {
+        ...state,
+        isUserPlot: true,
+      };
     case USER_LOGOUT:
       return {
         ...initialState,
@@ -324,6 +349,24 @@ export const forumQuestionsFetched = tagList => ({
 export const deleteCard = cardId => ({
   type: DELETE_CARD,
   cardId,
+});
+
+export const openPlot = id => ({
+  type: OPEN_PLOT,
+  id,
+});
+
+export const plotDataFetched = plotData => ({
+  type: PLOT_DATA_FETCHED,
+  plotData,
+});
+
+export const bookPlot = () => ({
+  type: BOOK_PLOT,
+});
+
+export const plotBooked = () => ({
+  type: PLOT_BOOKED,
 });
 
 /**

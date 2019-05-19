@@ -1,10 +1,20 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { Button } from 'semantic-ui-react';
-import { Link } from 'react-router-dom';
+
+import PlotDetail from 'src/containers/PlotDetail';
+
 
 import './index.scss';
 
-class Potager extends React.Component {
+
+class Potager extends Component {
+  handleClick = (evt) => {
+    const { openPlot } = this.props;
+
+    const plotId = evt.currentTarget.id;
+    openPlot(plotId);
+  }
 
   createTable = () => {
     // Je récupère mes props
@@ -25,7 +35,7 @@ class Potager extends React.Component {
       const rowPlots = plots.filter((plot, index) => index >= (length * i) && index < (length * (i + 1)));
       console.log(rowPlots);
       // Je map sur mon nouveau tableau, pour créer une div pour chaque plot
-      const row = rowPlots.map((plot, index) => <div key={`row${i}plot${index}`} className={`table-cell ${plot.status}`} id={plot.id} />);
+      const row = rowPlots.map((plot, index) => <div key={`row${i}plot${index}`} className={`table-cell ${plot.status}`} id={plot.id} onClick={this.handleClick} />);
       // Je push ma variable row dans children
       children.push(row);
       table.push(<div key={i} className="gardenRow">{children}</div>);
@@ -42,16 +52,23 @@ class Potager extends React.Component {
           <div className="table-container">
             {this.createTable()}
           </div>
-          <div className="todo">
-            <h1>Todo list ici</h1>
-          </div>
-        </div>
-        <div className="utils">
-          <Button className="button">Absence</Button>
-          <Button className="button">Événement</Button>
+          <aside className="todo">
+            <PlotDetail />
+          </aside>
         </div>
       </div>
     );
   }
 }
+
+Potager.propTypes = {
+  openPlot: PropTypes.func.isRequired,
+  length: PropTypes.number.isRequired,
+  width: PropTypes.number.isRequired,
+  plots: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.number,
+    status: PropTypes.string,
+  })).isRequired,
+};
+
 export default Potager;
