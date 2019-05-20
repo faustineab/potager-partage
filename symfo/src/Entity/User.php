@@ -28,19 +28,19 @@ class User implements UserInterface
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     * @Groups({"admin", "event", "forum_questions", "garden_get","login", "plot", "user"})
+     * @Groups({"admin", "event", "garden_get","login", "plot", "user"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
-     * @Groups({"admin", "forum_questions", "login", "plot", "user", "garden_get"})
+     * @Groups({"admin", "login", "plot", "user", "garden_get"})
      */
     private $email;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"admin", "event", "forum_questions", "garden_get", "is_planted_on", "login", "marketoffer", "plot", "remplacement", "user", "vacancy"})
+     * @Groups({"admin", "event", "forum_question_index", "forum_question_show", "garden_get", "is_planted_on", "login", "marketoffer", "plot", "remplacement", "user", "vacancy"})
      */
     private $name;
 
@@ -87,12 +87,12 @@ class User implements UserInterface
     private $plots;
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\ForumAnswer", mappedBy="user")
-     * @Groups({"forum_questions", "login"})
+     * @Groups({"forum_question_index", "forum_question_show", "login"})
      */
     private $forumAnswers;
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\ForumQuestion", mappedBy="user")
-     * @Groups({"forum_questions", "login"})
+     * @Groups({"forum_question_index", "forum_question_show", "login"})
      */
     private $forumQuestions;
 
