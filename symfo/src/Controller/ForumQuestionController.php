@@ -69,21 +69,16 @@ class ForumQuestionController extends AbstractController
                 }
                 
                 $newQuestion = new ForumQuestion();
-                
-                $tag = $tagRepository->findOneBy(['name' => $question['tag']]);
-                if ($tag == null) {
-                    $tag = new ForumTag();
-                    $tag->setName($question['tag'])
-                    ->setGarden($garden);
-                    
-                    $entityManager->persist($tag);
-                };
-                
                 $newQuestion->setUser($currentUser)
                             ->setTitle($question['title'])
                             ->setText($question['text'])
-                            ->addTag($tag)
                             ->setGarden($garden);
+
+                if ($question['tags'] != null)
+                {
+                        $tag = $tagRepository->findOneBy(['name' => $question['tags']]);
+                        $newQuestion->addTag($tag);
+                }
                 
                 $entityManager->persist($newQuestion);
                 $entityManager->flush();
