@@ -34,7 +34,7 @@ class ForumQuestionController extends AbstractController
             if ($currentUser == $gardenMember) {
                 $questions = $garden->getForumQuestions();
                 $jsonQuestions = $serializer->serialize($questions, 'json', [
-                    'groups' => 'forum_questions',
+                    'groups' => 'forum_question_index',
                     'circular_reference_handler' => function ($questions) {
                         return $questions->getId();
                     },
@@ -101,7 +101,7 @@ class ForumQuestionController extends AbstractController
                 $jsonQuestion = $serializer->serialize(
                     $question,
                     'json',
-                    ['groups' => 'forum_questions',
+                    ['groups' => 'forum_question_show',
                     'circular_reference_handler' => function ($questions) {
                         return $questions->getId();
                     },
