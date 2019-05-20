@@ -16,37 +16,37 @@ class ForumTag
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     * @Groups({"forum_questions", "forum_tags", "user"})
+     * @Groups({"forum_tags", "user"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=100)
-     * @Groups({"forum_questions", "forum_tags", "user"})
+     * @Groups({"forum_question_index", "forum_question_show", "forum_tags", "user"})
      */
     private $name;
 
     /**
      * @ORM\Column(type="datetime")
-     * @Groups({"forum_questions", "forum_tags", "user"})
+     * @Groups({"forum_tags", "user"})
      */
     private $createdAt;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
-     * @Groups({"forum_questions", "forum_tags", "user"})
+     * @Groups({"forum_tags", "user"})
      */
     private $updatedAt;
 
     /**
      * @ORM\ManyToMany(targetEntity="App\Entity\ForumQuestion", inversedBy="tags")
-     * @Groups({"forum_questions", "forum_tags"})
+     * @Groups({"forum_question_index", "forum_question_show", "forum_tags"})
      */
     private $questions;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Garden", inversedBy="forumTags")
-     * @Groups({"forum_questions"})
+     * @Groups({"forum_question_index", "forum_question_show"})
      */
     private $garden;
 
