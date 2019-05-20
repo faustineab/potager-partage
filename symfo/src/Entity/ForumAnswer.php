@@ -15,25 +15,24 @@ class ForumAnswer
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     * @Groups({"forum_questions", "user"})
+     * @Groups({"forum_question_show", "user"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="text")
-     * @Groups({"forum_questions", "user"})
+     * @Groups({"forum_question_show", "user"})
      */
     private $text;
 
     /**
      * @ORM\Column(type="datetime")
-     * @Groups({"forum_questions", "user"})
+     * @Groups({"forum_question_show", "user"})
      */
     private $createdAt;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
-     * @Groups({"forum_questions", "user"})
      */
     private $updatedAt;
 
@@ -46,6 +45,7 @@ class ForumAnswer
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="forumAnswers")
      * @ORM\JoinColumn(nullable=false)
+     * @Groups({"forum_question_show"})
      */
     private $user;
 
