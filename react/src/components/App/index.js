@@ -43,12 +43,15 @@ const App = ({ loggedIn, loginStatus }) => (
         )}
       />
       <Route path="/choose-garden" component={ChooseGarden} />
-      <Route path="/subscribe" component={Subscribe} />
       <Route path="/create-garden" component={CreateGarden} />
       <Route path="/join-garden" component={JoinGarden} />
       <Route
         path="/logout"
         render={() => (<Redirect to="/" />)}
+      />
+      <Route
+        path="/subscribe"
+        render={() => (!loggedIn ? (<Subscribe />) : (<Redirect to="/potager" />))}
       />
       <Route
         path="/profile"

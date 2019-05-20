@@ -5,6 +5,7 @@ import {
   CREATE_GARDEN,
   JOIN_GARDEN,
   LOG_USER,
+  logUser,
   FETCH_USER_INFOS,
   receivedGardenList,
   fetchUserInfos,
@@ -30,7 +31,7 @@ import {
 } from 'src/store/reducer';
 
 
-const baseURL = 'http://217.70.191.127';
+const baseURL = 'http://localhost/apo/potager-partage/symfo/public';
 // http://localhost/apo/potager-partage/symfo/public
 // http://217.70.191.127
 
@@ -72,9 +73,11 @@ const ajaxMiddleware = store => next => (action) => {
       })
         .then((response) => {
           console.log(response);
+          store.dispatch(logUser());
         })
         .catch((error) => {
           console.log(error);
+          window.location.href = '/subscribe';
         });
       break;
 
@@ -287,9 +290,6 @@ const ajaxMiddleware = store => next => (action) => {
     case BOOK_PLOT:
       next(action);
       axios.put(`${baseURL}/api/garden/${store.getState().gardenId}/plots/${store.getState().openPlotId}/edit`, {
-        id: store.getState().openPlotId,
-      },
-      {
         headers: {
           Authorization: `Bearer ${store.getState().token}`,
         },
