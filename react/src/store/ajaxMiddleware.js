@@ -231,7 +231,7 @@ const ajaxMiddleware = store => next => (action) => {
       axios.post(`${baseURL}/api/garden/${store.getState().gardenId}/forum/question/new`, {
         title: store.getState().questionTitle,
         text: store.getState().questionToAsk,
-        tag: store.getState().questionTags,
+        tags: store.getState().questionTags,
       },
       {
         headers: {
