@@ -31,7 +31,7 @@ import {
 } from 'src/store/reducer';
 
 
-const baseURL = 'http://localhost/apo/potager-partage/symfo/public';
+const baseURL = 'http://217.70.191.127';
 // http://localhost/apo/potager-partage/symfo/public
 // http://217.70.191.127
 
@@ -253,16 +253,15 @@ const ajaxMiddleware = store => next => (action) => {
       next(action);
       store.dispatch(fetchForumQuestions());
       break;
+
     case DELETE_CARD:
       next(action);
-      axios.delete(`${baseURL}/api/garden/${store.getState().gardenId}/forum/question/${store.getState().questionToDelete}`, {
-        id: store.getState().questionToDelete,
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${store.getState().token}`,
-        },
-      })
+      axios.delete(`http://localhost/apo/potager-partage/symfo/public/api/garden/${store.getState().gardenId}/forum/question/${store.getState().questionToDelete}`,
+        {
+          headers: {
+            Authorization: `Bearer ${store.getState().token}`,
+          },
+        })
         .then((response) => {
           console.log(response.data);
         })
