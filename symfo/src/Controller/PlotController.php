@@ -93,7 +93,7 @@ class PlotController extends AbstractController
     }
 
     /**
-     * @IsGranted("ROLE_MEMBER")
+     * 
      * @Route("/{gardenid}/plots/{id}/edit", name="take_plot", methods={"PUT"})
      * @ParamConverter("garden", options={"id" = "gardenid"})
      * @ParamConverter("plot", options={"id" = "id"})
