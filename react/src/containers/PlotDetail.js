@@ -7,10 +7,10 @@ import { bookPlot } from '../store/reducer';
 
 
 const mapStateToProps = state => ({
-  plotStatus: state.plotData.status,
-  isUserPlot: state.isUserPlot,
-  // plotStatus: 'actif',
-  // isUserPlot: false,
+  // plotStatus: state.plotData.status,
+  // isUserPlot: state.isUserPlot,
+  plotStatus: 'actif',
+  isUserPlot: true,
   plotId: state.openPlotId,
 });
 
