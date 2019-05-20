@@ -4,11 +4,25 @@
   font-family: 'Fresca', sans-serif;
   color: #5e5250;
 
+  #submitComment{
+    max-width: 90%;
+    margin: 50px auto;
+  }
+
   #postComments{
     max-width: 90%;
     margin: 50px auto;
     font-family: 'Fresca', sans-serif;
     color: #5e5250;
+    #commentHeader {
+      display: flex;
+      .cardDelete{
+        color: #bf4156;
+      }
+      .commentDelete{
+        margin-left: 0.5em;
+      }
+    }
   }
 
   #newQuestion{
