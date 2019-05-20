@@ -18,13 +18,13 @@ class Vegetable
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     * @Groups({"vegetable"})
+     * @Groups({"vegetable","plot"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=60)
-     * @Groups({"is_planted_on", "vegetable", "marketoffer"})
+     * @Groups({"is_planted_on", "vegetable", "marketoffer","plot"})
      */
     private $name;
 

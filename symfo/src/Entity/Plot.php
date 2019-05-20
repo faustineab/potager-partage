@@ -53,7 +53,7 @@ class Plot
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\IsPlantedOn", mappedBy="plot")
-     * @Groups({"login"})
+     * @Groups({"login","plot"})
      */
     private $isPlantedOns;
 

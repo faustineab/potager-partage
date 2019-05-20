@@ -34,7 +34,7 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
-     * @Groups({"admin", "forum_questions", "login", "user", "garden_get"})
+     * @Groups({"admin", "forum_questions", "login", "plot", "user", "garden_get"})
      */
     private $email;
 
