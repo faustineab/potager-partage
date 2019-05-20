@@ -10,7 +10,7 @@ const mapStateToProps = state => ({
   plotStatus: state.plotData.status,
   isUserPlot: state.isUserPlot,
   // plotStatus: 'actif',
-  // isUserPlot: true,
+  // isUserPlot: false,
   plotId: state.openPlotId,
 });
 

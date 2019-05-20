@@ -19,8 +19,16 @@ class Forum extends Component {
     deleteCard(cardId);
   };
 
+  handleOpenPost = (evt) => {
+    const { saveQuestionId } = this.props;
+    const questionId = evt.currentTarget.id;
+    console.log(questionId);
+    saveQuestionId(questionId);
+  }
+
   render() {
     const { questionList } = this.props;
+    console.log(this.props);
     return (
       <div id="forum">
         <h2>Le coin des jardiniers</h2>
@@ -36,7 +44,7 @@ class Forum extends Component {
               <span className="tag">Fruits & Légumes</span>
             </Card.Meta>
             <div className="cardButtons">
-              <Button className="cardButton" as={Link} to={`/forum/post/${id}`}>Voir Plus...</Button>
+              <Button className="cardButton" id={id} as={Link} to={`/forum/post/${id}`} onClick={this.handleOpenPost}>Voir Plus...</Button>
               <Icon name="ban" size="large" className="cardDelete" id={id} onClick={this.handleDeleteCard} />
             </div>
           </Card>
@@ -51,7 +59,7 @@ Forum.propTypes = {
   questionList: PropTypes.arrayOf(PropTypes.objectOf).isRequired,
   deleteCard: PropTypes.func.isRequired,
   openForum: PropTypes.func.isRequired,
-
+  saveQuestionId: PropTypes.func.isRequired,
 };
 
 export default Forum;
