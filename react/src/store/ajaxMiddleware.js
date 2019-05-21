@@ -26,6 +26,7 @@ import {
   questionAsked,
   QUESTION_ASKED,
   FETCH_QUESTION_DETAIL,
+  questionDetailFetched,
   userLogout,
   DELETE_CARD,
   OPEN_PLOT,
@@ -186,7 +187,7 @@ const ajaxMiddleware = store => next => (action) => {
         });
       break;
 
-      case FETCH_VEGETABLES_LIST:
+    case FETCH_VEGETABLES_LIST:
       next(action);
       axios.get(`${baseURL}/api/vegetable/`, {
         headers: {
@@ -297,16 +298,18 @@ const ajaxMiddleware = store => next => (action) => {
           console.log(error);
         });
       break;
-    
+
     case FETCH_QUESTION_DETAIL:
       next(action);
-      axios.get(`${baseURL}/api/garden/${store.getState().gardenId}/forum/question/${store.getState().openQuestionId}`, {
+      axios.get(`http://localhost/apo/potager-partage/symfo/public/api/garden/${store.getState().gardenId}/forum/question/${store.getState().openQuestionId}`, {
         headers: {
           Authorization: `Bearer ${store.getState().token}`,
         },
       })
         .then((response) => {
           console.log(response.data);
+          const questionDetail = response.data;
+          store.dispatch(questionDetailFetched(questionDetail));
         })
         .catch((error) => {
           console.log(error);
