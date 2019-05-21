@@ -15,11 +15,7 @@ class ForumAnswer
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-<<<<<<< HEAD
-     * @Groups({"forum_question_show", "user"})
-=======
      * @Groups({"user"})
->>>>>>> bf39a19f3ed76a34b84ee927e988e3c4b2c57761
      */
     private $id;
 
@@ -37,10 +33,6 @@ class ForumAnswer
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
-<<<<<<< HEAD
-=======
-     * @Groups({"user"})
->>>>>>> bf39a19f3ed76a34b84ee927e988e3c4b2c57761
      */
     private $updatedAt;
 
