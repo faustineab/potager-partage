@@ -14,21 +14,21 @@ class IsPlantedOn
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     * @Groups({"login"})
+     * @Groups({"login", "plot"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="datetime")
      * @Groups({"is_planted_on"})
-     * @Groups({"login"})
+     * @Groups({"login","plot"})
      */
     private $seedling_date;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
      * @Groups({"is_planted_on"})
-     * @Groups({"login"})
+     * @Groups({"login","plot"})
      */
     private $irrigation_date;
 
@@ -52,19 +52,19 @@ class IsPlantedOn
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Vegetable", inversedBy="isPlantedOns")
      * @ORM\JoinColumn(nullable=false)
-     * @Groups({"is_planted_on"})
+     * @Groups({"is_planted_on","plot"})
      */
     private $vegetable;
 
     /**
      * @ORM\Column(type="date", nullable=true)
-     * @Groups({"is_planted_on"})
+     * @Groups({"is_planted_on","plot"})
      */
     private $harvestDate;
 
     /**
      * @ORM\Column(type="boolean")
-     * @Groups({"is_planted_on"})
+     * @Groups({"is_planted_on","plot"})
      */
     private $sprayStatus;
 

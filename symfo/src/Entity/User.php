@@ -34,7 +34,11 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
+<<<<<<< HEAD
      * @Groups({"admin", "login", "user", "garden_get"})
+=======
+     * @Groups({"admin", "login", "plot", "user", "garden_get"})
+>>>>>>> bf39a19f3ed76a34b84ee927e988e3c4b2c57761
      */
     private $email;
 
@@ -70,7 +74,7 @@ class User implements UserInterface
     private $created_at;
 
     /**
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(type="datetime", nullable=true)
      */
     private $updated_at;
 
@@ -87,12 +91,20 @@ class User implements UserInterface
     private $plots;
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\ForumAnswer", mappedBy="user")
+<<<<<<< HEAD
      * @Groups({"login"})
+=======
+     * @Groups({"forum_question_index", "forum_question_show", "login"})
+>>>>>>> bf39a19f3ed76a34b84ee927e988e3c4b2c57761
      */
     private $forumAnswers;
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\ForumQuestion", mappedBy="user")
+<<<<<<< HEAD
      * @Groups({"login"})
+=======
+     * @Groups({"forum_question_index", "forum_question_show", "login"})
+>>>>>>> bf39a19f3ed76a34b84ee927e988e3c4b2c57761
      */
     private $forumQuestions;
 

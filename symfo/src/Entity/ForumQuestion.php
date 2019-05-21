@@ -40,13 +40,20 @@ class ForumQuestion
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
+<<<<<<< HEAD
      * @Groups({"user"})
+=======
+     * @Groups({"forum_tags", "user"})
+>>>>>>> bf39a19f3ed76a34b84ee927e988e3c4b2c57761
      */
     private $updatedAt;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\ForumAnswer", mappedBy="question", orphanRemoval=true)
+<<<<<<< HEAD
      * @Groups({"forum_question_show"})
+=======
+>>>>>>> bf39a19f3ed76a34b84ee927e988e3c4b2c57761
      */
     private $answers;
 

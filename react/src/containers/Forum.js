@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 
 import Forum from 'src/components/Forum';
-import { deleteCard, fetchForumQuestions } from '../store/reducer';
+import { deleteCard, fetchForumQuestions, saveQuestionId } from '../store/reducer';
 
 
 const mapStateToProps = state => ({
@@ -14,6 +14,9 @@ const mapDispatchToProps = dispatch => ({
   },
   openForum: () => {
     dispatch(fetchForumQuestions());
+  },
+  saveQuestionId: (id) => {
+    dispatch(saveQuestionId(id));
   },
 });
 

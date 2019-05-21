@@ -76,6 +76,7 @@ class IsPlantedOnController extends AbstractController
         };
 
         if (!empty(array_uintersect($user, $gardenUsers, $compare))) {
+            
             $plots= $plotRepository->find($id);
             $plantations = $isPlantedOnRepository->findByPlot($plots);
             

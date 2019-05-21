@@ -5,7 +5,11 @@ import {
   CREATE_GARDEN,
   JOIN_GARDEN,
   LOG_USER,
+  logUser,
   FETCH_USER_INFOS,
+  FETCH_VEGETABLES_LIST,
+  fetchVegetablesList,
+  saveVegetablesList,
   receivedGardenList,
   fetchUserInfos,
   fetchGardenInfos,
@@ -21,6 +25,7 @@ import {
   SUBMIT_QUESTION,
   questionAsked,
   QUESTION_ASKED,
+  FETCH_QUESTION_DETAIL,
   userLogout,
   DELETE_CARD,
   OPEN_PLOT,
@@ -72,9 +77,11 @@ const ajaxMiddleware = store => next => (action) => {
       })
         .then((response) => {
           console.log(response);
+          store.dispatch(logUser());
         })
         .catch((error) => {
           console.log(error);
+          window.location.href = '/subscribe';
         });
       break;
 
@@ -171,6 +178,7 @@ const ajaxMiddleware = store => next => (action) => {
             gardenSize,
             gardenPlots,
           ));
+          store.dispatch(fetchVegetablesList());
         })
         .catch((error) => {
           console.log(error);
@@ -178,9 +186,32 @@ const ajaxMiddleware = store => next => (action) => {
         });
       break;
 
+      case FETCH_VEGETABLES_LIST:
+      next(action);
+      axios.get(`${baseURL}/api/vegetable/`, {
+        headers: {
+          Authorization: `Bearer ${store.getState().token}`,
+        },
+      })
+        .then((response) => {
+          console.log(response.data);
+          const vegetablesList = response.data;
+          const formattedVegetablesList = vegetablesList.map(vegetable => ({
+            key: vegetable.id,
+            text: vegetable.name,
+            value: vegetable.name,
+          }));
+          console.log(formattedVegetablesList);
+          store.dispatch(saveVegetablesList(formattedVegetablesList));
+        })
+        .catch((error) => {
+          console.log('forum question error', error);
+        });
+      break;
+
     case FETCH_FORUM_QUESTIONS:
       next(action);
-      axios.get(`${baseURL}/api/garden/${store.getState().gardenId}/forum/question`, {
+      axios.get(`http://localhost/apo/potager-partage/symfo/public/api/garden/${store.getState().gardenId}/forum/question`, {
         headers: {
           Authorization: `Bearer ${store.getState().token}`,
         },
@@ -231,7 +262,7 @@ const ajaxMiddleware = store => next => (action) => {
       axios.post(`${baseURL}/api/garden/${store.getState().gardenId}/forum/question/new`, {
         title: store.getState().questionTitle,
         text: store.getState().questionToAsk,
-        tag: store.getState().questionTags,
+        tags: store.getState().questionTags,
       },
       {
         headers: {
@@ -250,12 +281,26 @@ const ajaxMiddleware = store => next => (action) => {
       next(action);
       store.dispatch(fetchForumQuestions());
       break;
+
     case DELETE_CARD:
       next(action);
-      axios.delete(`${baseURL}/api/garden/${store.getState().gardenId}/forum/question/${store.getState().questionToDelete}`, {
-        id: store.getState().questionToDelete,
-      },
-      {
+      axios.delete(`http://localhost/apo/potager-partage/symfo/public/api/garden/${store.getState().gardenId}/forum/question/${store.getState().questionToDelete}`,
+        {
+          headers: {
+            Authorization: `Bearer ${store.getState().token}`,
+          },
+        })
+        .then((response) => {
+          console.log(response.data);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+      break;
+    
+    case FETCH_QUESTION_DETAIL:
+      next(action);
+      axios.get(`${baseURL}/api/garden/${store.getState().gardenId}/forum/question/${store.getState().openQuestionId}`, {
         headers: {
           Authorization: `Bearer ${store.getState().token}`,
         },
@@ -286,10 +331,7 @@ const ajaxMiddleware = store => next => (action) => {
       break;
     case BOOK_PLOT:
       next(action);
-      axios.put(`${baseURL}/api/garden/${store.getState().gardenId}/plots/${store.getState().openPlotId}/edit`, {
-        id: store.getState().openPlotId,
-      },
-      {
+      axios.put(`${baseURL}/api/garden/${store.getState().gardenId}/plots/${store.getState().openPlotId}/edit`, {}, {
         headers: {
           Authorization: `Bearer ${store.getState().token}`,
         },

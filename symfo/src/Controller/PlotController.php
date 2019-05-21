@@ -77,7 +77,11 @@ class PlotController extends AbstractController
         };
 
         if (!empty(array_uintersect($user, $gardenUsers, $compare))) {
-        $data = $this->get('serializer')->serialize($plot, 'json', ['groups' => ['plot']]);
+        $data = $this->get('serializer')->serialize($plot, 'json', ['groups' => 'plot',
+        'circular_reference_handler' => function ($plot) {
+            return $plot->getIsPlantedOns();}
+            ]);
+        
         $response = new Response($data);
         $response->headers->set('Content-Type', 'application/json');
         return $response;
@@ -89,7 +93,7 @@ class PlotController extends AbstractController
     }
 
     /**
-     * @IsGranted("ROLE_MEMBER")
+     * 
      * @Route("/{gardenid}/plots/{id}/edit", name="take_plot", methods={"PUT"})
      * @ParamConverter("garden", options={"id" = "gardenid"})
      * @ParamConverter("plot", options={"id" = "id"})

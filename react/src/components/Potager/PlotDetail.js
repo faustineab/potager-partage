@@ -3,14 +3,22 @@ import PropTypes from 'prop-types';
 import { Button, Form } from 'semantic-ui-react';
 
 
-const PlotDetail = ({ isUserPlot, plotStatus, plotId, bookPlot }) => {
+const PlotDetail = ({
+  isUserPlot, plotStatus, plotId, bookPlot, vegetablesList, plotData,
+}) => {
   console.log(isUserPlot, plotStatus, plotId);
 
+  const plotVegetables = [];
+
+  if (plotData.isPlantedOns && plotData.isPlantedOns[0]) {
+    for (let i = 0; plotData.isPlantedOns[i]; i++) {
+      plotVegetables.push(<li>{plotData.isPlantedOns[i].vegetable.name}</li>);
+    }
+  }
 
   return (
     <div>
       <h1 id="asideTitle">Détail de la parcelle</h1>
-
       {(plotStatus === 'inactif') && (
         <div>
           <h2>Cette parcelle n'est pas encore occupée</h2>
@@ -20,12 +28,11 @@ const PlotDetail = ({ isUserPlot, plotStatus, plotId, bookPlot }) => {
 
       {isUserPlot && (
         <div>
+          {console.log('A MOI')}
           <h2>Vous êtes sur votre parcelle</h2>
           <p>Fruits & légumes cultivés</p>
           <ul id="vegetableList">
-            <li>Tomates</li>
-            <li>Melons</li>
-            <li>Courgettes</li>
+            {plotVegetables}
           </ul>
           <Form>
             <Form.Input fluid placeholder="Ajouter un fruit ou un légume" />
@@ -35,12 +42,11 @@ const PlotDetail = ({ isUserPlot, plotStatus, plotId, bookPlot }) => {
 
       {(plotStatus === 'actif' && !isUserPlot) && (
         <div>
-          <h2>Cette parcelle est occupé par ...</h2>
+          {console.log('la liste du user actuel : ', plotData.isPlantedOns)}
+          <h2>Cette parcelle est occupé par {plotData.user.name}.</h2>
           <p>Fruits & légumes cultivés</p>
           <ul id="vegetableList">
-            <li>Tomates</li>
-            <li>Melons</li>
-            <li>Courgettes</li>
+            {plotVegetables}
           </ul>
         </div>
       )}

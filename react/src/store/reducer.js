@@ -39,9 +39,12 @@ const initialState = {
     { key: 'n', text: 'Autour du jardin', value: 'Autour du jardin' },
     { key: 'o', text: 'Trucs & Astuces', value: 'Trucs & Astuces' },
   ],
+  questionDetail: [],
+  openQuestionId: '',
   openPlotId: '',
   plotData: {},
   isUserPlot: false,
+  vegetablesList: {},
 };
 
 
@@ -53,6 +56,8 @@ export const CREATE_GARDEN = 'CREATE_GARDEN';
 export const JOIN_GARDEN = 'JOIN_GARDEN';
 export const LOG_USER = 'LOG_USER';
 export const FETCH_USER_INFOS = 'FETCH_USER_INFOS';
+export const FETCH_VEGETABLES_LIST = 'FETCH_VEGETABLES_LIST';
+export const SAVE_VEGETABLES_LIST = 'SAVE_VEGETABLES_LIST';
 export const SAVE_USER_INFOS = 'SAVE_USER_INFOS';
 export const FETCH_GARDEN_INFOS = 'FETCH_GARDEN_INFOS';
 const USER_LOGGED = 'USER_LOGGED';
@@ -74,6 +79,8 @@ export const OPEN_PLOT = 'OPEN_PLOT';
 export const PLOT_DATA_FETCHED = 'PLOT_DATA_FETCHED';
 export const BOOK_PLOT = 'BOOK_PLOT';
 export const PLOT_BOOKED = 'PLOT_BOOKED';
+export const SAVE_QUESTION_ID = 'SAVE_QUESTION_ID';
+export const FETCH_QUESTION_DETAIL = 'FETCH_QUESTION_DETAIL';
 
 /**
  * Reducer
@@ -100,6 +107,15 @@ const reducer = (state = initialState, action = {}) => {
         ...state,
         token: action.token,
         loginMessage: 'Récupération des données utilisateur',
+      };
+    case FETCH_VEGETABLES_LIST:
+      return {
+        ...state,
+      };
+    case SAVE_VEGETABLES_LIST:
+      return {
+        ...state,
+        vegetablesList: action.vegetablesList,
       };
     case SAVE_USER_INFOS:
       return {
@@ -204,6 +220,15 @@ const reducer = (state = initialState, action = {}) => {
         ...state,
         questionToDelete: action.cardId,
       };
+    case SAVE_QUESTION_ID:
+      return {
+        ...state,
+        openQuestionId: action.id,
+      };
+    case FETCH_QUESTION_DETAIL:
+      return {
+        ...state,
+      };
     case OPEN_PLOT:
       return {
         ...state,
@@ -256,6 +281,15 @@ export const fetchUserInfos = token => ({
 export const saveUserInfos = user => ({
   type: SAVE_USER_INFOS,
   user,
+});
+
+export const fetchVegetablesList = () => ({
+  type: FETCH_VEGETABLES_LIST,
+});
+
+export const saveVegetablesList = vegetablesList => ({
+  type: SAVE_VEGETABLES_LIST,
+  vegetablesList,
 });
 
 export const fetchGardenInfos = (user, gardenId) => ({
@@ -349,6 +383,15 @@ export const forumQuestionsFetched = tagList => ({
 export const deleteCard = cardId => ({
   type: DELETE_CARD,
   cardId,
+});
+
+export const saveQuestionId = id => ({
+  type: SAVE_QUESTION_ID,
+  id,
+});
+
+export const fetchQuestionDetail = () => ({
+  type: FETCH_QUESTION_DETAIL,
 });
 
 export const openPlot = id => ({
