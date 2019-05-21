@@ -28,6 +28,7 @@ import {
   FETCH_QUESTION_DETAIL,
   questionDetailFetched,
   SEND_ANSWER,
+  answerSent,
   DELETE_ANSWER,
   userLogout,
   DELETE_CARD,
@@ -333,6 +334,7 @@ const ajaxMiddleware = store => next => (action) => {
           .then((response) => {
             console.log(response.data);
             store.dispatch(fetchQuestionDetail());
+            store.dispatch(answerSent());
           })
           .catch((error) => {
             console.log(error);

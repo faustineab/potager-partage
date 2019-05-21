@@ -40,7 +40,7 @@ class PostDetail extends Component {
   }
 
   render() {
-    const { answers, questionDetail } = this.props;
+    const { answers, questionDetail, ongoingAnswer } = this.props;
     const { createdAt, id, tags, text, title, user } = questionDetail;
 
     return (
@@ -85,7 +85,7 @@ class PostDetail extends Component {
         </Comment.Group>
 
         <Form id="submitComment" reply onSubmit={this.handleSubmit}>
-          <Form.TextArea name="answer" onChange={this.handleInputChange} />
+          <Form.TextArea name="answer" value={ongoingAnswer} onChange={this.handleInputChange} />
           <Button type="submit" content="Répondre" floated="right" />
         </Form>
       </main>

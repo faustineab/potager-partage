@@ -6,6 +6,7 @@ import { fetchQuestionDetail, inputChange, sendAnswer, deleteCard, deleteAnswer 
 const mapStateToProps = state => ({
   questionDetail: state.questionDetail,
   answers: state.questionDetail.answers,
+  ongoingAnswer: state.answer,
 });
 
 const mapDispatchToProps = dispatch => ({

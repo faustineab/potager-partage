@@ -80,6 +80,7 @@ export const PLOT_BOOKED = 'PLOT_BOOKED';
 export const SAVE_QUESTION_ID = 'SAVE_QUESTION_ID';
 export const FETCH_QUESTION_DETAIL = 'FETCH_QUESTION_DETAIL';
 export const SEND_ANSWER = 'SEND_ANSWER';
+const ANSWER_SENT = 'ANSWER_SENT';
 export const DELETE_ANSWER = 'DELETE_ANSWER';
 export const QUESTION_DETAIL_FETCHED = 'QUESTION_DETAIL_FETCHED';
 
@@ -239,6 +240,11 @@ const reducer = (state = initialState, action = {}) => {
     case SEND_ANSWER:
       return {
         ...state,
+      };
+    case ANSWER_SENT:
+      return {
+        ...state,
+        answer: '',
       };
     case DELETE_ANSWER:
       return {
@@ -413,6 +419,10 @@ export const fetchQuestionDetail = () => ({
 
 export const sendAnswer = () => ({
   type: SEND_ANSWER,
+});
+
+export const answerSent = () => ({
+  type: ANSWER_SENT,
 });
 
 export const deleteAnswer = answerId => ({
