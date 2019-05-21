@@ -41,6 +41,7 @@ const initialState = {
   ],
   questionDetail: [],
   openQuestionId: '',
+  answer: '',
   openPlotId: '',
   plotData: {},
   isUserPlot: false,
@@ -81,6 +82,7 @@ export const BOOK_PLOT = 'BOOK_PLOT';
 export const PLOT_BOOKED = 'PLOT_BOOKED';
 export const SAVE_QUESTION_ID = 'SAVE_QUESTION_ID';
 export const FETCH_QUESTION_DETAIL = 'FETCH_QUESTION_DETAIL';
+export const SUBMIT_QUESTION_ANSWER = 'SUBMIT_QUESTION_ANSWER';
 
 /**
  * Reducer
@@ -392,6 +394,10 @@ export const saveQuestionId = id => ({
 
 export const fetchQuestionDetail = () => ({
   type: FETCH_QUESTION_DETAIL,
+});
+
+export const submitQuestionAnswer = () => ({
+  type: SUBMIT_QUESTION_ANSWER,
 });
 
 export const openPlot = id => ({

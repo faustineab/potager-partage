@@ -10,9 +10,15 @@ class PostDetail extends Component {
     fetchQuestionDetail();
   }
 
+  handleInputChange =(evt) => {
+    const { inputChange } = this.props;
+    const { name, value } = evt.currentTarget;
+    console.log(name);
+    console.log(value);
+    inputChange(name, value);
+  };
+
   render() {
-    const { match } = this.props;
-    // const { id } = match.params;
     return (
       <main id="postDetail">
         <Card fluid className="forumCard">
@@ -60,7 +66,7 @@ class PostDetail extends Component {
           </Comment>
         </Comment.Group>
         <Form id="submitComment" reply>
-          <Form.TextArea />
+          <Form.TextArea name="answer" onChange={this.handleInputChange} />
           <Button content="Répondre" floated="right" />
         </Form>
       </main>
@@ -70,6 +76,7 @@ class PostDetail extends Component {
 
 PostDetail.propTypes = {
   fetchQuestionDetail: PropTypes.func.isRequired,
+  inputChange: PropTypes.func.isRequired,
 };
 
 export default PostDetail;

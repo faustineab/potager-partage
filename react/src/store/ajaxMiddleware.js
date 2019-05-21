@@ -186,7 +186,7 @@ const ajaxMiddleware = store => next => (action) => {
         });
       break;
 
-      case FETCH_VEGETABLES_LIST:
+    case FETCH_VEGETABLES_LIST:
       next(action);
       axios.get(`${baseURL}/api/vegetable/`, {
         headers: {
