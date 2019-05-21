@@ -38,6 +38,7 @@ const initialState = {
   questionDetail: {},
   openQuestionId: '',
   answer: '',
+  answerToDelete: '',
   openPlotId: '',
   plotData: {},
   isUserPlot: false,
@@ -79,6 +80,7 @@ export const PLOT_BOOKED = 'PLOT_BOOKED';
 export const SAVE_QUESTION_ID = 'SAVE_QUESTION_ID';
 export const FETCH_QUESTION_DETAIL = 'FETCH_QUESTION_DETAIL';
 export const SEND_ANSWER = 'SEND_ANSWER';
+export const DELETE_ANSWER = 'DELETE_ANSWER';
 export const QUESTION_DETAIL_FETCHED = 'QUESTION_DETAIL_FETCHED';
 
 
@@ -237,6 +239,11 @@ const reducer = (state = initialState, action = {}) => {
     case SEND_ANSWER:
       return {
         ...state,
+      };
+    case DELETE_ANSWER:
+      return {
+        ...state,
+        answerToDelete: action.answerId,
       };
     case OPEN_PLOT:
       return {
@@ -406,6 +413,11 @@ export const fetchQuestionDetail = () => ({
 
 export const sendAnswer = () => ({
   type: SEND_ANSWER,
+});
+
+export const deleteAnswer = answerId => ({
+  type: DELETE_ANSWER,
+  answerId,
 });
 
 export const questionDetailFetched = questionDetail => ({

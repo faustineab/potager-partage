@@ -28,7 +28,7 @@ import {
   FETCH_QUESTION_DETAIL,
   questionDetailFetched,
   SEND_ANSWER,
-  answerSent,
+  DELETE_ANSWER,
   userLogout,
   DELETE_CARD,
   OPEN_PLOT,
@@ -338,6 +338,23 @@ const ajaxMiddleware = store => next => (action) => {
             console.log(error);
           });
       }
+      break;
+
+    case DELETE_ANSWER:
+      next(action);
+      axios.delete(`http://localhost/apo/potager-partage/symfo/public/api/garden/${store.getState().gardenId}/forum/question/${store.getState().openQuestionId}/answer/${store.getState().answerToDelete}`,
+        {
+          headers: {
+            Authorization: `Bearer ${store.getState().token}`,
+          },
+        })
+        .then((response) => {
+          console.log(response.data);
+          store.dispatch(fetchQuestionDetail());
+        })
+        .catch((error) => {
+          console.log(error);
+        });
       break;
 
     case OPEN_PLOT:

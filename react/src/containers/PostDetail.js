@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import PostDetail from '../components/PostDetail';
 
-import { fetchQuestionDetail, inputChange, sendAnswer } from '../store/reducer';
+import { fetchQuestionDetail, inputChange, sendAnswer, deleteCard, deleteAnswer } from '../store/reducer';
 
 const mapStateToProps = state => ({
   questionDetail: state.questionDetail,
@@ -17,6 +17,12 @@ const mapDispatchToProps = dispatch => ({
   },
   sendAnswer: () => {
     dispatch(sendAnswer());
+  },
+  deleteCard: (cardId) => {
+    dispatch(deleteCard(cardId));
+  },
+  deleteAnswer: (answerId) => {
+    dispatch(deleteAnswer(answerId));
   },
 });
 

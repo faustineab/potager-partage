@@ -25,6 +25,20 @@ class PostDetail extends Component {
     sendAnswer();
   }
 
+  handleDeleteCard = (evt) => {
+    const { deleteCard } = this.props;
+    const cardId = evt.currentTarget.id;
+    console.log(cardId);
+    deleteCard(cardId);
+  };
+
+  handleDeleteAnswer = (evt) => {
+    const {deleteAnswer } = this.props;
+    const answerId = evt.currentTarget.id;
+    console.log(answerId);
+    deleteAnswer(answerId);
+  }
+
   render() {
     const { answers, questionDetail } = this.props;
     const { createdAt, id, tags, text, title, user } = questionDetail;
@@ -41,7 +55,7 @@ class PostDetail extends Component {
             <div id="headerMeta">
               <span className="postDetail">publié par {user.name} le {createdAt}</span>
               {tags.map(({ name }) => <span className="tag">{name}</span>)}
-              <Icon name="ban" id={id} className="cardDelete" />
+              <Icon name="ban" id={id} className="cardDelete" onClick={this.handleDeleteCard} />
             </div>
           </Card.Header>
           <Card.Content id="questionContent">
@@ -59,7 +73,7 @@ class PostDetail extends Component {
               <Comment.Content>
                 <Comment.Content id="commentHeader">
                   <Comment.Author>{answer.user.name}</Comment.Author>
-                  <Icon name="ban" id={answer.id} className="cardDelete commentDelete" />
+                  <Icon name="ban" id={answer.id} className="commentDelete" onClick={this.handleDeleteAnswer} />
                 </Comment.Content>
                 <Comment.Metadata>
                   <div>{answer.createdAt}</div>
