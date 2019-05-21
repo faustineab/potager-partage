@@ -5,7 +5,7 @@ import { Card, Icon, Button, Comment, Form, Header } from 'semantic-ui-react';
 import './index.scss';
 
 class PostDetail extends Component {
-  componentDidMount() {
+  componentWillMount() {
     const { fetchQuestionDetail } = this.props;
     fetchQuestionDetail();
   }
@@ -19,7 +19,10 @@ class PostDetail extends Component {
   };
 
   handleSubmit = (evt) => {
+    evt.preventDefault();
     console.log('submit');
+    const { sendAnswer } = this.props;
+    sendAnswer();
   }
 
   render() {

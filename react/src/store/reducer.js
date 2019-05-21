@@ -78,7 +78,7 @@ export const BOOK_PLOT = 'BOOK_PLOT';
 export const PLOT_BOOKED = 'PLOT_BOOKED';
 export const SAVE_QUESTION_ID = 'SAVE_QUESTION_ID';
 export const FETCH_QUESTION_DETAIL = 'FETCH_QUESTION_DETAIL';
-export const SUBMIT_QUESTION_ANSWER = 'SUBMIT_QUESTION_ANSWER';
+export const SEND_ANSWER = 'SEND_ANSWER';
 export const QUESTION_DETAIL_FETCHED = 'QUESTION_DETAIL_FETCHED';
 
 
@@ -233,6 +233,10 @@ const reducer = (state = initialState, action = {}) => {
       return {
         ...state,
         questionDetail: action.questionDetail,
+      };
+    case SEND_ANSWER:
+      return {
+        ...state,
       };
     case OPEN_PLOT:
       return {
@@ -400,8 +404,8 @@ export const fetchQuestionDetail = () => ({
 });
 
 
-export const submitQuestionAnswer = () => ({
-  type: SUBMIT_QUESTION_ANSWER,
+export const sendAnswer = () => ({
+  type: SEND_ANSWER,
 });
 
 export const questionDetailFetched = questionDetail => ({
