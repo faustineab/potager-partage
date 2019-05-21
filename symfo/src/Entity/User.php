@@ -87,12 +87,12 @@ class User implements UserInterface
     private $plots;
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\ForumAnswer", mappedBy="user")
-     * @Groups({"forum_question_index", "forum_question_show", "login"})
+     * @Groups({"login"})
      */
     private $forumAnswers;
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\ForumQuestion", mappedBy="user")
-     * @Groups({"forum_question_index", "login"})
+     * @Groups({"login"})
      */
     private $forumQuestions;
 
