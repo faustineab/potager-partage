@@ -229,6 +229,7 @@ const ajaxMiddleware = store => next => (action) => {
             text: list.text,
             title: list.title,
             user: list.user,
+            tags: list.tags,
             creationDate: list.createdAt.substring(0, 10),
           }));
           console.log(formattedQuestionList);
