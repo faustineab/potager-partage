@@ -34,12 +34,8 @@ const initialState = {
   questionList: [],
   questionToDelete: '',
   questionTags: [],
-  tags: [
-    { key: 'm', text: 'Fruits & Légumes', value: 'Fruits & Légumes' },
-    { key: 'n', text: 'Autour du jardin', value: 'Autour du jardin' },
-    { key: 'o', text: 'Trucs & Astuces', value: 'Trucs & Astuces' },
-  ],
-  questionDetail: [],
+  tags: [],
+  questionDetail: {},
   openQuestionId: '',
   answer: '',
   openPlotId: '',
@@ -83,6 +79,8 @@ export const PLOT_BOOKED = 'PLOT_BOOKED';
 export const SAVE_QUESTION_ID = 'SAVE_QUESTION_ID';
 export const FETCH_QUESTION_DETAIL = 'FETCH_QUESTION_DETAIL';
 export const SUBMIT_QUESTION_ANSWER = 'SUBMIT_QUESTION_ANSWER';
+export const QUESTION_DETAIL_FETCHED = 'QUESTION_DETAIL_FETCHED';
+
 
 /**
  * Reducer
@@ -230,6 +228,11 @@ const reducer = (state = initialState, action = {}) => {
     case FETCH_QUESTION_DETAIL:
       return {
         ...state,
+      };
+    case QUESTION_DETAIL_FETCHED:
+      return {
+        ...state,
+        questionDetail: action.questionDetail,
       };
     case OPEN_PLOT:
       return {
@@ -396,8 +399,14 @@ export const fetchQuestionDetail = () => ({
   type: FETCH_QUESTION_DETAIL,
 });
 
+
 export const submitQuestionAnswer = () => ({
   type: SUBMIT_QUESTION_ANSWER,
+});
+
+export const questionDetailFetched = questionDetail => ({
+  type: QUESTION_DETAIL_FETCHED,
+  questionDetail,
 });
 
 export const openPlot = id => ({

@@ -40,17 +40,19 @@ class ForumQuestion
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
-     * @Groups({"forum_tags", "user"})
+     * @Groups({"user"})
      */
     private $updatedAt;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\ForumAnswer", mappedBy="question", orphanRemoval=true)
+     * @Groups({"forum_question_show"})
      */
     private $answers;
 
     /**
      * @ORM\ManyToMany(targetEntity="App\Entity\ForumTag", mappedBy="questions")
+     * @Groups({"forum_question_show"})
      */
     private $tags;
 

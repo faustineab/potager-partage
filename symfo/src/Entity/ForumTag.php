@@ -16,7 +16,7 @@ class ForumTag
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     * @Groups({"forum_tags", "user"})
+     * @Groups({"forum_tags", "user","forum_question_show"})
      */
     private $id;
 
@@ -40,13 +40,13 @@ class ForumTag
 
     /**
      * @ORM\ManyToMany(targetEntity="App\Entity\ForumQuestion", inversedBy="tags")
-     * @Groups({"forum_question_index", "forum_question_show", "forum_tags"})
+     * @Groups({"forum_question_index", "forum_tags"})
      */
     private $questions;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Garden", inversedBy="forumTags")
-     * @Groups({"forum_question_index", "forum_question_show"})
+     * @Groups({"forum_question_index"})
      */
     private $garden;
 
