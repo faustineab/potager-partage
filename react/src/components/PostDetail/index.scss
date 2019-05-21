@@ -72,25 +72,27 @@
 
   .forumCard{
     .cardHeader{
-      font-size: 1em;
+      font-size: 1.5em;
       padding: 0.5em;
-      background-color: #5e5250;
-      color: #faf0ca;
-    }
-    .postAuthor{
-      font-size: 1.1em;
-    }
-    .postDate{
-      font-style: italic; 
-      opacity: 0.7;
-    }
-    .cardButtons{
-      margin: 0.5em;
-      text-align: right;
-
-      .cardDelete{
-        color: #bf4156;
+      background-color: rgba($color: #7ba566, $alpha: 0.5);
+      
+      color: #5e5250;
+      #headerMeta{
+        text-align: right;
+        font-size: 0.65em;
+        .cardDelete{
+          color: #bf4156;
+          text-align: right;
+        }
+        .postDetail{
+          font-style: italic; 
+          opacity: 0.7;
+          margin-right: 0.5em;
+        }
       }
+    }
+    #questionContent{
+      font-size: 1.2em;
     }
   }
 }

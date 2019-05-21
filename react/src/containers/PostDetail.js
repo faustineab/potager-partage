@@ -3,7 +3,10 @@ import PostDetail from '../components/PostDetail';
 
 import { fetchQuestionDetail, inputChange } from '../store/reducer';
 
-const mapStateToProps = '';
+const mapStateToProps = state => ({
+  questionDetail: state.questionDetail,
+  answers: state.questionDetail.answers,
+});
 
 const mapDispatchToProps = dispatch => ({
   fetchQuestionDetail: (postId) => {

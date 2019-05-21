@@ -18,65 +18,62 @@ class PostDetail extends Component {
     inputChange(name, value);
   };
 
+  handleSubmit = (evt) => {
+    console.log('submit');
+  }
+
   render() {
+    const { answers, questionDetail } = this.props;
+    const { createdAt, id, tags, text, title, user } = questionDetail;
+
     return (
       <main id="postDetail">
         <Card fluid className="forumCard">
-          <Card.Header className="cardHeader">A quelle fréquence arroser mes tomates ?</Card.Header>
-          <Card.Content>
-            <span className="postAuthor">Wassim Alkayar</span>
-            <span className="postDate">- publié le 07/05/2019</span>
+          <Card.Header className="cardHeader">
+            <div>
+              <h3>
+                {title}
+              </h3>
+            </div>
+            <div id="headerMeta">
+              <span className="postDetail">publié par {user.name} le {createdAt}</span>
+              {tags.map(({ name }) => <span className="tag">{name}</span>)}
+              <Icon name="ban" id={id} className="cardDelete" />
+            </div>
+          </Card.Header>
+          <Card.Content id="questionContent">
+            <p>{text}</p>
           </Card.Content>
-          <Card.Meta>
-            <span className="tag">Fruits & Légumes</span>
-          </Card.Meta>
-          <div className="cardButtons">
-            <Icon name="ban" size="large" className="cardDelete" />
-          </div>
         </Card>
+
         <Comment.Group id="postComments">
           <Header as="h3" dividing>
             Réponses
           </Header>
 
-          <Comment>
-            <Comment.Content>
-              <Comment.Content id="commentHeader">
-                <Comment.Author>Matt</Comment.Author>
-                <Icon name="ban" className="cardDelete commentDelete" />
+          {answers.map(answer => (
+            <Comment>
+              <Comment.Content>
+                <Comment.Content id="commentHeader">
+                  <Comment.Author>{answer.user.name}</Comment.Author>
+                  <Icon name="ban" id={answer.id} className="cardDelete commentDelete" />
+                </Comment.Content>
+                <Comment.Metadata>
+                  <div>{answer.createdAt}</div>
+                </Comment.Metadata>
+                <Comment.Text>{answer.text}</Comment.Text>
               </Comment.Content>
-              <Comment.Metadata>
-                <div>Today at 5:42PM</div>
-              </Comment.Metadata>
-              <Comment.Text>How artistic!</Comment.Text>
-            </Comment.Content>
-          </Comment>
-
-          <Comment>
-            <Comment.Content>
-              <Comment.Content id="commentHeader">
-                <Comment.Author>Matt</Comment.Author>
-                <Icon name="ban" className="cardDelete commentDelete" />
-              </Comment.Content>
-              <Comment.Metadata>
-                <div>Today at 5:42PM</div>
-              </Comment.Metadata>
-              <Comment.Text>How artistic!</Comment.Text>
-            </Comment.Content>
-          </Comment>
+            </Comment>
+          ))}
         </Comment.Group>
-        <Form id="submitComment" reply>
+
+        <Form id="submitComment" reply onSubmit={this.handleSubmit}>
           <Form.TextArea name="answer" onChange={this.handleInputChange} />
-          <Button content="Répondre" floated="right" />
+          <Button type="submit" content="Répondre" floated="right" />
         </Form>
       </main>
     );
   }
 }
-
-PostDetail.propTypes = {
-  fetchQuestionDetail: PropTypes.func.isRequired,
-  inputChange: PropTypes.func.isRequired,
-};
 
 export default PostDetail;
