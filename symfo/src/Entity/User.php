@@ -28,7 +28,7 @@ class User implements UserInterface
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     * @Groups({"admin", "event", "garden_get","login", "plot", "user"})
+     * @Groups({"admin", "event", "garden_get","login", "plot", "user","forum_question_show"})
      */
     private $id;
 
@@ -87,12 +87,12 @@ class User implements UserInterface
     private $plots;
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\ForumAnswer", mappedBy="user")
-     * @Groups({"login"})
+     * @Groups({"forum_question_index", "forum_question_show", "login"})
      */
     private $forumAnswers;
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\ForumQuestion", mappedBy="user")
-     * @Groups({"login"})
+     * @Groups({"forum_question_index", "login"})
      */
     private $forumQuestions;
 
