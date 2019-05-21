@@ -39,6 +39,8 @@ const initialState = {
     { key: 'n', text: 'Autour du jardin', value: 'Autour du jardin' },
     { key: 'o', text: 'Trucs & Astuces', value: 'Trucs & Astuces' },
   ],
+  questionDetail: [],
+  openQuestionId: '',
   openPlotId: '',
   plotData: {},
   isUserPlot: false,
@@ -74,6 +76,8 @@ export const OPEN_PLOT = 'OPEN_PLOT';
 export const PLOT_DATA_FETCHED = 'PLOT_DATA_FETCHED';
 export const BOOK_PLOT = 'BOOK_PLOT';
 export const PLOT_BOOKED = 'PLOT_BOOKED';
+export const SAVE_QUESTION_ID = 'SAVE_QUESTION_ID';
+export const FETCH_QUESTION_DETAIL = 'FETCH_QUESTION_DETAIL';
 
 /**
  * Reducer
@@ -203,6 +207,15 @@ const reducer = (state = initialState, action = {}) => {
       return {
         ...state,
         questionToDelete: action.cardId,
+      };
+    case SAVE_QUESTION_ID:
+      return {
+        ...state,
+        openQuestionId: action.id,
+      };
+    case FETCH_QUESTION_DETAIL:
+      return {
+        ...state,
       };
     case OPEN_PLOT:
       return {
@@ -349,6 +362,15 @@ export const forumQuestionsFetched = tagList => ({
 export const deleteCard = cardId => ({
   type: DELETE_CARD,
   cardId,
+});
+
+export const saveQuestionId = id => ({
+  type: SAVE_QUESTION_ID,
+  id,
+});
+
+export const fetchQuestionDetail = () => ({
+  type: FETCH_QUESTION_DETAIL,
 });
 
 export const openPlot = id => ({

@@ -5,6 +5,7 @@ import {
   CREATE_GARDEN,
   JOIN_GARDEN,
   LOG_USER,
+  logUser,
   FETCH_USER_INFOS,
   receivedGardenList,
   fetchUserInfos,
@@ -21,6 +22,7 @@ import {
   SUBMIT_QUESTION,
   questionAsked,
   QUESTION_ASKED,
+  FETCH_QUESTION_DETAIL,
   userLogout,
   DELETE_CARD,
   OPEN_PLOT,
@@ -72,9 +74,11 @@ const ajaxMiddleware = store => next => (action) => {
       })
         .then((response) => {
           console.log(response);
+          store.dispatch(logUser());
         })
         .catch((error) => {
           console.log(error);
+          window.location.href = '/subscribe';
         });
       break;
 
@@ -180,7 +184,7 @@ const ajaxMiddleware = store => next => (action) => {
 
     case FETCH_FORUM_QUESTIONS:
       next(action);
-      axios.get(`${baseURL}/api/garden/${store.getState().gardenId}/forum/question`, {
+      axios.get(`http://localhost/apo/potager-partage/symfo/public/api/garden/${store.getState().gardenId}/forum/question`, {
         headers: {
           Authorization: `Bearer ${store.getState().token}`,
         },
@@ -250,12 +254,26 @@ const ajaxMiddleware = store => next => (action) => {
       next(action);
       store.dispatch(fetchForumQuestions());
       break;
+
     case DELETE_CARD:
       next(action);
-      axios.delete(`${baseURL}/api/garden/${store.getState().gardenId}/forum/question/${store.getState().questionToDelete}`, {
-        id: store.getState().questionToDelete,
-      },
-      {
+      axios.delete(`http://localhost/apo/potager-partage/symfo/public/api/garden/${store.getState().gardenId}/forum/question/${store.getState().questionToDelete}`,
+        {
+          headers: {
+            Authorization: `Bearer ${store.getState().token}`,
+          },
+        })
+        .then((response) => {
+          console.log(response.data);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+      break;
+    
+    case FETCH_QUESTION_DETAIL:
+      next(action);
+      axios.get(`${baseURL}/api/garden/${store.getState().gardenId}/forum/question/${store.getState().openQuestionId}`, {
         headers: {
           Authorization: `Bearer ${store.getState().token}`,
         },
@@ -286,10 +304,7 @@ const ajaxMiddleware = store => next => (action) => {
       break;
     case BOOK_PLOT:
       next(action);
-      axios.put(`${baseURL}/api/garden/${store.getState().gardenId}/plots/${store.getState().openPlotId}/edit`, {
-        id: store.getState().openPlotId,
-      },
-      {
+      axios.put(`${baseURL}/api/garden/${store.getState().gardenId}/plots/${store.getState().openPlotId}/edit`, {}, {
         headers: {
           Authorization: `Bearer ${store.getState().token}`,
         },
