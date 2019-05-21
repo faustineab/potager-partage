@@ -52,7 +52,7 @@ class ForumQuestion
 
     /**
      * @ORM\ManyToMany(targetEntity="App\Entity\ForumTag", mappedBy="questions")
-     * @Groups({"forum_question_show"})
+     * @Groups({"forum_question_index", "forum_question_show"})
      */
     private $tags;
 
