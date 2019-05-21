@@ -32,7 +32,12 @@ import {
   plotDataFetched,
   BOOK_PLOT,
   plotBooked,
-} from 'src/store/reducer';
+  NEW_VEGETABLE,
+  REMOVE_VEGETABLE,
+  userPlotOn,
+  userPlotOff,
+ openPlot } from 'src/store/reducer';
+
 
 
 const baseURL = 'http://217.70.191.127';
@@ -186,7 +191,7 @@ const ajaxMiddleware = store => next => (action) => {
         });
       break;
 
-      case FETCH_VEGETABLES_LIST:
+    case FETCH_VEGETABLES_LIST:
       next(action);
       axios.get(`${baseURL}/api/vegetable/`, {
         headers: {
@@ -297,7 +302,7 @@ const ajaxMiddleware = store => next => (action) => {
           console.log(error);
         });
       break;
-    
+
     case FETCH_QUESTION_DETAIL:
       next(action);
       axios.get(`${baseURL}/api/garden/${store.getState().gardenId}/forum/question/${store.getState().openQuestionId}`, {
@@ -321,12 +326,19 @@ const ajaxMiddleware = store => next => (action) => {
         },
       })
         .then((response) => {
-          console.log(response.data);
-
+          console.log('response data = ', response.data);
           store.dispatch(plotDataFetched(response.data));
+          console.log('user = ', store.getState().user);
+          console.log('user id : ', store.getState().user.id, 'open plot id ', store.getState().plotData);
+          if (store.getState().plotData.user == null) {
+            store.dispatch(userPlotOff());
+          }
+          else if (store.getState().user.id === store.getState().plotData.user.id) {
+            store.dispatch(userPlotOn());
+          }
         })
         .catch((error) => {
-          console.log(error);
+          console.log('ERROR OPEN PLOT', error);
         });
       break;
     case BOOK_PLOT:
@@ -338,6 +350,7 @@ const ajaxMiddleware = store => next => (action) => {
       })
         .then((response) => {
           console.log(response);
+          store.dispatch(openPlot(store.getState().openPlotId));
         })
         .catch((error) => {
           console.log(error);
@@ -358,6 +371,40 @@ const ajaxMiddleware = store => next => (action) => {
       })
         .then((response) => {
           console.log(response);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+      break;
+    case NEW_VEGETABLE:
+      next(action);
+      axios.post(`${baseURL}/api/garden/${store.getState().gardenId}/plots/${store.getState().openPlotId}/plantation/new`, {
+        vegetable: store.getState().newVegetableId,
+        seedling_date: '2019-05-21',
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${store.getState().token}`,
+        },
+      })
+        .then((response) => {
+          console.log(response);
+          store.dispatch(openPlot(store.getState().openPlotId));
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+      break;
+    case REMOVE_VEGETABLE:
+      next(action);
+      axios.delete(`${baseURL}/api/garden/${store.getState().gardenId}/plots/${store.getState().openPlotId}/plantation/${store.getState().removeVegetableId}`, {
+        headers: {
+          Authorization: `Bearer ${store.getState().token}`,
+        },
+      })
+        .then((response) => {
+          console.log(response);
+          store.dispatch(openPlot(store.getState().openPlotId));
         })
         .catch((error) => {
           console.log(error);

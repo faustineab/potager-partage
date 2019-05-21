@@ -45,6 +45,8 @@ const initialState = {
   plotData: {},
   isUserPlot: false,
   vegetablesList: {},
+  newVegetableId: '',
+  removeVegetableId: '',
 };
 
 
@@ -81,6 +83,10 @@ export const BOOK_PLOT = 'BOOK_PLOT';
 export const PLOT_BOOKED = 'PLOT_BOOKED';
 export const SAVE_QUESTION_ID = 'SAVE_QUESTION_ID';
 export const FETCH_QUESTION_DETAIL = 'FETCH_QUESTION_DETAIL';
+export const NEW_VEGETABLE = 'NEW_VEGETABLE';
+export const REMOVE_VEGETABLE = 'REMOVE_VEGETABLE';
+export const USER_PLOT_ON = 'USER_PLOT_ON';
+export const USER_PLOT_OFF = 'USER_PLOT_OFF';
 
 /**
  * Reducer
@@ -252,6 +258,26 @@ const reducer = (state = initialState, action = {}) => {
       return {
         ...initialState,
       };
+    case NEW_VEGETABLE:
+      return {
+        ...state,
+        newVegetableId: action.newVegetableId,
+      };
+    case REMOVE_VEGETABLE:
+      return {
+        ...state,
+        removeVegetableId: action.removeVegetableId,
+      };
+    case USER_PLOT_ON:
+      return {
+        ...state,
+        isUserPlot: true,
+      };
+    case USER_PLOT_OFF:
+      return {
+        ...state,
+        isUserPlot: false,
+      };
     default:
       return state;
   }
@@ -261,6 +287,24 @@ const reducer = (state = initialState, action = {}) => {
 /**
  * Action Creators
  */
+export const userPlotOff = () => ({
+  type: USER_PLOT_OFF,
+});
+
+export const userPlotOn = () => ({
+  type: USER_PLOT_ON,
+});
+
+export const removeVegetable = removeVegetableId => ({
+  type: REMOVE_VEGETABLE,
+  removeVegetableId,
+});
+
+export const newVegetable = newVegetableId => ({
+  type: NEW_VEGETABLE,
+  newVegetableId,
+});
+
 export const joinGarden = () => ({
   type: JOIN_GARDEN,
 });
