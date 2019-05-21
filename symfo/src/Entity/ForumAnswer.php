@@ -15,7 +15,7 @@ class ForumAnswer
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     * @Groups({"user"})
+     * @Groups({"forum_question_show", "user"})
      */
     private $id;
 
@@ -33,20 +33,19 @@ class ForumAnswer
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
-     * @Groups({"user"})
      */
     private $updatedAt;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\ForumQuestion", inversedBy="answers")
      * @ORM\JoinColumn(nullable=false)
-     * @Groups({"forum_question_show"})
      */
     private $question;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="forumAnswers")
      * @ORM\JoinColumn(nullable=false)
+     * @Groups({"forum_question_show"})
      */
     private $user;
 
