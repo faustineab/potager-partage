@@ -7,6 +7,9 @@ import {
   LOG_USER,
   logUser,
   FETCH_USER_INFOS,
+  FETCH_VEGETABLES_LIST,
+  fetchVegetablesList,
+  saveVegetablesList,
   receivedGardenList,
   fetchUserInfos,
   fetchGardenInfos,
@@ -175,10 +178,34 @@ const ajaxMiddleware = store => next => (action) => {
             gardenSize,
             gardenPlots,
           ));
+          store.dispatch(fetchVegetablesList());
         })
         .catch((error) => {
           console.log(error);
           store.dispatch(userLogout());
+        });
+      break;
+
+      case FETCH_VEGETABLES_LIST:
+      next(action);
+      axios.get(`${baseURL}/api/vegetable/`, {
+        headers: {
+          Authorization: `Bearer ${store.getState().token}`,
+        },
+      })
+        .then((response) => {
+          console.log(response.data);
+          const vegetablesList = response.data;
+          const formattedVegetablesList = vegetablesList.map(vegetable => ({
+            key: vegetable.id,
+            text: vegetable.name,
+            value: vegetable.name,
+          }));
+          console.log(formattedVegetablesList);
+          store.dispatch(saveVegetablesList(formattedVegetablesList));
+        })
+        .catch((error) => {
+          console.log('forum question error', error);
         });
       break;
 

@@ -44,6 +44,7 @@ const initialState = {
   openPlotId: '',
   plotData: {},
   isUserPlot: false,
+  vegetablesList: {},
 };
 
 
@@ -55,6 +56,8 @@ export const CREATE_GARDEN = 'CREATE_GARDEN';
 export const JOIN_GARDEN = 'JOIN_GARDEN';
 export const LOG_USER = 'LOG_USER';
 export const FETCH_USER_INFOS = 'FETCH_USER_INFOS';
+export const FETCH_VEGETABLES_LIST = 'FETCH_VEGETABLES_LIST';
+export const SAVE_VEGETABLES_LIST = 'SAVE_VEGETABLES_LIST';
 export const SAVE_USER_INFOS = 'SAVE_USER_INFOS';
 export const FETCH_GARDEN_INFOS = 'FETCH_GARDEN_INFOS';
 const USER_LOGGED = 'USER_LOGGED';
@@ -104,6 +107,15 @@ const reducer = (state = initialState, action = {}) => {
         ...state,
         token: action.token,
         loginMessage: 'Récupération des données utilisateur',
+      };
+    case FETCH_VEGETABLES_LIST:
+      return {
+        ...state,
+      };
+    case SAVE_VEGETABLES_LIST:
+      return {
+        ...state,
+        vegetablesList: action.vegetablesList,
       };
     case SAVE_USER_INFOS:
       return {
@@ -269,6 +281,15 @@ export const fetchUserInfos = token => ({
 export const saveUserInfos = user => ({
   type: SAVE_USER_INFOS,
   user,
+});
+
+export const fetchVegetablesList = () => ({
+  type: FETCH_VEGETABLES_LIST,
+});
+
+export const saveVegetablesList = vegetablesList => ({
+  type: SAVE_VEGETABLES_LIST,
+  vegetablesList,
 });
 
 export const fetchGardenInfos = (user, gardenId) => ({
