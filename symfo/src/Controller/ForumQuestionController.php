@@ -28,13 +28,16 @@ class ForumQuestionController extends AbstractController
     /**
      * @Route("/", name="forum_question_index", methods={"GET"})
      */
-    public function index(Garden $garden, SerializerInterface $serializer): Response
+    public function index(Garden $garden, SerializerInterface $serializer, ForumQuestionRepository $questionRepo): Response
     {
         $currentUser = $this->get('security.token_storage')->getToken()->getUser();
         $gardenMembers = $garden->getUsers();
         foreach ($gardenMembers as $gardenMember) {
             if ($currentUser == $gardenMember) {
-                $questions = $garden->getForumQuestions();
+                $questions = $questionRepo->findBy(
+                    ['garden' => $garden],
+                    ['createdAt' => 'ASC']
+                );
                 $jsonQuestions = $serializer->serialize($questions, 'json', [
                     'groups' => 'forum_question_index',
                     'circular_reference_handler' => function ($questions) {
