@@ -3,19 +3,21 @@
 namespace App\Controller;
 
 use App\Entity\Garden;
-use App\Entity\ForumQuestion;
 use App\Entity\ForumTag;
+use App\Entity\ForumQuestion;
 use App\Repository\ForumTagRepository;
-use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\ORM\EntityManagerInterface;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\JsonResponse;
+use App\Repository\ForumAnswerRepository;
+use App\Repository\ForumQuestionRepository;
 use Symfony\Component\HttpFoundation\Request;
+use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
 /**
  * @Route("/api/garden/{gardenid}/forum/question")
@@ -92,21 +94,24 @@ class ForumQuestionController extends AbstractController
     /**
      * @Route("/{id}", name="forum_question_show", methods={"GET"})
      */
-    public function show(Garden $garden, ForumQuestion $question, SerializerInterface $serializer): Response
+    public function show(Garden $garden, $id, ForumAnswerRepository $forumAnswerRepository , ForumQuestionRepository $forumQuestionRepository, ForumQuestion $question, SerializerInterface $serializer): Response
     {
         $currentUser = $this->get('security.token_storage')->getToken()->getUser();
         $gardenMembers = $garden->getUsers();
         foreach ($gardenMembers as $gardenMember) {
             if ($currentUser == $gardenMember) {
+
+                //$questions=$forumQuestionRepository->find($id);
+                //$answers = $forumAnswerRepository->findByQuestion($questions);
                 $jsonQuestion = $serializer->serialize(
                     $question,
                     'json',
                     ['groups' => 'forum_question_show',
-                    'circular_reference_handler' => function ($questions) {
-                        return $questions->getId();
-                    },
-                    ]
+                    'circular_reference_handler' => function ($question) {
+                        return $question->getId();
+                    },]
                 );
+                
                 
                 return JsonResponse::fromJsonString($jsonQuestion);
             }
