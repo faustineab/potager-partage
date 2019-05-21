@@ -16,7 +16,7 @@ class ForumTag
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     * @Groups({"forum_tags", "user"})
+     * @Groups({"forum_tags", "user","forum_question_show"})
      */
     private $id;
 
