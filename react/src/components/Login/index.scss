@@ -5,11 +5,16 @@
     background-repeat: no-repeat;
     background-attachment: fixed;
     padding: 1em;
+    min-height: 100vh;
+    padding-bottom: 5em;
+
       h1{
         text-align: center;
-        font-size: 1.5em;
-        margin: 1em;
+        font-size: 3em;
+        margin-top: 1em;
+        margin-bottom: 1em;
         color:  #5e5250;
+        text-transform: uppercase;
       }
     .subscriptionForm{
       margin: 0 auto;

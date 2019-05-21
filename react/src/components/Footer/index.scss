@@ -1,18 +1,18 @@
 .footer {
     width: 100%;
-    height: 250px;
+    height: 150px;
     display: flex;
     flex-wrap: nowrap;
     justify-content: center;
     align-items: center;
-    background-color: #5e5250;
+    background-color: rgba($color: #5e5250, $alpha: 0.8);
     .listbox{
         width: 550px;
-        height: 175px;
+        height: 100px;
         text-align: center;
         h1{
             color: #faf0ca;
-            font-size: 1.8em;
+            font-size: 1.3em;
             padding-bottom: 40px;
             font-family: 'Fresca', sans-serif;
             transition: all 300ms;

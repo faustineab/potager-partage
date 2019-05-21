@@ -20,7 +20,8 @@ const Login = ({ email, password, inputChange, loginMessage, onFormSubmit, loadi
   };
 
   return (
-    <main className="subscription"> 
+    <main className="subscription">
+      <h1 id="title">bienvenue sur potager partagé</h1>
       <Form className="subscriptionForm" onSubmit={handleSubmit}>
         <Form.Field>
         <label>Adresse e-mail</label>
