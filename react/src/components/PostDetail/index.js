@@ -49,49 +49,58 @@ class PostDetail extends Component {
 
     return (
       <main id="postDetail">
-        <Card fluid className="forumCard">
-          <Card.Header className="cardHeader">
-            <div>
-              <h3>
-                {title}
-              </h3>
-            </div>
-            <div id="headerMeta">
-              <span className="postDetail">publié par {author.name} le {createdAt}</span>
-              {questionTags.map(({ name }) => <span className="tag">{name}</span>)}
-              <Icon name="ban" id={id} className="cardDelete" onClick={this.handleDeleteCard} />
-            </div>
-          </Card.Header>
-          <Card.Content id="questionContent">
-            <p>{text}</p>
-          </Card.Content>
-        </Card>
+        <div id="post-header">
+          <div id="post-container">
+            <h2 id="post-title">Le coin des jardiniers</h2>
+          </div>
+        </div>
+        <div id="post-body">
+          <Card fluid className="forumCard">
+            <Card.Header className="cardHeader">
+              <div>
+                <h3>
+                  {title}
+                </h3>
+              </div>
+              <div id="headerMeta">
+                <span className="postDetail">publié par {author.name} le {createdAt}</span>
+                {questionTags.map(({ name }) => <span className="tag">{name}</span>)}
+                <Icon name="ban" id={id} className="cardDelete" onClick={this.handleDeleteCard} />
+              </div>
+            </Card.Header>
+            <Card.Content id="questionContent">
+              <p>{text}</p>
+            </Card.Content>
+          </Card>
 
-        <Comment.Group id="postComments">
-          <Header as="h3" dividing>
-            Réponses
-          </Header>
+          <Comment.Group id="postComments">
+            <Header as="h3" dividing>
+              Réponses
+            </Header>
 
-          {answers.map(answer => (
-            <Comment>
-              <Comment.Content>
-                <Comment.Content id="commentHeader">
-                  <Comment.Author>{answer.user.name}</Comment.Author>
-                  <Icon name="ban" id={answer.id} className="commentDelete" onClick={this.handleDeleteAnswer} />
+            {answers.map(answer => (
+              <Comment>
+                <Comment.Content>
+                  <Comment.Content id="commentHeader">
+                    <Comment.Author>{answer.user.name}</Comment.Author>
+                    <Icon name="ban" id={answer.id} className="commentDelete" onClick={this.handleDeleteAnswer} />
+                  </Comment.Content>
+                  <Comment.Metadata>
+                    <div>{answer.createdAt}</div>
+                  </Comment.Metadata>
+                  <Comment.Text>{answer.text}</Comment.Text>
                 </Comment.Content>
-                <Comment.Metadata>
-                  <div>{answer.createdAt}</div>
-                </Comment.Metadata>
-                <Comment.Text>{answer.text}</Comment.Text>
-              </Comment.Content>
-            </Comment>
-          ))}
-        </Comment.Group>
+              </Comment>
+            ))}
+          </Comment.Group>
 
-        <Form id="submitComment" reply onSubmit={this.handleSubmit}>
-          <Form.TextArea name="answer" value={ongoingAnswer} onChange={this.handleInputChange} />
-          <Button type="submit" content="Répondre" floated="right" />
-        </Form>
+          <Form id="submitComment" reply onSubmit={this.handleSubmit}>
+            <Form.TextArea name="answer" value={ongoingAnswer} onChange={this.handleInputChange} />
+            <Button type="submit" content="Répondre" floated="right" />
+          </Form>
+        </div>
+
+        
       </main>
     );
   }
