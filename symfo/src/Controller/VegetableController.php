@@ -30,7 +30,7 @@ class VegetableController extends AbstractController
     public function index(VegetableRepository $vegetableRepository, SerializerInterface $serializer): Response
 
     {
-        $vegetables = $vegetableRepository->findAll();
+        $vegetables = $vegetableRepository->findBy([],['name' => 'ASC']);
         $jsonVegetables = $serializer->serialize($vegetables, 'json',
             ['groups' => 'vegetable']
         );
