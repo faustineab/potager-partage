@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\User;
 use App\Entity\Garden;
 use App\Entity\ForumTag;
 use App\Entity\ForumQuestion;
@@ -30,13 +31,19 @@ class ForumQuestionController extends AbstractController
      */
     public function index(Garden $garden, SerializerInterface $serializer, ForumQuestionRepository $questionRepo): Response
     {
-        $currentUser = $this->get('security.token_storage')->getToken()->getUser();
-        $gardenMembers = $garden->getUsers();
-        foreach ($gardenMembers as $gardenMember) {
-            if ($currentUser == $gardenMember) {
+        $gardenUsers = $garden->getUsers()->getValues();
+
+        $user = [];
+        $user[] = $this->get('security.token_storage')->getToken()->getUser();
+
+        $compare = function ($user, $gardenUsers) {
+            return spl_object_hash($user) <=> spl_object_hash($gardenUsers);
+        };
+
+        if (!empty(array_uintersect($user, $gardenUsers, $compare))) {
                 $questions = $questionRepo->findBy(
                     ['garden' => $garden],
-                    ['createdAt' => 'ASC']
+                    ['createdAt' => 'DESC']
                 );
                 $jsonQuestions = $serializer->serialize($questions, 'json', [
                     'groups' => 'forum_question_index',
@@ -48,7 +55,7 @@ class ForumQuestionController extends AbstractController
                 return JsonResponse::fromJsonString($jsonQuestions);
             }
             return JsonResponse::fromJsonString('Vous ne faites pas partie de ce potager', 400);
-        }
+        //}
     }
 
     /**
@@ -56,10 +63,16 @@ class ForumQuestionController extends AbstractController
      */
     public function new(Garden $garden, Request $request, ForumTagRepository $tagRepository, EntityManagerInterface $entityManager, ValidatorInterface $validator)
     {
-        $currentUser = $this->get('security.token_storage')->getToken()->getUser();
-        $gardenMembers = $garden->getUsers();
-        foreach ($gardenMembers as $gardenMember) {
-            if ($currentUser == $gardenMember) {
+        $gardenUsers = $garden->getUsers()->getValues();
+
+        $user = [];
+        $user[] = $this->get('security.token_storage')->getToken()->getUser();
+
+        $compare = function ($user, $gardenUsers) {
+            return spl_object_hash($user) <=> spl_object_hash($gardenUsers);
+        };
+
+        if (!empty(array_uintersect($user, $gardenUsers, $compare))) {
                 
                 $question = json_decode($request->getContent(), true);
                 
@@ -72,7 +85,7 @@ class ForumQuestionController extends AbstractController
                         );
                     }
                 }
-                
+                $currentUser = $this->get('security.token_storage')->getToken()->getUser();
                 $newQuestion = new ForumQuestion();
                 $newQuestion->setUser($currentUser)
                             ->setTitle($question['title'])
@@ -91,7 +104,7 @@ class ForumQuestionController extends AbstractController
                 return JsonResponse::fromJsonString('Votre question a été posée', 200);
             }
             return JsonResponse::fromJsonString('Vous ne faites pas partie de ce potager', 400);
-        }
+        
     }
 
     /**
@@ -99,11 +112,16 @@ class ForumQuestionController extends AbstractController
      */
     public function show(Garden $garden, $id, ForumAnswerRepository $forumAnswerRepository , ForumQuestionRepository $forumQuestionRepository, ForumQuestion $question, SerializerInterface $serializer): Response
     {
-        $currentUser = $this->get('security.token_storage')->getToken()->getUser();
-        $gardenMembers = $garden->getUsers();
-        foreach ($gardenMembers as $gardenMember) {
-            if ($currentUser == $gardenMember) {
+        $gardenUsers = $garden->getUsers()->getValues();
 
+        $user = [];
+        $user[] = $this->get('security.token_storage')->getToken()->getUser();
+
+        $compare = function ($user, $gardenUsers) {
+            return spl_object_hash($user) <=> spl_object_hash($gardenUsers);
+        };
+
+        if (!empty(array_uintersect($user, $gardenUsers, $compare))) {
                 //$questions=$forumQuestionRepository->find($id);
                 //$answers = $forumAnswerRepository->findByQuestion($questions);
                 $jsonQuestion = $serializer->serialize(
@@ -119,7 +137,7 @@ class ForumQuestionController extends AbstractController
                 return JsonResponse::fromJsonString($jsonQuestion);
             }
             return JsonResponse::fromJsonString('Vous ne faites pas partie de ce potager', 400);
-        }
+        
     }
 
     /**
@@ -194,23 +212,15 @@ class ForumQuestionController extends AbstractController
      */
     public function delete(Garden $garden, ObjectManager $objectManager, ForumQuestion $question): Response
     {
-        $currentUser = $this->get('security.token_storage')->getToken()->getUser();
-        $gardenMembers = $garden->getUsers();
-        $questionOwner = $question->getUser();        
-        $userRoles = $currentUser->getRoles();
-        foreach ($userRoles as $key => $value) {
-            if ($value == 'ROLE_ADMIN') {
-                $admin = $currentUser;
-            }
-        }
+        $questionUser = $question->getUser();
 
-        foreach ($gardenMembers as $gardenMember) {
-            
-            if ($currentUser == $gardenMember && $currentUser == $questionOwner || $admin) {
+        //$userRole= $userEntity->getRoles();
+
+        $currentUser= $this->get('security.token_storage')->getToken()->getUser();
+
+
+        if ($questionUser == $currentUser) {
                 
-                foreach ($question->getTags() as $tag) {
-                    $question->removeTag($tag);
-                }
                 $objectManager->remove($question);
                 $objectManager->flush();
                 
@@ -218,6 +228,6 @@ class ForumQuestionController extends AbstractController
             }
                 
             return JsonResponse::fromJsonString('message: Vous n\'êtes pas autorisé à supprimer cette question', 406);
+        
         }
-    }
 }

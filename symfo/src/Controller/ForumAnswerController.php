@@ -28,10 +28,16 @@ class ForumAnswerController extends AbstractController
      */
     public function new(Garden $garden, ForumQuestion $question, Request $request, SerializerInterface $serializer, EntityManagerInterface $entityManager, ValidatorInterface $validator)
     {
-        $currentUser = $this->get('security.token_storage')->getToken()->getUser();
-        $gardenMembers = $garden->getUsers();
-        foreach ($gardenMembers as $gardenMember) {
-            if ($currentUser == $gardenMember) {
+        $gardenUsers = $garden->getUsers()->getValues();
+
+        $user = [];
+        $user[] = $this->get('security.token_storage')->getToken()->getUser();
+
+        $compare = function ($user, $gardenUsers) {
+            return spl_object_hash($user) <=> spl_object_hash($gardenUsers);
+        };
+
+        if (!empty(array_uintersect($user, $gardenUsers, $compare))) {
                 $content = $request->getContent();
                 
                 $answer = $serializer->deserialize($content, ForumAnswer::class, 'json');
@@ -42,7 +48,7 @@ class ForumAnswerController extends AbstractController
                         return JsonResponse::fromJsonString('message: Votre réponse comporte des erreurs : ' . $error . '.',406);
                     }
                 }
-                
+                $currentUser = $this->get('security.token_storage')->getToken()->getUser();
                 $answer->setQuestion($question);
                 $answer->setUser($currentUser);
                 
@@ -52,7 +58,7 @@ class ForumAnswerController extends AbstractController
                 return JsonResponse::fromJsonString('message: Vous avez répondu à la question "' . $question->getTitle() . '"', 200);
             }
             return JsonResponse::fromJsonString('Vous n\'êtes pas autorisé à répondre à cette question', 400);
-        }
+        
     }
 
     /**
@@ -110,29 +116,24 @@ class ForumAnswerController extends AbstractController
     /**
      * @Route("/{id}", name="forum_answer_delete", methods={"DELETE"})
      */
-    public function delete(Garden $garden, ObjectManager $objectManager, ForumAnswer $forumAnswer): Response
+    public function delete(Garden $garden, ObjectManager $objectManager, ForumAnswer $answer): Response
     {
-        $currentUser = $this->get('security.token_storage')->getToken()->getUser();
-        $gardenMembers = $garden->getUsers();
-        $forumAnswerOwner = $forumAnswer->getUser();        
-        $userRoles = $currentUser->getRoles();
-        foreach ($userRoles as $key => $value) {
-            if ($value == 'ROLE_ADMIN') {
-                $admin = $currentUser;
-            }
-        }
+        $answerUser = $answer->getUser();
 
-        foreach ($gardenMembers as $gardenMember) {
-            
-            if ($currentUser == $gardenMember && $currentUser == $forumAnswerOwner || $admin) {
+        //$userRole= $userEntity->getRoles();
+
+        $currentUser= $this->get('security.token_storage')->getToken()->getUser();
+
+
+        if ($answerUser == $currentUser) {
                 
-                $objectManager->remove($forumAnswer);
+                $objectManager->remove($answer);
                 $objectManager->flush();
                 
-                return JsonResponse::fromJsonString('La réponse a été supprimée', 200);
+                return JsonResponse::fromJsonString('La question a été supprimée', 200);
             }
                 
-            return JsonResponse::fromJsonString('message: Vous n\'êtes pas autorisé à supprimer cette réponse', 406);
+            return JsonResponse::fromJsonString('message: Vous n\'êtes pas autorisé à supprimer cette question', 406);
+        
         }
-    }
 }
