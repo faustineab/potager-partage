@@ -26,10 +26,16 @@ class ForumTagController extends AbstractController
      */
     public function index(Garden $garden,SerializerInterface $serializer): Response
     {
-        $currentUser = $this->get('security.token_storage')->getToken()->getUser();
-        $gardenMembers = $garden->getUsers();
-        foreach ($gardenMembers as $gardenMember) {
-            if ($currentUser == $gardenMember) {
+        $gardenUsers = $garden->getUsers()->getValues();
+
+        $user = [];
+        $user[] = $this->get('security.token_storage')->getToken()->getUser();
+
+        $compare = function ($user, $gardenUsers) {
+            return spl_object_hash($user) <=> spl_object_hash($gardenUsers);
+        };
+
+        if (!empty(array_uintersect($user, $gardenUsers, $compare))) {
                 $tags = $garden->getForumTags();
                 $jsonTags = $serializer->serialize($tags, 'json', [
                     'groups' => 'forum_tags',
@@ -41,7 +47,7 @@ class ForumTagController extends AbstractController
                 return JsonResponse::fromJsonString($jsonTags);
             }
             return JsonResponse::fromJsonString('Vous ne faites pas partie de ce potager', 400);
-        }
+        
     }
 
     /**
@@ -99,12 +105,16 @@ class ForumTagController extends AbstractController
      */
     public function edit(Garden $garden, Request $request, ForumTag $forumTag, EntityManagerInterface $entityManager, ValidatorInterface $validator, SerializerInterface $serializer): Response
     {
-        $user = $this->get('security.token_storage')->getToken()->getUser();
-        $gardenMembers = $garden->getUsers();
-        foreach ($gardenMembers as $member) {
+        $gardenUsers = $garden->getUsers()->getValues();
 
-            if ($user == $forumTag->getUser() && $user == $member)
-            {
+        $user = [];
+        $user[] = $this->get('security.token_storage')->getToken()->getUser();
+
+        $compare = function ($user, $gardenUsers) {
+            return spl_object_hash($user) <=> spl_object_hash($gardenUsers);
+        };
+
+        if (!empty(array_uintersect($user, $gardenUsers, $compare))) {
                 $content = $request->getContent();
     
                 $editedTag = $serializer->deserialize($content, ForumTag::class, 'json');
@@ -137,7 +147,7 @@ class ForumTagController extends AbstractController
                 return JsonResponse::fromJsonString('message: Votre catégorie a été modifiée', 200);
             }
             return JsonResponse::fromJsonString('message: Vous n\'êtes pas autorisé à modifier cette catégorie', 403);
-        }
+        
 
     }
 

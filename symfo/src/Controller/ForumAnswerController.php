@@ -28,10 +28,16 @@ class ForumAnswerController extends AbstractController
      */
     public function new(Garden $garden, ForumQuestion $question, Request $request, SerializerInterface $serializer, EntityManagerInterface $entityManager, ValidatorInterface $validator)
     {
-        $currentUser = $this->get('security.token_storage')->getToken()->getUser();
-        $gardenMembers = $garden->getUsers();
-        foreach ($gardenMembers as $gardenMember) {
-            if ($currentUser == $gardenMember) {
+        $gardenUsers = $garden->getUsers()->getValues();
+
+        $user = [];
+        $user[] = $this->get('security.token_storage')->getToken()->getUser();
+
+        $compare = function ($user, $gardenUsers) {
+            return spl_object_hash($user) <=> spl_object_hash($gardenUsers);
+        };
+
+        if (!empty(array_uintersect($user, $gardenUsers, $compare))) {
                 $content = $request->getContent();
                 
                 $answer = $serializer->deserialize($content, ForumAnswer::class, 'json');
@@ -52,7 +58,7 @@ class ForumAnswerController extends AbstractController
                 return JsonResponse::fromJsonString('message: Vous avez répondu à la question "' . $question->getTitle() . '"', 200);
             }
             return JsonResponse::fromJsonString('Vous n\'êtes pas autorisé à répondre à cette question', 400);
-        }
+        
     }
 
     /**
