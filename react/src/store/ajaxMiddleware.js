@@ -373,10 +373,12 @@ const ajaxMiddleware = store => next => (action) => {
       })
         .then((response) => {
           console.log('response data = ', response.data);
-          console.log('plotUser', response.data.user.id);
-          console.log('userId', store.getState().user.id);
-          const isUserPlot = (response.data.user.id === store.getState().user.id);
+          console.log('status actif', response.data.status === 'actif');
+
+          const isUserPlot = (response.data.status === 'actif') ? (response.data.user.id === store.getState().user.id) : false;
+
           console.log('isUserPlot', isUserPlot);
+
           store.dispatch(plotDataFetched(response.data, isUserPlot));
         })
         .catch((error) => {
