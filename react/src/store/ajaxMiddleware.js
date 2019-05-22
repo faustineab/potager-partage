@@ -397,7 +397,7 @@ const ajaxMiddleware = store => next => (action) => {
       break;
     case REMOVE_VEGETABLE:
       next(action);
-      axios.delete(`${baseURL}/api/garden/${store.getState().gardenId}/plots/${store.getState().openPlotId}/plantation/${store.getState().removeVegetableId}`, {
+      axios.delete(`${baseURL}/api/garden/${store.getState().gardenId}/plantation/${store.getState().removeVegetableId}`, {
         headers: {
           Authorization: `Bearer ${store.getState().token}`,
         },

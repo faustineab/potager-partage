@@ -1,27 +1,27 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Form, Button, Icon, Select} from 'semantic-ui-react';
+import {
+  Form, Button, Icon, Select,
+} from 'semantic-ui-react';
 
 import './index.scss';
 
 const PlotDetail = ({
   isUserPlot, plotStatus, plotId, bookPlot, vegetablesList, plotData, inputChange, submitVegetable, newVegetable, removeVegetable,
 }) => {
-  console.log(isUserPlot, plotStatus, plotId);
-
-  const handleTags =(evt) => {
+  const handleTags = (evt) => {
     removeVegetable(evt.currentTarget.id);
-  }
+  };
 
   const plotVegetables = [];
 
   if (plotData.isPlantedOns && plotData.isPlantedOns[0]) {
     for (let i = 0; plotData.isPlantedOns[i]; i++) {
-      plotVegetables.push(<div key={i} className="vegetable"><li>{plotData.isPlantedOns[i].vegetable.name}<div className="tag"> <Icon id={plotData.isPlantedOns[i].id} size='small' onClick={handleTags} name="delete" /></div></li></div>);
+      plotVegetables.push(<div key={i} className="vegetable"><li>{plotData.isPlantedOns[i].vegetable.name}<div className="tag"> <Icon id={plotData.isPlantedOns[i].id} size="small" onClick={handleTags} name="delete" /></div></li></div>);
     }
   }
 
-  const handleListChange =(evt) => {
+  const handleListChange = (evt) => {
     let newVegetableId = '';
     const { outerText } = evt.target;
     for (let i = 0; vegetablesList[i]; i++) {
@@ -30,12 +30,10 @@ const PlotDetail = ({
         break;
       }
     }
-    console.log(plotVegetables);
     if (!plotVegetables.includes(outerText)) {
-      console.log("new vegetable id = ", newVegetableId);
       submitVegetable(newVegetableId);
     }
-  }
+  };
 
   return (
     <div>
@@ -52,23 +50,23 @@ const PlotDetail = ({
           <h2>Vous êtes sur votre parcelle</h2>
           <p>Fruits & légumes cultivés</p>
           <ul id="vegetableList">
-          {plotVegetables}
+            {plotVegetables}
           </ul>
           <Form>
-          <Form.Group>
-            <Form.Select
+            <Form.Group>
+              <Form.Select
               onChange={handleListChange}
               options={vegetablesList}
               placeholder="Ajouter un fruit ou un légume"
             />
-          </Form.Group>
+            </Form.Group>
           </Form>
         </div>
       )}
 
       {(plotStatus === 'actif' && !isUserPlot) && (
         <div>
-          {/*console.log('la liste du user actuel : ', plotData.isPlantedOns)*/}
+          {/* console.log('la liste du user actuel : ', plotData.isPlantedOns) */}
           <h2>Cette parcelle est occupé par {plotData.user.name}.</h2>
           <p>Fruits & légumes cultivés</p>
           <ul id="vegetableList">
