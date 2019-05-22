@@ -43,7 +43,7 @@ class ForumQuestionController extends AbstractController
         if (!empty(array_uintersect($user, $gardenUsers, $compare))) {
                 $questions = $questionRepo->findBy(
                     ['garden' => $garden],
-                    ['createdAt' => 'ASC']
+                    ['createdAt' => 'DESC']
                 );
                 $jsonQuestions = $serializer->serialize($questions, 'json', [
                     'groups' => 'forum_question_index',
