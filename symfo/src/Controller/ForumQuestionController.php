@@ -84,7 +84,7 @@ class ForumQuestionController extends AbstractController
                         );
                     }
                 }
-                
+                $currentUser = $this->get('security.token_storage')->getToken()->getUser();
                 $newQuestion = new ForumQuestion();
                 $newQuestion->setUser($currentUser)
                             ->setTitle($question['title'])

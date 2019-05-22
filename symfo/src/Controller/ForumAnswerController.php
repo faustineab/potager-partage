@@ -48,7 +48,7 @@ class ForumAnswerController extends AbstractController
                         return JsonResponse::fromJsonString('message: Votre réponse comporte des erreurs : ' . $error . '.',406);
                     }
                 }
-                
+                $currentUser = $this->get('security.token_storage')->getToken()->getUser();
                 $answer->setQuestion($question);
                 $answer->setUser($currentUser);
                 
