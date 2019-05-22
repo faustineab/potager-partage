@@ -32,8 +32,7 @@ class VegetableController extends AbstractController
     {
         $vegetables = $vegetableRepository->findAll();
         $jsonVegetables = $serializer->serialize($vegetables, 'json',
-            ['groups' => 'vegetable'],
-            ['name' => 'ASC']
+            ['groups' => 'vegetable']
         );
 
         return JsonResponse::fromJsonString($jsonVegetables);
