@@ -31,24 +31,30 @@ class Forum extends Component {
     console.log('props', this.props);
     return (
       <div id="forum">
-        <h2>Le coin des jardiniers</h2>
-        <AskQuestion />
-        {questionList.map(({ id, title, creationDate, index, user, tags }) => (
-          <Card fluid className="forumCard" key={index} id={id}>
-            <Card.Header className="cardHeader" content={title} />
-            <Card.Content>
-              <span className="postAuthor">{user.name}</span>
-              <span className="postDate">- publié le {creationDate}</span>
-            </Card.Content>
-            <Card.Meta>
-              {tags.map(({ name }) => <span className="tag">{name}</span>)}
-            </Card.Meta>
-            <div className="cardButtons">
-              <Button className="cardButton" id={id} as={Link} to={`/forum/post/${id}`} onClick={this.handleOpenPost}>Voir Plus...</Button>
-              <Icon name="ban" size="large" className="cardDelete" id={id} onClick={this.handleDeleteCard} />
-            </div>
-          </Card>
-        ))}
+        <div id="forum-header">
+          <div id="forum-container">
+            <h2 id="forum-title">Le coin des jardiniers</h2>
+          </div>
+        </div>
+        <div id="forum-body">
+          <AskQuestion />
+          {questionList.map(({ id, title, creationDate, index, user, tags }) => (
+            <Card fluid className="forumCard" key={index} id={id}>
+              <Card.Header className="cardHeader" content={title} />
+              <Card.Content>
+                <span className="postAuthor">{user.name}</span>
+                <span className="postDate">- publié le {creationDate}</span>
+              </Card.Content>
+              <Card.Meta>
+                {tags.map(({ name }) => <span className="tag">{name}</span>)}
+              </Card.Meta>
+              <div className="cardButtons">
+                <Button className="cardButton" id={id} as={Link} to={`/forum/post/${id}`} onClick={this.handleOpenPost}>Voir Plus...</Button>
+                <Icon name="ban" size="large" className="cardDelete" id={id} onClick={this.handleDeleteCard} />
+              </div>
+            </Card>
+          ))}
+        </div>
       </div>
     );
   }

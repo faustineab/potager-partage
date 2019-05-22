@@ -1,4 +1,25 @@
-#postDetail {
+#post-header{
+  background-image: url(../../img/forum.jpg);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  min-height: 200px;
+  #post-container {
+    background-color: rgba($color: white, $alpha: 0.3);
+  }
+  #post-title{
+    color: #5e5250; 
+    font-family: 'Fresca', sans-serif;
+    font-size: 4em;
+    text-align: center;
+    padding: 100px;
+  }
+}
+
+
+
+
+#post-body {
   margin: 50px auto 100px;
   width: 50%;
   font-family: 'Fresca', sans-serif;

@@ -49,14 +49,16 @@ class Potager extends Component {
     const { plotOpened } = this.props;
     return (
       <main id="garden">
-        <div className="table-container">
-          {this.createTable()}
-        </div> 
-        {plotOpened && (
-          <aside className="todo">
-            <PlotDetail />
-          </aside>
-        )}
+        <div id="container">
+          <div className="table-container">
+            {this.createTable()}
+          </div>
+          {plotOpened && (
+            <aside className="todo">
+              <PlotDetail />
+            </aside>
+          )}
+        </div>
       </main>
     );
   }

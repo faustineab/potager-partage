@@ -1,4 +1,23 @@
-#forum {
+#forum-header{
+  background-image: url(../../img/forum.jpg);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  min-height: 200px;
+  #forum-container {
+    background-color: rgba($color: white, $alpha: 0.3);
+  }
+  #forum-title{
+    color: #5e5250; 
+    font-family: 'Fresca', sans-serif;
+    font-size: 4em;
+    text-align: center;
+    padding: 100px;
+  }
+}
+
+
+#forum-body {
   margin: 50px auto;
   width: 50%;
   min-height: 100vh;
