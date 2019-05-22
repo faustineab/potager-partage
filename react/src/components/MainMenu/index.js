@@ -20,11 +20,11 @@ const MainMenu = ({ onLogout }) => (
         </Menu.Item>
       </div>
       <Menu.Menu position="right">
-        <div className="menudiv">
+        {/* <div className="menudiv">
           <Menu.Item as={NavLink} to="/profile" className="menuitem" name="Profil">
             <h1>Profil</h1>
           </Menu.Item>
-        </div>
+        </div> */}
         <div className="menudiv">
           <Menu.Item as={NavLink} to="/logout" className="menuitem" onClick={onLogout} name="Déconnexion">
             <h1>Déconnexion</h1>

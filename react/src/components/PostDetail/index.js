@@ -5,18 +5,18 @@ import { Card, Icon, Button, Comment, Form, Header } from 'semantic-ui-react';
 import './index.scss';
 
 class PostDetail extends Component {
-  componentWillMount() {
+  componentDidMount() {
     const { fetchQuestionDetail } = this.props;
     fetchQuestionDetail();
   }
 
-  handleInputChange =(evt) => {
+  handleInputChange = (evt) => {
     const { inputChange } = this.props;
     const { name, value } = evt.currentTarget;
     console.log(name);
     console.log(value);
     inputChange(name, value);
-  };
+  }
 
   handleSubmit = (evt) => {
     evt.preventDefault();
@@ -30,18 +30,22 @@ class PostDetail extends Component {
     const cardId = evt.currentTarget.id;
     console.log(cardId);
     deleteCard(cardId);
-  };
+  }
 
   handleDeleteAnswer = (evt) => {
-    const {deleteAnswer } = this.props;
+    const { deleteAnswer } = this.props;
     const answerId = evt.currentTarget.id;
     console.log(answerId);
     deleteAnswer(answerId);
   }
 
   render() {
-    const { answers, questionDetail, ongoingAnswer } = this.props;
-    const { createdAt, id, tags, text, title, user } = questionDetail;
+    const { answers, questionDetail, ongoingAnswer, questionTags, author } = this.props;
+    const { createdAt, id, text, title } = questionDetail;
+    console.log('answers', answers);
+    console.log('qDetail', questionDetail);
+    console.log('qTags', questionTags);
+    console.log('author', author);
 
     return (
       <main id="postDetail">
@@ -53,8 +57,8 @@ class PostDetail extends Component {
               </h3>
             </div>
             <div id="headerMeta">
-              <span className="postDetail">publié par {user.name} le {createdAt}</span>
-              {tags.map(({ name }) => <span className="tag">{name}</span>)}
+              <span className="postDetail">publié par {author.name} le {createdAt}</span>
+              {questionTags.map(({ name }) => <span className="tag">{name}</span>)}
               <Icon name="ban" id={id} className="cardDelete" onClick={this.handleDeleteCard} />
             </div>
           </Card.Header>
@@ -92,5 +96,51 @@ class PostDetail extends Component {
     );
   }
 }
+
+PostDetail.propTypes = {
+  fetchQuestionDetail: PropTypes.func.isRequired,
+  inputChange: PropTypes.func.isRequired,
+  sendAnswer: PropTypes.func.isRequired,
+  deleteAnswer: PropTypes.func.isRequired,
+  deleteCard: PropTypes.func.isRequired,
+  ongoingAnswer: PropTypes.string,
+  answers: PropTypes.array,
+  author: PropTypes.objectOf(PropTypes.shape({
+    id: PropTypes.number,
+    name: PropTypes.string,
+  })),
+  questionTags: PropTypes.arrayOf(
+    PropTypes.objectOf(
+      PropTypes.shape({
+        id: PropTypes.number,
+        name: PropTypes.string,
+      }),
+    ),
+  ),
+  questionDetail: PropTypes.objectOf(PropTypes.shape({
+    id: PropTypes.number,
+    title: PropTypes.string,
+    text: PropTypes.string,
+    createdAt: PropTypes.string,
+    answers: PropTypes.arrayOf(
+      PropTypes.shape({
+        createdAt: PropTypes.string,
+        text: PropTypes.string,
+        user: PropTypes.shape({
+          id: PropTypes.number,
+          name: PropTypes.string,
+        }),
+      }),
+    ),
+  })),
+};
+
+PostDetail.defaultProps = {
+  ongoingAnswer: '',
+  answers: [],
+  questionDetail: {},
+  author: {},
+  questionTags: [],
+};
 
 export default PostDetail;

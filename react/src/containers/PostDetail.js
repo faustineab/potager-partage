@@ -6,12 +6,15 @@ import { fetchQuestionDetail, inputChange, sendAnswer, deleteCard, deleteAnswer 
 const mapStateToProps = state => ({
   questionDetail: state.questionDetail,
   answers: state.questionDetail.answers,
+  questionTags: state.questionDetail.tags,
+  author: state.questionDetail.user,
   ongoingAnswer: state.answer,
+  questionId: state.openQuestionId,
 });
 
 const mapDispatchToProps = dispatch => ({
-  fetchQuestionDetail: (postId) => {
-    dispatch(fetchQuestionDetail(postId));
+  fetchQuestionDetail: () => {
+    dispatch(fetchQuestionDetail());
   },
   inputChange: (name, value) => {
     dispatch(inputChange(name, value));

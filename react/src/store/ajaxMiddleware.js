@@ -229,6 +229,7 @@ const ajaxMiddleware = store => next => (action) => {
             text: list.text,
             title: list.title,
             user: list.user,
+            tags: list.tags,
             creationDate: list.createdAt.substring(0, 10),
           }));
           console.log(formattedQuestionList);
@@ -289,7 +290,7 @@ const ajaxMiddleware = store => next => (action) => {
 
     case DELETE_CARD:
       next(action);
-      axios.delete(`http://localhost/apo/potager-partage/symfo/public/api/garden/${store.getState().gardenId}/forum/question/${store.getState().questionToDelete}`,
+      axios.delete(`${baseURL}/api/garden/${store.getState().gardenId}/forum/question/${store.getState().questionToDelete}`,
         {
           headers: {
             Authorization: `Bearer ${store.getState().token}`,
@@ -297,6 +298,7 @@ const ajaxMiddleware = store => next => (action) => {
         })
         .then((response) => {
           console.log(response.data);
+          store.dispatch(fetchForumQuestions());
         })
         .catch((error) => {
           console.log(error);

@@ -47,16 +47,14 @@ class Potager extends Component {
 
   render() {
     return (
-      <div>
-        <div className="body">
-          <div className="table-container">
-            {this.createTable()}
-          </div>
-          <aside className="todo">
-            <PlotDetail />
-          </aside>
+      <main className="body">
+        <div className="table-container">
+          {this.createTable()}
         </div>
-      </div>
+        <aside className="todo">
+          <PlotDetail />
+        </aside>
+      </main>
     );
   }
 }
