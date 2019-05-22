@@ -40,6 +40,7 @@ const initialState = {
   answer: '',
   answerToDelete: '',
   openPlotId: '',
+  plotOpened: false,
   plotData: {},
   addingVegetable: {},
   isUserPlot: false,
@@ -262,6 +263,7 @@ const reducer = (state = initialState, action = {}) => {
       return {
         ...state,
         openPlotId: action.id,
+        plotOpened: true,
       };
     case PLOT_DATA_FETCHED:
       return {

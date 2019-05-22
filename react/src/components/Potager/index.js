@@ -46,14 +46,17 @@ class Potager extends Component {
 
 
   render() {
+    const { plotOpened } = this.props;
     return (
       <main id="garden">
         <div className="table-container">
           {this.createTable()}
-        </div>
-        <aside className="todo">
-          <PlotDetail />
-        </aside>
+        </div> 
+        {plotOpened && (
+          <aside className="todo">
+            <PlotDetail />
+          </aside>
+        )}
       </main>
     );
   }
@@ -61,6 +64,7 @@ class Potager extends Component {
 
 Potager.propTypes = {
   openPlot: PropTypes.func.isRequired,
+  plotOpened: PropTypes.bool.isRequired,
   length: PropTypes.number.isRequired,
   width: PropTypes.number.isRequired,
   plots: PropTypes.arrayOf(PropTypes.shape({
