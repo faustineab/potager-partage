@@ -17,10 +17,14 @@
     align-content: stretch;
   }
 }
-
+.actif {
+    background-image: radial-gradient(ellipse at top, #dedcad, #bfc992, #9eb77b, #7ba566);
+}
+.inactif {
+  background-image: radial-gradient(ellipse at top, #d7c4a9, #b09b8a, #87756d, #5e5250);
+}
 .table-cell {
   // background-image: radial-gradient(ellipse at top, #dedcad, #bfc992, #9eb77b, #7ba566);
-  background-image: radial-gradient(ellipse at top, #d7c4a9, #b09b8a, #87756d, #5e5250);
   display: flex;
   flex-grow: 1; 
   border: solid 5px white;
@@ -81,6 +85,8 @@
   display: inline;
 }
 
+
 .vegetable {
   font-size: 1.2em;
 }
+

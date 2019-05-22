@@ -26,6 +26,10 @@ import {
   questionAsked,
   QUESTION_ASKED,
   FETCH_QUESTION_DETAIL,
+  questionDetailFetched,
+  SEND_ANSWER,
+  answerSent,
+  DELETE_ANSWER,
   userLogout,
   DELETE_CARD,
   OPEN_PLOT,
@@ -36,7 +40,8 @@ import {
   REMOVE_VEGETABLE,
   userPlotOn,
   userPlotOff,
- openPlot } from 'src/store/reducer';
+  openPlot,
+  fetchQuestionDetail } from './reducer';
 
 
 
@@ -229,6 +234,7 @@ const ajaxMiddleware = store => next => (action) => {
             text: list.text,
             title: list.title,
             user: list.user,
+            tags: list.tags,
             creationDate: list.createdAt.substring(0, 10),
           }));
           console.log(formattedQuestionList);
@@ -289,7 +295,7 @@ const ajaxMiddleware = store => next => (action) => {
 
     case DELETE_CARD:
       next(action);
-      axios.delete(`http://localhost/apo/potager-partage/symfo/public/api/garden/${store.getState().gardenId}/forum/question/${store.getState().questionToDelete}`,
+      axios.delete(`${baseURL}/api/garden/${store.getState().gardenId}/forum/question/${store.getState().questionToDelete}`,
         {
           headers: {
             Authorization: `Bearer ${store.getState().token}`,
@@ -297,6 +303,7 @@ const ajaxMiddleware = store => next => (action) => {
         })
         .then((response) => {
           console.log(response.data);
+          store.dispatch(fetchForumQuestions());
         })
         .catch((error) => {
           console.log(error);
@@ -305,13 +312,54 @@ const ajaxMiddleware = store => next => (action) => {
 
     case FETCH_QUESTION_DETAIL:
       next(action);
-      axios.get(`${baseURL}/api/garden/${store.getState().gardenId}/forum/question/${store.getState().openQuestionId}`, {
+      axios.get(`http://localhost/apo/potager-partage/symfo/public/api/garden/${store.getState().gardenId}/forum/question/${store.getState().openQuestionId}`, {
         headers: {
           Authorization: `Bearer ${store.getState().token}`,
         },
       })
         .then((response) => {
           console.log(response.data);
+          const questionDetail = response.data;
+          store.dispatch(questionDetailFetched(questionDetail));
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+      break;
+
+    case SEND_ANSWER:
+      if (store.getState().answer !== '') {
+        next(action);
+        axios.post(`${baseURL}/api/garden/${store.getState().gardenId}/forum/question/${store.getState().openQuestionId}/answer/new`, {
+          text: store.getState().answer,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${store.getState().token}`,
+          },
+        })
+          .then((response) => {
+            console.log(response.data);
+            store.dispatch(fetchQuestionDetail());
+            store.dispatch(answerSent());
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      }
+      break;
+
+    case DELETE_ANSWER:
+      next(action);
+      axios.delete(`http://localhost/apo/potager-partage/symfo/public/api/garden/${store.getState().gardenId}/forum/question/${store.getState().openQuestionId}/answer/${store.getState().answerToDelete}`,
+        {
+          headers: {
+            Authorization: `Bearer ${store.getState().token}`,
+          },
+        })
+        .then((response) => {
+          console.log(response.data);
+          store.dispatch(fetchQuestionDetail());
         })
         .catch((error) => {
           console.log(error);

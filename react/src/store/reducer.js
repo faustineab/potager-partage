@@ -34,13 +34,11 @@ const initialState = {
   questionList: [],
   questionToDelete: '',
   questionTags: [],
-  tags: [
-    { key: 'm', text: 'Fruits & Légumes', value: 'Fruits & Légumes' },
-    { key: 'n', text: 'Autour du jardin', value: 'Autour du jardin' },
-    { key: 'o', text: 'Trucs & Astuces', value: 'Trucs & Astuces' },
-  ],
-  questionDetail: [],
+  tags: [],
+  questionDetail: {},
   openQuestionId: '',
+  answer: '',
+  answerToDelete: '',
   openPlotId: '',
   plotData: {},
   isUserPlot: false,
@@ -87,6 +85,11 @@ export const NEW_VEGETABLE = 'NEW_VEGETABLE';
 export const REMOVE_VEGETABLE = 'REMOVE_VEGETABLE';
 export const USER_PLOT_ON = 'USER_PLOT_ON';
 export const USER_PLOT_OFF = 'USER_PLOT_OFF';
+export const SEND_ANSWER = 'SEND_ANSWER';
+const ANSWER_SENT = 'ANSWER_SENT';
+export const DELETE_ANSWER = 'DELETE_ANSWER';
+export const QUESTION_DETAIL_FETCHED = 'QUESTION_DETAIL_FETCHED';
+
 
 /**
  * Reducer
@@ -234,6 +237,25 @@ const reducer = (state = initialState, action = {}) => {
     case FETCH_QUESTION_DETAIL:
       return {
         ...state,
+      };
+    case QUESTION_DETAIL_FETCHED:
+      return {
+        ...state,
+        questionDetail: action.questionDetail,
+      };
+    case SEND_ANSWER:
+      return {
+        ...state,
+      };
+    case ANSWER_SENT:
+      return {
+        ...state,
+        answer: '',
+      };
+    case DELETE_ANSWER:
+      return {
+        ...state,
+        answerToDelete: action.answerId,
       };
     case OPEN_PLOT:
       return {
@@ -436,6 +458,25 @@ export const saveQuestionId = id => ({
 
 export const fetchQuestionDetail = () => ({
   type: FETCH_QUESTION_DETAIL,
+});
+
+
+export const sendAnswer = () => ({
+  type: SEND_ANSWER,
+});
+
+export const answerSent = () => ({
+  type: ANSWER_SENT,
+});
+
+export const deleteAnswer = answerId => ({
+  type: DELETE_ANSWER,
+  answerId,
+});
+
+export const questionDetailFetched = questionDetail => ({
+  type: QUESTION_DETAIL_FETCHED,
+  questionDetail,
 });
 
 export const openPlot = id => ({

@@ -126,9 +126,6 @@ class ForumAnswerController extends AbstractController
             
             if ($currentUser == $gardenMember && $currentUser == $forumAnswerOwner || $admin) {
                 
-                foreach ($forumAnswer->getTags() as $tag) {
-                    $forumAnswer->removeTag($tag);
-                }
                 $objectManager->remove($forumAnswer);
                 $objectManager->flush();
                 

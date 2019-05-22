@@ -28,12 +28,12 @@ class Forum extends Component {
 
   render() {
     const { questionList } = this.props;
-    console.log(this.props);
+    console.log('props', this.props);
     return (
       <div id="forum">
         <h2>Le coin des jardiniers</h2>
         <AskQuestion />
-        {questionList.map(({ id, title, creationDate, index, user }) => (
+        {questionList.map(({ id, title, creationDate, index, user, tags }) => (
           <Card fluid className="forumCard" key={index} id={id}>
             <Card.Header className="cardHeader" content={title} />
             <Card.Content>
@@ -41,7 +41,7 @@ class Forum extends Component {
               <span className="postDate">- publié le {creationDate}</span>
             </Card.Content>
             <Card.Meta>
-              <span className="tag">Fruits & Légumes</span>
+              {tags.map(({ name }) => <span className="tag">{name}</span>)}
             </Card.Meta>
             <div className="cardButtons">
               <Button className="cardButton" id={id} as={Link} to={`/forum/post/${id}`} onClick={this.handleOpenPost}>Voir Plus...</Button>
