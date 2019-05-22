@@ -99,16 +99,17 @@ class AdminController extends AbstractController
                 // dump($user);
                 if (array_search($userRole, $currentUserRoles) !== false) {
 
-
+dd($gardenUsers);
                     $usersToBeAuthorized = $userRepository->findby(['statut' => 'à valider']);
 
-                    // dd($usersToBeAuthorized);
+                    //  dd($usersToBeAuthorized);
 
                     $compare = function ($gardenUsers, $usersToBeAuthorized) {
                         return spl_object_hash($gardenUsers) <=> spl_object_hash($usersToBeAuthorized);
                     };
 
                     $resultat = array_uintersect($gardenUsers, $usersToBeAuthorized, $compare);
+
 
                     if (!empty($resultat)) {
 
