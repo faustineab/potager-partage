@@ -41,6 +41,7 @@ const initialState = {
   answerToDelete: '',
   openPlotId: '',
   plotData: {},
+  addingVegetable: {},
   isUserPlot: false,
   vegetablesList: {},
   newVegetableId: '',
@@ -77,6 +78,7 @@ export const FORUM_QUESTIONS_FETCHED = 'FORUM_QUESTIONS_FETCHED';
 export const DELETE_CARD = 'DELETE_CARD';
 export const OPEN_PLOT = 'OPEN_PLOT';
 export const PLOT_DATA_FETCHED = 'PLOT_DATA_FETCHED';
+const VEGETABLE_TO_ADD = 'VEGETABLE_TO_ADD';
 export const BOOK_PLOT = 'BOOK_PLOT';
 export const PLOT_BOOKED = 'PLOT_BOOKED';
 export const SAVE_QUESTION_ID = 'SAVE_QUESTION_ID';
@@ -266,6 +268,11 @@ const reducer = (state = initialState, action = {}) => {
         plotData: { ...action.plotData },
         isUserPlot: action.isUserPlot,
       };
+    case VEGETABLE_TO_ADD:
+      return {
+        ...state,
+        addingVegetable: action.vegetableName,
+      };
     case BOOK_PLOT:
       return {
         ...state,
@@ -282,6 +289,7 @@ const reducer = (state = initialState, action = {}) => {
       return {
         ...state,
         newVegetableId: action.newVegetableId,
+        addingVegetable: '',
       };
     case REMOVE_VEGETABLE:
       return {
@@ -478,6 +486,11 @@ export const bookPlot = () => ({
 export const plotBooked = () => ({
   type: PLOT_BOOKED,
 });
+
+export const vegetableToAdd = vegetableName => ({
+  type: VEGETABLE_TO_ADD,
+  vegetableName,
+})
 
 /**
  * Selectors

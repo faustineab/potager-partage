@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 
 import PlotDetail from 'src/components/Potager/PlotDetail';
 
-import { bookPlot, inputChange, newVegetable, removeVegetable } from '../store/reducer';
+import { bookPlot, inputChange, newVegetable, removeVegetable, vegetableToAdd } from '../store/reducer';
 
 
 const mapStateToProps = state => ({
@@ -13,6 +13,7 @@ const mapStateToProps = state => ({
   plotData: state.plotData,
   plotId: state.openPlotId,
   newVegetable: state.newVegetable,
+  addingVegetable: state.addingVegetable,
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -27,7 +28,10 @@ const mapDispatchToProps = dispatch => ({
   },
   removeVegetable: (toRemove) => {
     dispatch(removeVegetable(toRemove));
-  }
+  },
+  vegetableToAdd: (vegetableName) => {
+    dispatch(vegetableToAdd(vegetableName));
+  },
 });
 
 
