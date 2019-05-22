@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\User;
 use App\Entity\Garden;
 use App\Entity\ForumTag;
 use App\Entity\ForumQuestion;
@@ -211,23 +212,15 @@ class ForumQuestionController extends AbstractController
      */
     public function delete(Garden $garden, ObjectManager $objectManager, ForumQuestion $question): Response
     {
-        $currentUser = $this->get('security.token_storage')->getToken()->getUser();
-        $gardenMembers = $garden->getUsers();
-        $questionOwner = $question->getUser();        
-        $userRoles = $currentUser->getRoles();
-        foreach ($userRoles as $key => $value) {
-            if ($value == 'ROLE_ADMIN') {
-                $admin = $currentUser;
-            }
-        }
+        $questionUser = $question->getUser();
 
-        foreach ($gardenMembers as $gardenMember) {
-            
-            if ($currentUser == $gardenMember && $currentUser == $questionOwner || $admin) {
+        //$userRole= $userEntity->getRoles();
+
+        $currentUser= $this->get('security.token_storage')->getToken()->getUser();
+
+
+        if ($questionUser == $currentUser) {
                 
-                foreach ($question->getTags() as $tag) {
-                    $question->removeTag($tag);
-                }
                 $objectManager->remove($question);
                 $objectManager->flush();
                 
@@ -235,6 +228,6 @@ class ForumQuestionController extends AbstractController
             }
                 
             return JsonResponse::fromJsonString('message: Vous n\'êtes pas autorisé à supprimer cette question', 406);
+        
         }
-    }
 }
