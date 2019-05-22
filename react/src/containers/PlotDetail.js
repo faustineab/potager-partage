@@ -8,11 +8,9 @@ import { bookPlot, inputChange, newVegetable, removeVegetable } from '../store/r
 
 const mapStateToProps = state => ({
   plotStatus: state.plotData.status,
-  // isUserPlot: state.isUserPlot,
+  isUserPlot: state.isUserPlot,
   vegetablesList: state.vegetablesList,
   plotData: state.plotData,
-  // plotStatus: 'actif',
-  //isUserPlot: true,
   plotId: state.openPlotId,
   newVegetable: state.newVegetable,
 });

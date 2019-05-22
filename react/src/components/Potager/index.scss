@@ -1,5 +1,7 @@
-.body {
+#garden {
   display: flex;
+  min-height: 80vh;
+  margin-bottom: 200px;
 }
 
 .table-container{
@@ -15,6 +17,10 @@
   .gardenRow{
     display: flex;
     align-content: stretch;
+    align-items: stretch;
+    min-height: 10%;
+    min-width: 5%;
+
   }
 }
 .actif {
@@ -49,6 +55,9 @@
   font-family: 'Fresca', sans-serif;
   padding-left: 40px;
   padding-top: 20px;
+  overflow: auto;
+
+
   
   #asideTitle{
     font-size: 1.5em;

@@ -47,7 +47,7 @@ class Potager extends Component {
 
   render() {
     return (
-      <main className="body">
+      <main id="garden">
         <div className="table-container">
           {this.createTable()}
         </div>

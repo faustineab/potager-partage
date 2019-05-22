@@ -44,7 +44,6 @@ import {
   fetchQuestionDetail } from './reducer';
 
 
-
 const baseURL = 'http://217.70.191.127';
 // http://localhost/apo/potager-partage/symfo/public
 // http://217.70.191.127
@@ -375,15 +374,19 @@ const ajaxMiddleware = store => next => (action) => {
       })
         .then((response) => {
           console.log('response data = ', response.data);
-          store.dispatch(plotDataFetched(response.data));
-          console.log('user = ', store.getState().user);
-          console.log('user id : ', store.getState().user.id, 'open plot id ', store.getState().plotData);
-          if (store.getState().plotData.user == null) {
-            store.dispatch(userPlotOff());
-          }
-          else if (store.getState().user.id === store.getState().plotData.user.id) {
-            store.dispatch(userPlotOn());
-          }
+          console.log('plotUser', response.data.user.id);
+          console.log('userId', store.getState().user.id);
+          const isUserPlot = (response.data.user.id === store.getState().user.id);
+          console.log('isUserPlot', isUserPlot);
+          store.dispatch(plotDataFetched(response.data, isUserPlot));
+          // console.log('user = ', store.getState().user);
+          // console.log('user id : ', store.getState().user.id, 'open plot id ', store.getState().plotData);
+          // if (store.getState().plotData.user == null) {
+          //   store.dispatch(userPlotOff());
+          // }
+          // else if (store.getState().user.id === store.getState().plotData.user.id) {
+          //   store.dispatch(userPlotOn());
+          // }
         })
         .catch((error) => {
           console.log('ERROR OPEN PLOT', error);

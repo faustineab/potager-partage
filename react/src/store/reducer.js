@@ -83,8 +83,6 @@ export const SAVE_QUESTION_ID = 'SAVE_QUESTION_ID';
 export const FETCH_QUESTION_DETAIL = 'FETCH_QUESTION_DETAIL';
 export const NEW_VEGETABLE = 'NEW_VEGETABLE';
 export const REMOVE_VEGETABLE = 'REMOVE_VEGETABLE';
-export const USER_PLOT_ON = 'USER_PLOT_ON';
-export const USER_PLOT_OFF = 'USER_PLOT_OFF';
 export const SEND_ANSWER = 'SEND_ANSWER';
 const ANSWER_SENT = 'ANSWER_SENT';
 export const DELETE_ANSWER = 'DELETE_ANSWER';
@@ -266,6 +264,7 @@ const reducer = (state = initialState, action = {}) => {
       return {
         ...state,
         plotData: { ...action.plotData },
+        isUserPlot: action.isUserPlot,
       };
     case BOOK_PLOT:
       return {
@@ -274,7 +273,6 @@ const reducer = (state = initialState, action = {}) => {
     case PLOT_BOOKED:
       return {
         ...state,
-        isUserPlot: true,
       };
     case USER_LOGOUT:
       return {
@@ -290,16 +288,6 @@ const reducer = (state = initialState, action = {}) => {
         ...state,
         removeVegetableId: action.removeVegetableId,
       };
-    case USER_PLOT_ON:
-      return {
-        ...state,
-        isUserPlot: true,
-      };
-    case USER_PLOT_OFF:
-      return {
-        ...state,
-        isUserPlot: false,
-      };
     default:
       return state;
   }
@@ -309,13 +297,6 @@ const reducer = (state = initialState, action = {}) => {
 /**
  * Action Creators
  */
-export const userPlotOff = () => ({
-  type: USER_PLOT_OFF,
-});
-
-export const userPlotOn = () => ({
-  type: USER_PLOT_ON,
-});
 
 export const removeVegetable = removeVegetableId => ({
   type: REMOVE_VEGETABLE,
@@ -484,9 +465,10 @@ export const openPlot = id => ({
   id,
 });
 
-export const plotDataFetched = plotData => ({
+export const plotDataFetched = (plotData, isUserPlot) => ({
   type: PLOT_DATA_FETCHED,
   plotData,
+  isUserPlot,
 });
 
 export const bookPlot = () => ({

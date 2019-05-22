@@ -17,7 +17,15 @@ const PlotDetail = ({
 
   if (plotData.isPlantedOns && plotData.isPlantedOns[0]) {
     for (let i = 0; plotData.isPlantedOns[i]; i++) {
-      plotVegetables.push(<div key={i} className="vegetable"><li>{plotData.isPlantedOns[i].vegetable.name}<div className="tag"> <Icon id={plotData.isPlantedOns[i].id} size="small" onClick={handleTags} name="delete" /></div></li></div>);
+      plotVegetables.push(
+        <div key={i} className="vegetable">
+          <li>{plotData.isPlantedOns[i].vegetable.name}
+            <div className="tag">
+              <Icon id={plotData.isPlantedOns[i].id} size="small" onClick={handleTags} name="delete" />
+            </div>
+          </li>
+        </div>,
+      );
     }
   }
 
@@ -55,10 +63,10 @@ const PlotDetail = ({
           <Form>
             <Form.Group>
               <Form.Select
-              onChange={handleListChange}
-              options={vegetablesList}
-              placeholder="Ajouter un fruit ou un légume"
-            />
+                onChange={handleListChange}
+                options={vegetablesList}
+                placeholder="Ajouter un fruit ou un légume"
+              />
             </Form.Group>
           </Form>
         </div>
