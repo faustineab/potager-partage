@@ -103,7 +103,7 @@ const PlotDetail = ({
       {(plotStatus === 'actif' && !isUserPlot) && (
         <div>
           {/* console.log('la liste du user actuel : ', plotData.isPlantedOns) */}
-          <h2>Cette parcelle est occupé par {plotData.user.name}.</h2>
+          <h2>Cette parcelle est occupée par {plotData.user.name}.</h2>
           <p>Fruits & légumes cultivés</p>
           <ul id="vegetableList">
             {plotVegetableList.map(({ vegetable }) => (
