@@ -30,10 +30,16 @@ class ForumQuestionController extends AbstractController
      */
     public function index(Garden $garden, SerializerInterface $serializer, ForumQuestionRepository $questionRepo): Response
     {
-        $currentUser = $this->get('security.token_storage')->getToken()->getUser();
-        $gardenMembers = $garden->getUsers();
-        foreach ($gardenMembers as $gardenMember) {
-            if ($currentUser == $gardenMember) {
+        $gardenUsers = $garden->getUsers()->getValues();
+
+        $user = [];
+        $user[] = $this->get('security.token_storage')->getToken()->getUser();
+
+        $compare = function ($user, $gardenUsers) {
+            return spl_object_hash($user) <=> spl_object_hash($gardenUsers);
+        };
+
+        if (!empty(array_uintersect($user, $gardenUsers, $compare))) {
                 $questions = $questionRepo->findBy(
                     ['garden' => $garden],
                     ['createdAt' => 'ASC']
@@ -48,7 +54,7 @@ class ForumQuestionController extends AbstractController
                 return JsonResponse::fromJsonString($jsonQuestions);
             }
             return JsonResponse::fromJsonString('Vous ne faites pas partie de ce potager', 400);
-        }
+        //}
     }
 
     /**
@@ -56,10 +62,16 @@ class ForumQuestionController extends AbstractController
      */
     public function new(Garden $garden, Request $request, ForumTagRepository $tagRepository, EntityManagerInterface $entityManager, ValidatorInterface $validator)
     {
-        $currentUser = $this->get('security.token_storage')->getToken()->getUser();
-        $gardenMembers = $garden->getUsers();
-        foreach ($gardenMembers as $gardenMember) {
-            if ($currentUser == $gardenMember) {
+        $gardenUsers = $garden->getUsers()->getValues();
+
+        $user = [];
+        $user[] = $this->get('security.token_storage')->getToken()->getUser();
+
+        $compare = function ($user, $gardenUsers) {
+            return spl_object_hash($user) <=> spl_object_hash($gardenUsers);
+        };
+
+        if (!empty(array_uintersect($user, $gardenUsers, $compare))) {
                 
                 $question = json_decode($request->getContent(), true);
                 
@@ -91,7 +103,7 @@ class ForumQuestionController extends AbstractController
                 return JsonResponse::fromJsonString('Votre question a été posée', 200);
             }
             return JsonResponse::fromJsonString('Vous ne faites pas partie de ce potager', 400);
-        }
+        
     }
 
     /**
