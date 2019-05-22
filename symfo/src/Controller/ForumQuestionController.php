@@ -111,11 +111,16 @@ class ForumQuestionController extends AbstractController
      */
     public function show(Garden $garden, $id, ForumAnswerRepository $forumAnswerRepository , ForumQuestionRepository $forumQuestionRepository, ForumQuestion $question, SerializerInterface $serializer): Response
     {
-        $currentUser = $this->get('security.token_storage')->getToken()->getUser();
-        $gardenMembers = $garden->getUsers();
-        foreach ($gardenMembers as $gardenMember) {
-            if ($currentUser == $gardenMember) {
+        $gardenUsers = $garden->getUsers()->getValues();
 
+        $user = [];
+        $user[] = $this->get('security.token_storage')->getToken()->getUser();
+
+        $compare = function ($user, $gardenUsers) {
+            return spl_object_hash($user) <=> spl_object_hash($gardenUsers);
+        };
+
+        if (!empty(array_uintersect($user, $gardenUsers, $compare))) {
                 //$questions=$forumQuestionRepository->find($id);
                 //$answers = $forumAnswerRepository->findByQuestion($questions);
                 $jsonQuestion = $serializer->serialize(
@@ -131,7 +136,7 @@ class ForumQuestionController extends AbstractController
                 return JsonResponse::fromJsonString($jsonQuestion);
             }
             return JsonResponse::fromJsonString('Vous ne faites pas partie de ce potager', 400);
-        }
+        
     }
 
     /**
