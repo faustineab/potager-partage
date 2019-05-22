@@ -3,18 +3,17 @@ import { connect } from 'react-redux';
 
 import PlotDetail from 'src/components/Potager/PlotDetail';
 
-import { bookPlot, inputChange, newVegetable, removeVegetable } from '../store/reducer';
+import { bookPlot, inputChange, newVegetable, removeVegetable, vegetableToAdd, unlinkPlot } from '../store/reducer';
 
 
 const mapStateToProps = state => ({
   plotStatus: state.plotData.status,
-  // isUserPlot: state.isUserPlot,
+  isUserPlot: state.isUserPlot,
   vegetablesList: state.vegetablesList,
   plotData: state.plotData,
-  // plotStatus: 'actif',
-  //isUserPlot: true,
   plotId: state.openPlotId,
   newVegetable: state.newVegetable,
+  addingVegetable: state.addingVegetable,
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -29,7 +28,13 @@ const mapDispatchToProps = dispatch => ({
   },
   removeVegetable: (toRemove) => {
     dispatch(removeVegetable(toRemove));
-  }
+  },
+  vegetableToAdd: (vegetableName) => {
+    dispatch(vegetableToAdd(vegetableName));
+  },
+  unlinkPlot: () => {
+    dispatch(unlinkPlot());
+  },
 });
 
 

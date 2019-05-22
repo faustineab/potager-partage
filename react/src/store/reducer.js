@@ -40,7 +40,9 @@ const initialState = {
   answer: '',
   answerToDelete: '',
   openPlotId: '',
+  plotOpened: false,
   plotData: {},
+  addingVegetable: {},
   isUserPlot: false,
   vegetablesList: {},
   newVegetableId: '',
@@ -77,14 +79,14 @@ export const FORUM_QUESTIONS_FETCHED = 'FORUM_QUESTIONS_FETCHED';
 export const DELETE_CARD = 'DELETE_CARD';
 export const OPEN_PLOT = 'OPEN_PLOT';
 export const PLOT_DATA_FETCHED = 'PLOT_DATA_FETCHED';
+const VEGETABLE_TO_ADD = 'VEGETABLE_TO_ADD';
 export const BOOK_PLOT = 'BOOK_PLOT';
+export const UNLINK_PLOT = 'UNLINK_PLOT';
 export const PLOT_BOOKED = 'PLOT_BOOKED';
 export const SAVE_QUESTION_ID = 'SAVE_QUESTION_ID';
 export const FETCH_QUESTION_DETAIL = 'FETCH_QUESTION_DETAIL';
 export const NEW_VEGETABLE = 'NEW_VEGETABLE';
 export const REMOVE_VEGETABLE = 'REMOVE_VEGETABLE';
-export const USER_PLOT_ON = 'USER_PLOT_ON';
-export const USER_PLOT_OFF = 'USER_PLOT_OFF';
 export const SEND_ANSWER = 'SEND_ANSWER';
 const ANSWER_SENT = 'ANSWER_SENT';
 export const DELETE_ANSWER = 'DELETE_ANSWER';
@@ -261,11 +263,18 @@ const reducer = (state = initialState, action = {}) => {
       return {
         ...state,
         openPlotId: action.id,
+        plotOpened: true,
       };
     case PLOT_DATA_FETCHED:
       return {
         ...state,
         plotData: { ...action.plotData },
+        isUserPlot: action.isUserPlot,
+      };
+    case VEGETABLE_TO_ADD:
+      return {
+        ...state,
+        addingVegetable: action.vegetableName,
       };
     case BOOK_PLOT:
       return {
@@ -274,7 +283,10 @@ const reducer = (state = initialState, action = {}) => {
     case PLOT_BOOKED:
       return {
         ...state,
-        isUserPlot: true,
+      };
+    case UNLINK_PLOT:
+      return {
+        ...state,
       };
     case USER_LOGOUT:
       return {
@@ -284,21 +296,12 @@ const reducer = (state = initialState, action = {}) => {
       return {
         ...state,
         newVegetableId: action.newVegetableId,
+        addingVegetable: '',
       };
     case REMOVE_VEGETABLE:
       return {
         ...state,
         removeVegetableId: action.removeVegetableId,
-      };
-    case USER_PLOT_ON:
-      return {
-        ...state,
-        isUserPlot: true,
-      };
-    case USER_PLOT_OFF:
-      return {
-        ...state,
-        isUserPlot: false,
       };
     default:
       return state;
@@ -309,13 +312,6 @@ const reducer = (state = initialState, action = {}) => {
 /**
  * Action Creators
  */
-export const userPlotOff = () => ({
-  type: USER_PLOT_OFF,
-});
-
-export const userPlotOn = () => ({
-  type: USER_PLOT_ON,
-});
 
 export const removeVegetable = removeVegetableId => ({
   type: REMOVE_VEGETABLE,
@@ -484,18 +480,28 @@ export const openPlot = id => ({
   id,
 });
 
-export const plotDataFetched = plotData => ({
+export const plotDataFetched = (plotData, isUserPlot) => ({
   type: PLOT_DATA_FETCHED,
   plotData,
+  isUserPlot,
 });
 
 export const bookPlot = () => ({
   type: BOOK_PLOT,
 });
 
+export const unlinkPlot = () => ({
+  type: UNLINK_PLOT,
+});
+
 export const plotBooked = () => ({
   type: PLOT_BOOKED,
 });
+
+export const vegetableToAdd = vegetableName => ({
+  type: VEGETABLE_TO_ADD,
+  vegetableName,
+})
 
 /**
  * Selectors
