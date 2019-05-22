@@ -13,21 +13,24 @@ const PlotDetail = ({
     removeVegetable(evt.currentTarget.id);
   };
 
-  const plotVegetables = [];
+  console.log('is planted on', plotData.isPlantedOns);
+  const plotVegetableList = plotData.isPlantedOns;
 
-  if (plotData.isPlantedOns && plotData.isPlantedOns[0]) {
-    for (let i = 0; plotData.isPlantedOns[i]; i++) {
-      plotVegetables.push(
-        <div key={i} className="vegetable">
-          <li>{plotData.isPlantedOns[i].vegetable.name}
-            <div className="tag">
-              <Icon id={plotData.isPlantedOns[i].id} size="small" onClick={handleTags} name="delete" />
-            </div>
-          </li>
-        </div>,
-      );
-    }
-  }
+  // const plotVegetables = [];
+
+  // if (plotData.isPlantedOns && plotData.isPlantedOns[0]) {
+  //   for (let i = 0; plotData.isPlantedOns[i]; i++) {
+  //     plotVegetables.push(
+  //       <div key={i} className="vegetable">
+  //         <li>{plotData.isPlantedOns[i].vegetable.name}
+  //           <div className="tag">
+  //             <Icon id={plotData.isPlantedOns[i].id} size="small" onClick={handleTags} name="delete" />
+  //           </div>
+  //         </li>
+  //       </div>,
+  //     );
+  //   }
+  // }
 
   const handleListChange = (evt) => {
     let newVegetableId = '';
@@ -55,10 +58,17 @@ const PlotDetail = ({
 
       {isUserPlot && (
         <div>
-          <h2>Vous êtes sur votre parcelle</h2>
+          <h2>Vous êtes sur votre parcelle <Icon size="small" name="unlink" /></h2>
           <p>Fruits & légumes cultivés</p>
           <ul id="vegetableList">
-            {plotVegetables}
+            {plotVegetableList.map(({id, vegetable}) => (
+              <li>
+                {vegetable.name}
+                <div className="tag">
+                  <Icon id={id} size="small" onClick={handleTags} name="delete" />
+                </div>
+              </li>
+            ))}
           </ul>
           <Form>
             <Form.Group>
@@ -78,7 +88,11 @@ const PlotDetail = ({
           <h2>Cette parcelle est occupé par {plotData.user.name}.</h2>
           <p>Fruits & légumes cultivés</p>
           <ul id="vegetableList">
-            {plotVegetables}
+            {plotVegetableList.map(({ vegetable }) => (
+              <li>
+                {vegetable.name}
+              </li>
+            ))}
           </ul>
         </div>
       )}
