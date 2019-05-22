@@ -437,10 +437,14 @@ export const fetchForumTags = questionList => ({
   questionList,
 });
 
-export const forumQuestionsFetched = tagList => ({
-  type: FORUM_QUESTIONS_FETCHED,
-  tagList,
-});
+export const forumQuestionsFetched = (tagList) => {
+  console.log('tagList reducer', tagList);
+  return ({
+    type: FORUM_QUESTIONS_FETCHED,
+    tagList,
+  });
+};
+
 
 export const deleteCard = cardId => ({
   type: DELETE_CARD,

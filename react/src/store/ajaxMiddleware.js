@@ -219,7 +219,7 @@ const ajaxMiddleware = store => next => (action) => {
 
     case FETCH_FORUM_QUESTIONS:
       next(action);
-      axios.get(`http://localhost/apo/potager-partage/symfo/public/api/garden/${store.getState().gardenId}/forum/question`, {
+      axios.get(`${baseURL}/api/garden/${store.getState().gardenId}/forum/question`, {
         headers: {
           Authorization: `Bearer ${store.getState().token}`,
         },
@@ -258,7 +258,7 @@ const ajaxMiddleware = store => next => (action) => {
             text: tag.name,
             value: tag.name,
           }));
-          console.log(formattedTagList);
+          console.log('formattedTagList', formattedTagList);
           store.dispatch(forumQuestionsFetched(formattedTagList));
         })
         .catch((error) => {
@@ -310,7 +310,7 @@ const ajaxMiddleware = store => next => (action) => {
 
     case FETCH_QUESTION_DETAIL:
       next(action);
-      axios.get(`http://localhost/apo/potager-partage/symfo/public/api/garden/${store.getState().gardenId}/forum/question/${store.getState().openQuestionId}`, {
+      axios.get(`${baseURL}/api/garden/${store.getState().gardenId}/forum/question/${store.getState().openQuestionId}`, {
         headers: {
           Authorization: `Bearer ${store.getState().token}`,
         },
@@ -349,7 +349,7 @@ const ajaxMiddleware = store => next => (action) => {
 
     case DELETE_ANSWER:
       next(action);
-      axios.delete(`http://localhost/apo/potager-partage/symfo/public/api/garden/${store.getState().gardenId}/forum/question/${store.getState().openQuestionId}/answer/${store.getState().answerToDelete}`,
+      axios.delete(`${baseURL}/api/garden/${store.getState().gardenId}/forum/question/${store.getState().openQuestionId}/answer/${store.getState().answerToDelete}`,
         {
           headers: {
             Authorization: `Bearer ${store.getState().token}`,
