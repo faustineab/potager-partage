@@ -86,6 +86,7 @@ const ajaxMiddleware = store => next => (action) => {
         .then((response) => {
           console.log(response);
           store.dispatch(logUser());
+          window.location.href = '/potager';
         })
         .catch((error) => {
           console.log(error);
@@ -106,11 +107,11 @@ const ajaxMiddleware = store => next => (action) => {
         .then((response) => {
           console.log(response);
 
-          // window.location.href = '/';
+          window.location.href = '/';
         })
         .catch((error) => {
           console.log(error);
-        //   window.location.href = '/subscribe';
+          window.location.href = '/subscribe';
         });
       break;
 

@@ -8,6 +8,7 @@ const mapStateToProps = state => ({
   length: state.gardenNbPlotsRow,
   width: state.gardenNbPlotsColumn,
   plotOpened: state.plotOpened,
+  gardenName: state.gardenName,
 });
 
 const mapDispatchToProps = dispatch => ({
