@@ -1,13 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {
-  Form, Button, Icon, Select,
+  Form, Button, Icon, Select, Popup,
 } from 'semantic-ui-react';
 
 import './index.scss';
 
 const PlotDetail = ({
-  isUserPlot, plotStatus, plotId, bookPlot, vegetablesList, plotData, inputChange, submitVegetable, newVegetable, removeVegetable, vegetableToAdd, addingVegetable,
+  isUserPlot, plotStatus, plotId, bookPlot, vegetablesList, plotData, inputChange, submitVegetable, newVegetable, removeVegetable, vegetableToAdd, addingVegetable, unlinkPlot,
 }) => {
   const handleTags = (evt) => {
     removeVegetable(evt.currentTarget.id);
@@ -68,7 +68,13 @@ const PlotDetail = ({
 
       {isUserPlot && (
         <div>
-          <h2>Vous êtes sur votre parcelle <Icon size="small" name="unlink" /></h2>
+          <h2>Vous êtes sur votre parcelle
+            <Popup
+              content="libérer la parcelle"
+              style={{ FontFamily: 'Fresca, sans-serif', color: '#5e5250' }}
+              trigger={<Icon size="small" name="unlink" id="unlink" onClick={unlinkPlot} />}
+            />
+          </h2>
           <p>Fruits & légumes cultivés</p>
           <ul id="vegetableList">
             {plotVegetableList.map(({ id, vegetable }) => (

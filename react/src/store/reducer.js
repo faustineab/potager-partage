@@ -80,6 +80,7 @@ export const OPEN_PLOT = 'OPEN_PLOT';
 export const PLOT_DATA_FETCHED = 'PLOT_DATA_FETCHED';
 const VEGETABLE_TO_ADD = 'VEGETABLE_TO_ADD';
 export const BOOK_PLOT = 'BOOK_PLOT';
+export const UNLINK_PLOT = 'UNLINK_PLOT';
 export const PLOT_BOOKED = 'PLOT_BOOKED';
 export const SAVE_QUESTION_ID = 'SAVE_QUESTION_ID';
 export const FETCH_QUESTION_DETAIL = 'FETCH_QUESTION_DETAIL';
@@ -278,6 +279,10 @@ const reducer = (state = initialState, action = {}) => {
         ...state,
       };
     case PLOT_BOOKED:
+      return {
+        ...state,
+      };
+    case UNLINK_PLOT:
       return {
         ...state,
       };
@@ -481,6 +486,10 @@ export const plotDataFetched = (plotData, isUserPlot) => ({
 
 export const bookPlot = () => ({
   type: BOOK_PLOT,
+});
+
+export const unlinkPlot = () => ({
+  type: UNLINK_PLOT,
 });
 
 export const plotBooked = () => ({

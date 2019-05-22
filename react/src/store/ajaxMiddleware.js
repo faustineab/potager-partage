@@ -36,10 +36,9 @@ import {
   plotDataFetched,
   BOOK_PLOT,
   plotBooked,
+  UNLINK_PLOT,
   NEW_VEGETABLE,
   REMOVE_VEGETABLE,
-  userPlotOn,
-  userPlotOff,
   openPlot,
   fetchQuestionDetail } from './reducer';
 
@@ -379,14 +378,6 @@ const ajaxMiddleware = store => next => (action) => {
           const isUserPlot = (response.data.user.id === store.getState().user.id);
           console.log('isUserPlot', isUserPlot);
           store.dispatch(plotDataFetched(response.data, isUserPlot));
-          // console.log('user = ', store.getState().user);
-          // console.log('user id : ', store.getState().user.id, 'open plot id ', store.getState().plotData);
-          // if (store.getState().plotData.user == null) {
-          //   store.dispatch(userPlotOff());
-          // }
-          // else if (store.getState().user.id === store.getState().plotData.user.id) {
-          //   store.dispatch(userPlotOn());
-          // }
         })
         .catch((error) => {
           console.log('ERROR OPEN PLOT', error);
@@ -401,6 +392,23 @@ const ajaxMiddleware = store => next => (action) => {
       })
         .then((response) => {
           console.log(response);
+          store.dispatch(fetchGardenInfos(store.getState().user, store.getState().gardenId));
+          store.dispatch(openPlot(store.getState().openPlotId));
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+      break;
+    case UNLINK_PLOT:
+      next(action);
+      axios.put(`${baseURL}/api/garden/${store.getState().gardenId}/plots/${store.getState().openPlotId}/remove`, {}, {
+        headers: {
+          Authorization: `Bearer ${store.getState().token}`,
+        },
+      })
+        .then((response) => {
+          console.log(response);
+          store.dispatch(fetchGardenInfos(store.getState().user, store.getState().gardenId));
           store.dispatch(openPlot(store.getState().openPlotId));
         })
         .catch((error) => {
