@@ -222,6 +222,13 @@ class PlotController extends AbstractController
                  $plot->setStatus('inactif');
                  $plot->setUpdatedAt(new \Datetime());
             //  }
+            $isPlantedOns = $plot->getIsPlantedOns();
+
+            for ($i = 0; $i < count($isPlantedOns); $i++){
+                foreach($isPlantedOns as $isPlantedOn){
+                    $plot->removeIsPlantedOn($isPlantedOn);
+                }
+            }
  
          
              $entityManager->merge($plot);
