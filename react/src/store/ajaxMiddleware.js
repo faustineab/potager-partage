@@ -86,7 +86,7 @@ const ajaxMiddleware = store => next => (action) => {
         .then((response) => {
           console.log(response);
           store.dispatch(logUser());
-          window.location.href = '/potager';
+          window.location.href = '/';
         })
         .catch((error) => {
           console.log(error);
