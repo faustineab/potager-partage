@@ -20,6 +20,7 @@ const JoinGarden = ({ gardenList, inputChange, joinGarden }) => {
       <Form className="subscriptionForm" onSubmit={handleSubmit}>
         <h1>Rejoindre un jardin</h1>
         <Form.Select name="gardenId" options={gardenList} placeholder="Choisissez un jardin" onChange={handleInputChange} />
+        <span>Votre demande sera envoyée à l'administrateur du potager pour validation</span>
         <Button type="submit">Rejoindre</Button>
       </Form>
     </main>

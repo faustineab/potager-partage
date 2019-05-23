@@ -43,8 +43,9 @@ const App = ({ loggedIn, loginStatus }) => (
         )}
       />
       <Route path="/choose-garden" component={ChooseGarden} />
-      <Route path="/create-garden" component={CreateGarden} />
       <Route path="/join-garden" component={JoinGarden} />
+      <Route path="/create-garden" component={CreateGarden} />
+
       <Route
         path="/logout"
         render={() => (<Redirect to="/" />)}
