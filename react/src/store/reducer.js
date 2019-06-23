@@ -18,7 +18,7 @@ const initialState = {
   token: '',
   user: {},
   gardenList: [],
-  gardenId: '177',
+  gardenId: '',
   gardenName: '',
   gardenAddress: '',
   gardenZipcode: '',
