@@ -88,10 +88,10 @@ Subscribe.propTypes = {
 Subscribe.defaultProps = {
   firstName: '',
   lastName: '',
-  email: PropTypes.string,
-  password: PropTypes.string,
-  phoneNumber: PropTypes.string,
-  address: PropTypes.string,
+  email: '',
+  password: '',
+  phoneNumber: '',
+  address: '',
 };
 
 export default withRouter(Subscribe);
