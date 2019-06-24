@@ -438,7 +438,7 @@ export const fetchForumTags = questionList => ({
 });
 
 export const forumQuestionsFetched = (tagList) => {
-  console.log('tagList reducer', tagList);
+  //console.log('tagList reducer', tagList);
   return ({
     type: FORUM_QUESTIONS_FETCHED,
     tagList,
